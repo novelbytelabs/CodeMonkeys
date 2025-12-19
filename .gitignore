@@ -1,0 +1,33 @@
+# Rust
+/target/
+Cargo.lock
+
+# ArqonShip data
+.arqon/
+*.db
+*.lance/
+
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+venv/
+.venv/
+
+# MkDocs
+site/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

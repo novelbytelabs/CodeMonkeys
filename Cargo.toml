@@ -1,0 +1,60 @@
+[package]
+name = "arqonship"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+authors = ["Novel Byte Labs"]
+description = "DevSecOps CLI: Codebase Oracle, Self-Healing CI, Governed Releases"
+repository = "https://github.com/novelbytelabs/ArqonShip"
+license = "Apache-2.0"
+keywords = ["devops", "ci", "cli", "ai", "code-analysis"]
+categories = ["development-tools", "command-line-utilities"]
+
+[dependencies]
+# CLI
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+
+# Configuration
+toml = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+rusqlite = { version = "0.32", features = ["bundled"] }
+lancedb = "0.16"
+
+# AI / Embeddings
+candle-core = "0.8"
+candle-nn = "0.8"
+candle-transformers = "0.8"
+tokenizers = "0.21"
+hf-hub = "0.4"
+
+# Parsing
+tree-sitter = "0.26"
+tree-sitter-rust = "0.24"
+tree-sitter-python = "0.23"
+
+# Utilities
+anyhow = "1"
+thiserror = "2"
+uuid = { version = "1", features = ["v4"] }
+sha2 = "0.10"
+chrono = "0.4"
+ignore = "0.4"
+indicatif = "0.17"
+reqwest = { version = "0.12", features = ["json", "blocking"] }
+
+# Arrow (for LanceDB)
+arrow-array = "54"
+arrow-schema = "54"
+
+[dev-dependencies]
+insta = "1"
+tempfile = "3"
+criterion = "0.5"
+
+[[bin]]
+name = "arqon"
+path = "src/main.rs"
