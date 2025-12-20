@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/run_report_v1.schema.json",
+  "title": "CodeMonkeys RunReport v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_version", "run_id", "agent", "command",
+    "started_at", "finished_at", "exit_code", "seed", "inputs", "artifacts"
+  ],
+  "properties": {
+    "report_version": { "type": "integer", "const": 1 },
+    "run_id": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9\\-]{3,64}$" },
+    "agent": { "type": "string", "enum": ["silverback", "codemonkey", "foreman", "core"] },
+    "command": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "args": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 2000 },
+      "maxItems": 200
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" },
+    "exit_code": { "type": "integer", "minimum": 0, "maximum": 255 },
+    "seed": { "type": "integer", "minimum": 0, "maximum": 18446744073709551615 },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "branch", "dirty"],
+      "properties": {
+        "head": { "type": "string", "minLength": 7, "maxLength": 64 },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["config_hash"],
+      "properties": {
+        "config_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "constitution_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "governance_lock_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "plan_id": { "type": "string" },
+        "plan_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 20000,
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 200,
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "ledger": { "$ref": "#/$defs/ledger" },
+    "next_action": { "type": "string", "description": "Suggested next CLI command." }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "severity", "message", "location", "fingerprint"],
+      "properties": {
+        "rule_id": { "type": "string", "maxLength": 200 },
+        "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+        "message": { "type": "string", "maxLength": 2000 },
+        "location": { "$ref": "#/$defs/location" },
+        "fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "tool": { "type": "string", "maxLength": 100 },
+        "rule_version": { "type": "string", "maxLength": 50 },
+        "suppressed": { "type": "boolean" },
+        "suppression": {
+          "type": "object",
+          "properties": {
+            "reason": { "type": "string", "maxLength": 500 },
+            "until": { "type": "string", "format": "date" }
+          }
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string", "maxLength": 500 },
+        "line": { "type": "integer", "minimum": 1 },
+        "col": { "type": "integer", "minimum": 1 },
+        "end_line": { "type": "integer", "minimum": 1 },
+        "end_col": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "sha256"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["governance_lock", "sarif", "json", "log", "diff", "plan", "other"] },
+        "path": { "type": "string", "maxLength": 500 },
+        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budgets", "spent", "remaining", "actions"],
+      "properties": {
+        "budgets": { "$ref": "#/$defs/wallet" },
+        "spent": { "$ref": "#/$defs/wallet" },
+        "remaining": { "$ref": "#/$defs/wallet" },
+        "actions": {
+          "type": "array",
+          "maxItems": 2000,
+          "items": {
+            "type": "object",
+            "required": ["action", "started_at", "finished_at", "result"],
+            "properties": {
+              "action": { "type": "string", "maxLength": 100 },
+              "started_at": { "type": "string", "format": "date-time" },
+              "finished_at": { "type": "string", "format": "date-time" },
+              "elapsed_ms": { "type": "integer", "minimum": 0 },
+              "charges": { "$ref": "#/$defs/wallet" },
+              "result": { "type": "string", "maxLength": 200 },
+              "notes": { "type": "string", "maxLength": 2000 }
+            }
+          }
+        }
+      }
+    },
+    "wallet": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wall_time_seconds": { "type": "integer", "minimum": 0 },
+        "test_runs": { "type": "integer", "minimum": 0 },
+        "build_runs": { "type": "integer", "minimum": 0 },
+        "llm_calls": { "type": "integer", "minimum": 0 },
+        "fuzz_minutes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

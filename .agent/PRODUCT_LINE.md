@@ -1,0 +1,86 @@
+# Novel Byte Labs: Product Line Structure
+
+> *Building the tools that build software*
+
+---
+
+## The Umbrella
+
+| Entity | Role |
+|--------|------|
+| **Novel Byte Labs** | Parent company / organization |
+
+---
+
+## Product Lines
+
+### 1. Arqon Tech (MAS Division)
+**Focus:** Multi-Agent Systems & Runtime Optimization
+
+| Product | Engine | Binary | Purpose |
+|---------|--------|--------|---------|
+| **Arqon Runtime Optimizer** | ArqonHPO | `arqon` | Probe-gated optimization, runtime adaptation |
+
+**Tagline:** *"Runtime optimization infrastructure for live production systems."*
+
+---
+
+### 2. CodeMonkeys (DevSecOps Division)
+**Focus:** Autonomous Software Development Automation
+
+| Product | Engine | Binary | Purpose |
+|---------|--------|--------|---------|
+| **CodeMonkeys** | (standalone) | `codemonkeys` | Governance, healing, chaos testing |
+
+**Tagline:** *"The Autonomous Software Troop."*
+
+**The Troop:**
+- 🦍 **Silverback** — Governance (`check`)
+- 🐒 **Code Monkey** — Builder (`heal`)
+- 🦧 **Foreman** — Planner (`plan`)
+- 🐵 **Chaos Monkey** — Fuzzer (`chaos`) [v0.2]
+- 🐵 **Scout** — Reconnaissance (`scout`) [v0.2]
+
+---
+
+## Branding Guidelines
+
+### Novel Byte Labs
+- **Usage:** Copyright notices, legal, "A Novel Byte Labs project"
+- **Style:** Professional, understated
+
+### Arqon Tech
+- **Usage:** MAS/optimization products only
+- **Style:** Enterprise, technical, performance-focused
+- **Colors:** Dark mode, blues/purples
+
+### CodeMonkeys
+- **Usage:** DevSecOps automation
+- **Style:** Professional by default, playful with `--fun` mode
+- **Mascot:** 🐒 (Monkey emoji family)
+- **Economy:** 🍌 (Banana tokens)
+
+---
+
+## Repository Structure
+
+```
+github.com/novelbytelabs/
+├── ArqonHPO/           # Rust core for runtime optimization
+├── CodeMonkeys/        # DevSecOps automation (formerly ArqonShip)
+└── (other projects)
+```
+
+---
+
+## Note on ArqonShip
+
+**ArqonShip** was the original codename for CodeMonkeys during development.
+It is now **deprecated** as a product name.
+
+The repository may remain at `ArqonShip/` locally or be renamed to `CodeMonkeys/` at your discretion.
+
+---
+
+**Version:** 1.0.0
+**Date:** 2025-12-20

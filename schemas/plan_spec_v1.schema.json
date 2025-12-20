@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/plan_spec_v1.schema.json",
+  "title": "CodeMonkeys PlanSpec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["plan_version", "plan_id", "goal", "created_at", "seed", "tickets"],
+  "properties": {
+    "plan_version": { "type": "integer", "const": 1 },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9\\-]{7,63}$",
+      "description": "Stable identifier like plan-2025-12-20-001"
+    },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "seed": { "type": "integer", "minimum": 0, "maximum": 18446744073709551615 },
+    "workspace_root": {
+      "type": "string",
+      "description": "Optional absolute path used for path normalization (informational)."
+    },
+    "context_refs": {
+      "type": "array",
+      "description": "Optional references to Intent Layer docs, tickets, etc.",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 32
+    },
+    "tickets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": { "$ref": "#/$defs/ticket" }
+    }
+  },
+  "$defs": {
+    "ticket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "description", "acceptance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^T[0-9]{1,4}$" },
+        "kind": { "type": "string", "enum": ["code", "tests", "docs", "refactor", "config"] },
+        "description": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 1000, "default": 500 },
+        "risk_tier": { "type": "string", "enum": ["low", "medium", "high"], "default": "medium" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 50,
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+        },
+        "budget_hint": { "$ref": "#/$defs/budget_hint" },
+        "requires": {
+          "type": "array",
+          "description": "Tool capabilities this ticket expects (optional).",
+          "items": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "maxItems": 20
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "enum": ["code", "refactor", "config"] } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["scope"] }
+        }
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["write_paths"],
+      "properties": {
+        "write_paths": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+        },
+        "read_paths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "maxItems": 500
+        },
+        "deny_paths": {
+          "type": "array",
+          "description": "Paths that must not be modified (additional guardrail).",
+          "items": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "maxItems": 200
+        }
+      }
+    },
+    "budget_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wall_time_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "test_runs": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "build_runs": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "llm_calls": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}

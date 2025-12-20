@@ -1,14 +1,15 @@
 [package]
-name = "arqonship"
+name = "codemonkeys"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.82"
 authors = ["Novel Byte Labs"]
-description = "DevSecOps CLI: Codebase Oracle, Self-Healing CI, Governed Releases"
-repository = "https://github.com/novelbytelabs/ArqonShip"
+description = "The Autonomous Software Troop: Governance, Healing, and Chaos Testing"
+repository = "https://github.com/novelbytelabs/CodeMonkeys"
 license = "Apache-2.0"
-keywords = ["devops", "ci", "cli", "ai", "code-analysis"]
+keywords = ["devops", "ci", "cli", "ai", "governance", "fuzzing", "autonomous"]
 categories = ["development-tools", "command-line-utilities"]
+
 
 [dependencies]
 # CLI
@@ -56,5 +57,5 @@ insta = "1"
 criterion = "0.5"
 
 [[bin]]
-name = "arqonship"
+name = "codemonkeys"
 path = "src/main.rs"

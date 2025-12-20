@@ -1,0 +1,55 @@
+# CodeMonkeys Configuration
+# The Autonomous Software Troop
+
+# Default profile for local development
+profile: local
+
+# Banana Economy budgets
+economy:
+  budgets:
+    wall_time_seconds: 900 # 15 minutes
+    test_runs: 6
+    build_runs: 3
+    llm_calls: 4
+
+# Policy profiles
+governance:
+  profiles:
+    local:
+      strict: false
+      require_capabilities: false
+    ci:
+      strict: true
+      require_capabilities: true
+    release:
+      strict: true
+      deny_new_warnings: true
+
+# Capabilities (external tools)
+capabilities:
+  required_in_ci:
+    - cargo_clippy
+  optional:
+    - gitleaks
+    - cargo_tarpaulin
+
+# Write policy (what Code Monkey can modify)
+policy:
+  write_allowlist:
+    - "src/**"
+    - "tests/**"
+    - "Cargo.toml"
+    - "Cargo.lock"
+  write_denylist:
+    - ".github/**"
+    - ".env*"
+    - "**/*.key"
+    - ".codemonkeys/governance.lock"
+
+# Chaos Monkey (v0.2 - reserved)
+chaos:
+  allow_hosts:
+    - "localhost"
+    - "127.0.0.1"
+  deny_hosts:
+    - "*"
