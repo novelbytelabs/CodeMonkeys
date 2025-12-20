@@ -1,6 +1,7 @@
 site_name: ArqonShip
-site_description: DevSecOps CLI for Intelligent Codebase Understanding, Self-Healing CI, and Governed Releases
+site_description: Constitution-governed automation that fixes bugs while you sleep, ships releases automatically, and scales to 50+ products.
 site_author: Novel Byte Labs
+site_url: https://novelbytelabs.github.io/ArqonShip/
 repo_name: novelbytelabs/ArqonShip
 repo_url: https://github.com/novelbytelabs/ArqonShip
 
@@ -23,8 +24,18 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.expand
+    - navigation.top
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/novelbytelabs/ArqonShip
+  generator: false
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -38,6 +49,11 @@ markdown_extensions:
       alternate_style: true
   - admonition
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
 
