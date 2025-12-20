@@ -56,5 +56,5 @@ insta = "1"
 criterion = "0.5"
 
 [[bin]]
-name = "arqon"
+name = "arqonship"
 path = "src/main.rs"

@@ -9,6 +9,7 @@
 Building products is fast. **Maintaining them is slow.**
 
 Every repo needs:
+
 - 🔴 CI that stays green
 - 📄 Docs that don't drift
 - 🚀 Releases that follow rules
@@ -93,7 +94,7 @@ echo 'fn broken() { let x: i32 = "oops"; }' > tests/broken.rs
 cargo test --message-format=json > fail.json
 
 # Watch ArqonShip fix it
-arqon heal --log-file fail.json
+arqonship heal --log-file fail.json
 ```
 
 ---
@@ -109,27 +110,27 @@ arqon heal --log-file fail.json
 === "Initialize"
 
     ```bash
-    arqon init
-    arqon scan
+    arqonship init
+    arqonship scan
     ```
 
 === "Query"
 
     ```bash
-    arqon chat -q "What functions handle errors?"
+    arqonship chat -q "What functions handle errors?"
     ```
 
 === "Heal"
 
     ```bash
     cargo test --message-format=json > test.json
-    arqon heal --log-file test.json
+    arqonship heal --log-file test.json
     ```
 
 === "Ship"
 
     ```bash
-    arqon ship --dry-run
+    arqonship ship --dry-run
     ```
 
 ---
@@ -138,12 +139,12 @@ arqon heal --log-file fail.json
 
 | Command | Description |
 |---------|-------------|
-| `arqon init` | Initialize ArqonShip in current repo |
-| `arqon scan` | Build Codebase Oracle |
-| `arqon chat` | Query codebase with natural language |
-| `arqon heal` | Autonomous self-healing |
-| `arqon ship` | Governed release pipeline |
-| `arqon watch` | *(Coming)* Always-on daemon |
+| `arqonship init` | Initialize ArqonShip in current repo |
+| `arqonship scan` | Build Codebase Oracle |
+| `arqonship chat` | Query codebase with natural language |
+| `arqonship heal` | Autonomous self-healing |
+| `arqonship ship` | Governed release pipeline |
+| `arqonship watch` | *(Coming)* Always-on daemon |
 
 ---
 

@@ -19,23 +19,23 @@ alias arqon='./target/release/ship'
 arqon [OPTIONS] <COMMAND>
 
 Options:
-  --config <PATH>    Path to config file [default: .arqon/config.toml]
+  --config <PATH>    Path to config file [default: .arqonship/config.toml]
   -h, --help         Print help
   -V, --version      Print version
 ```
 
 ## Commands
 
-### `arqon init`
+### `arqonship init`
 
 Initialize ArqonShip in the current repository.
 
 ```bash
-arqon init
+arqonship init
 ```
 
 **Behavior:**
-- Creates `.arqon/` directory
+- Creates `.arqonship/` directory
 - Generates default `config.toml`
 - If config exists, does nothing
 
@@ -45,12 +45,12 @@ arqon init
 
 ---
 
-### `arqon scan`
+### `arqonship scan`
 
 Build the Codebase Oracle (parse files, build graph, generate embeddings).
 
 ```bash
-arqon scan
+arqonship scan
 ```
 
 **Behavior:**
@@ -75,13 +75,13 @@ Scan complete.
 
 ---
 
-### `arqon chat`
+### `arqonship chat`
 
 Query the Codebase Oracle using natural language.
 
 ```bash
-arqon chat --query "How does authentication work?"
-arqon chat -q "optimizer implementation"
+arqonship chat --query "How does authentication work?"
+arqonship chat -q "optimizer implementation"
 ```
 
 **Options:**
@@ -102,13 +102,13 @@ arqon chat -q "optimizer implementation"
 
 ---
 
-### `arqon heal`
+### `arqonship heal`
 
 Autonomous self-healing for test failures.
 
 ```bash
-arqon heal
-arqon heal --log-file test-output.json --max-attempts 3
+arqonship heal
+arqonship heal --log-file test-output.json --max-attempts 3
 ```
 
 **Options:**
@@ -134,14 +134,14 @@ arqon heal --log-file test-output.json --max-attempts 3
 
 ---
 
-### `arqon ship`
+### `arqonship ship`
 
 Create a governed release (SemVer + Changelog + PR).
 
 ```bash
-arqon ship
-arqon ship --dry-run
-arqon ship --skip-checks
+arqonship ship
+arqonship ship --dry-run
+arqonship ship --skip-checks
 ```
 
 **Options:**
@@ -197,20 +197,20 @@ Changelog:
 
 ```bash
 # Initialize project
-arqon init
+arqonship init
 
 # Build index
-arqon scan
+arqonship scan
 
 # Query code
-arqon chat -q "error handling"
+arqonship chat -q "error handling"
 
 # After test failure
 cargo test --message-format=json > test.json
-arqon heal --log-file test.json
+arqonship heal --log-file test.json
 
 # Create release
 export GITHUB_TOKEN=ghp_xxx
-arqon ship --dry-run
-arqon ship
+arqonship ship --dry-run
+arqonship ship
 ```

@@ -48,7 +48,7 @@ impl Default for Config {
                     "venv/".to_string(),
                     ".git/".to_string(),
                 ],
-                model_path: "~/.arqon/models/".to_string(),
+                model_path: "~/.arqonship/models/".to_string(),
             },
             heal: HealConfig {
                 max_attempts: 2,

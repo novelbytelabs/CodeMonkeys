@@ -10,14 +10,14 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 #[derive(Parser)]
-#[command(name = "arqon")]
+#[command(name = "arqonship")]
 #[command(about = "ArqonShip: DevSecOps Automation System", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
 
     /// Path to config file
-    #[arg(long, global = true, default_value = ".arqon/config.toml")]
+    #[arg(long, global = true, default_value = ".arqonshipship/config.toml")]
     config: PathBuf,
 }
 
@@ -87,8 +87,8 @@ async fn main() -> Result<()> {
         }
         Commands::Chat(args) => {
             let root = std::env::current_dir()?;
-            let db_path = root.join(".arqon/graph.db");
-            let vector_path = root.join(".arqon/vectors.lance");
+            let db_path = root.join(".arqonship/graph.db");
+            let vector_path = root.join(".arqonship/vectors.lance");
 
             let mut engine = oracle::query::QueryEngine::new(
                 db_path.to_str().unwrap(),
@@ -122,7 +122,7 @@ async fn main() -> Result<()> {
                 println!("Found {} test failure(s)", failures.len());
 
                 // Open Oracle store
-                let db_path = root.join(".arqon/graph.db");
+                let db_path = root.join(".arqonship/graph.db");
                 let store = oracle::OracleStore::open(&db_path)?;
 
                 // Create healing loop with Ollama

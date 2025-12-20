@@ -68,7 +68,7 @@ echo 'fn add(a: i32, b: i32) -> i32 { a - b // bug' > tests/broken.rs
 cargo test --message-format=json > fail.json
 
 # Watch ArqonShip fix it
-arqon heal --log-file fail.json
+arqonship heal --log-file fail.json
 ```
 
 ---
@@ -80,19 +80,19 @@ arqon heal --log-file fail.json
 cargo install --path .
 
 # Initialize
-arqon init
+arqonship init
 
 # Scan your codebase
-arqon scan
+arqonship scan
 
 # Query your code
-arqon chat -q "What functions handle errors?"
+arqonship chat -q "What functions handle errors?"
 
 # Self-heal failures
-arqon heal --log-file test.json
+arqonship heal --log-file test.json
 
 # Ship a release
-arqon ship --dry-run
+arqonship ship --dry-run
 ```
 
 ---
@@ -101,12 +101,12 @@ arqon ship --dry-run
 
 | Command | Description |
 |---------|-------------|
-| `arqon init` | Initialize ArqonShip in current repo |
-| `arqon scan` | Build Codebase Oracle (parse → graph → embed) |
-| `arqon chat` | Query codebase with natural language |
-| `arqon heal` | Autonomous self-healing for CI failures |
-| `arqon ship` | Governed release pipeline |
-| `arqon watch` | *(Coming)* Always-on daemon mode |
+| `arqonship init` | Initialize ArqonShip in current repo |
+| `arqonship scan` | Build Codebase Oracle (parse → graph → embed) |
+| `arqonship chat` | Query codebase with natural language |
+| `arqonship heal` | Autonomous self-healing for CI failures |
+| `arqonship ship` | Governed release pipeline |
+| `arqonship watch` | *(Coming)* Always-on daemon mode |
 
 ---
 

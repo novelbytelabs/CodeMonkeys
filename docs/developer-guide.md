@@ -32,8 +32,8 @@ cargo test -p ship
 
 # Integration tests (requires initialized project)
 cd /path/to/test-project
-arqon init
-arqon scan
+arqonship init
+arqonship scan
 cargo test -p ship --test integration
 ```
 
@@ -211,13 +211,13 @@ fn test_graph_extraction() {
 
 Add `tracing` for structured logging:
 ```bash
-RUST_LOG=debug arqon scan
+RUST_LOG=debug arqonship scan
 ```
 
 ### SQLite Inspection
 
 ```bash
-sqlite3 .arqon/graph.db
+sqlite3 .arqonship/graph.db
 sqlite> .schema
 sqlite> SELECT * FROM nodes LIMIT 10;
 ```
@@ -226,7 +226,7 @@ sqlite> SELECT * FROM nodes LIMIT 10;
 
 ```python
 import lancedb
-db = lancedb.connect(".arqon/vectors.lance")
+db = lancedb.connect(".arqonship/vectors.lance")
 table = db.open_table("code_vectors")
 print(table.head())
 ```

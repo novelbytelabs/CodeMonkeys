@@ -60,15 +60,15 @@
 
 | Store | Data | Path |
 |-------|------|------|
-| SQLite | Error patterns, fix templates, fleet registry | `~/.arqon/swarm.db` |
-| LanceDB | Semantic embeddings | `~/.arqon/swarm_vectors/` |
+| SQLite | Error patterns, fix templates, fleet registry | `~/.arqonship/swarm.db` |
+| LanceDB | Semantic embeddings | `~/.arqonship/swarm_vectors/` |
 
 ---
 
 ## Next Implementation Steps
 
-1. **`arqon watch`** — event listener mode
-2. **GitHub Action** — `arqon heal` on CI failure
-3. **`arqon ship --auto`** — release when green
+1. **`arqonship watch`** — event listener mode
+2. **GitHub Action** — `arqonship heal` on CI failure
+3. **`arqonship ship --auto`** — release when green
 4. **Swarm DB** — shared cross-repo memory
 5. **ArqonOrg CLI** — fleet commands

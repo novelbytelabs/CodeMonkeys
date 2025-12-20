@@ -2,15 +2,15 @@
 
 ## Configuration File
 
-ArqonShip uses `.arqon/config.toml` for project-level settings.
+ArqonShip uses `.arqonship/config.toml` for project-level settings.
 
 ### Generating Default Config
 
 ```bash
-arqon init
+arqonship init
 ```
 
-Creates `.arqon/config.toml` with defaults.
+Creates `.arqonship/config.toml` with defaults.
 
 ## Full Configuration Schema
 
@@ -37,7 +37,7 @@ exclude_globs = [
 ]
 
 # Path to store/cache model files
-model_path = "~/.arqon/models/"
+model_path = "~/.arqonship/models/"
 
 [heal]
 # Maximum repair attempts before giving up (Constitution XVII.1)
@@ -71,7 +71,7 @@ version_scheme = "semver"
 |--------|------|---------|-------------|
 | `include_globs` | string[] | `["src/**/*.rs", "src/**/*.py"]` | Files to parse and index |
 | `exclude_globs` | string[] | `["target/", "venv/", ".git/"]` | Paths to skip |
-| `model_path` | string | `"~/.arqon/models/"` | Model cache directory |
+| `model_path` | string | `"~/.arqonship/models/"` | Model cache directory |
 
 ### `[heal]` Section
 
@@ -92,7 +92,7 @@ version_scheme = "semver"
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `GITHUB_TOKEN` | GitHub API token for PR creation | For `arqon ship` |
+| `GITHUB_TOKEN` | GitHub API token for PR creation | For `arqonship ship` |
 | `ARQON_CONFIG` | Override config file path | No |
 | `ARQON_MODEL_CACHE` | Override model cache directory | No |
 
@@ -100,11 +100,11 @@ version_scheme = "semver"
 
 | Path | Purpose |
 |------|---------|
-| `.arqon/config.toml` | Project configuration |
-| `.arqon/graph.db` | SQLite graph database |
-| `.arqon/vectors.lance/` | LanceDB vector storage |
-| `~/.arqon/models/` | Cached AI models |
-| `~/.arqon/audit.db` | Global audit log |
+| `.arqonship/config.toml` | Project configuration |
+| `.arqonship/graph.db` | SQLite graph database |
+| `.arqonship/vectors.lance/` | LanceDB vector storage |
+| `~/.arqonship/models/` | Cached AI models |
+| `~/.arqonship/audit.db` | Global audit log |
 
 ## Example Configurations
 

@@ -28,7 +28,7 @@ As a solo builder shipping dozens of products:
 - CI workflows + caching
 - Release pipeline wiring
 - Default Constitution + Spec templates with machine policy block
-- `.arqon/config.toml` tuned to your environment
+- `.arqonship/config.toml` tuned to your environment
 
 ### ArqonDev — "Front-Half Loop" (spec-kit fork/wrapper)
 - Spec authoring

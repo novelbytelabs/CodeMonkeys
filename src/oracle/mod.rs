@@ -23,10 +23,10 @@ pub async fn scan_codebase(root: &Path) -> Result<()> {
     println!("Scanning codebase at {:?}", root);
 
     // 1. Init Stores
-    let db_path = root.join(".arqon/graph.db");
+    let db_path = root.join(".arqonship/graph.db");
     let mut store = OracleStore::open(db_path)?;
 
-    let vector_path = root.join(".arqon/vectors.lance");
+    let vector_path = root.join(".arqonship/vectors.lance");
     let vector_uri = vector_path.to_str().unwrap();
     let mut vector_store = VectorStore::new(vector_uri).await?;
     vector_store.create_table_if_not_exists().await?;

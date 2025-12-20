@@ -1,0 +1,147 @@
+# Living Linter Rule: No Unwrap in Handlers
+
+schema_version: 1
+
+pack:
+  id: "arqonship-rust-core"
+  name: "ArqonShip Rust Core Rules"
+  owners: ["platform@arqon.dev"]
+  default_severity: "warning"
+
+rules:
+  - id: "rust.no_unwrap_in_handlers"
+    title: "Avoid unwrap() in request handlers"
+    intent: "Prevent panics in request handlers"
+    rationale: |
+      Panics in handlers can crash workers or trigger retries, creating outages.
+      In a fleet of 50+ products, one panicking handler can cascade into
+      widespread service degradation.
+
+    severity: "warning"
+    confidence: 0.85
+    enabled: true
+
+    references:
+      incident: "INC-2024-042"
+      tickets: ["ENG-1337"]
+      cwe: ["CWE-248"]
+      docs: ["https://internal/wiki/panic-policy"]
+
+    tags: ["rust", "reliability", "panic", "handlers", "production"]
+    owners: ["service-platform@arqon.dev"]
+
+    scope:
+      languages: ["rust"]
+      paths:
+        include:
+          - "src/handlers/**"
+          - "src/routes/**"
+          - "api/endpoints/*.rs"
+        exclude:
+          - "**/tests/**"
+          - "**/generated/**"
+          - "**/mocks/**"
+      repos:
+        include: ["*"]
+        exclude: ["experimental-*", "*-sandbox"]
+      code_context:
+        any_of:
+          - kind: "function"
+            name_regex: ".*handler.*"
+          - kind: "function"
+            name_regex: ".*endpoint.*"
+          - kind: "attribute"
+            contains: "#[axum::handler]"
+          - kind: "attribute"
+            contains: "#[actix_web::get]"
+          - kind: "attribute"
+            contains: "#[rocket::get]"
+
+    detection:
+      mode: "union"
+      detectors:
+        # Primary: tree-sitter for precise AST matching
+        - engine: "tree_sitter"
+          language: "rust"
+          query: |
+            (call_expression
+              function: (field_expression
+                field: (field_identifier) @method
+                (#eq? @method "unwrap")))
+          constraints:
+            require_scope_context: true
+
+        # Secondary: Semgrep for quick pattern matching
+        - engine: "semgrep"
+          language: "rust"
+          ruleset:
+            - pattern: "$X.unwrap()"
+            - pattern: "$X.expect($MSG)"
+          metavariables:
+            X:
+              # Exclude test/mock contexts
+              allow_regex: "^(?!.*(test|mock|stub)).*$"
+
+    reporting:
+      message: |
+        Avoid `unwrap()` in request handlers. 
+        Handle the error explicitly with `?` or map to an HTTP response.
+      primary_location: "callsite"
+      fingerprint:
+        strategy: "stable_v1"
+      suppressions:
+        inline:
+          formats:
+            - "// living-linter:ignore rust.no_unwrap_in_handlers"
+            - "// arqonship:allow unwrap"
+        expiry_days_default: 30
+
+    remediation:
+      recipe_id: "rust.replace_unwrap_with_question_mark"
+      guidance: |
+        1. Replace `.unwrap()` with `?` to propagate errors
+        2. Or use `.map_err()` to convert to an HTTP error response
+        3. Or use `.unwrap_or_default()` if a fallback is acceptable
+      autofix:
+        kind: "suggestion"
+        patch_template: |
+          - find: ".unwrap()"
+            replace: "?"
+          - find: ".expect($MSG)"
+            replace: ".map_err(|e| anyhow::anyhow!($MSG))?"
+      examples:
+        - before: 'let id = req.param("id").unwrap();'
+          after: 'let id = req.param("id")?;'
+        - before: 'let data = parse_json().expect("invalid json");'
+          after: 'let data = parse_json().map_err(|e| HttpError::BadRequest("invalid json"))?;'
+
+    tests:
+      positive:
+        - path: "src/handlers/user.rs"
+          code: |
+            #[axum::handler]
+            fn get_user_handler() {
+              let id = req.param("id").unwrap();  // Should match
+            }
+        - path: "src/routes/api.rs"
+          code: |
+            async fn create_order_handler() {
+              let body = body.json().expect("parse error");  // Should match
+            }
+      negative:
+        - path: "src/lib.rs"
+          code: |
+            fn internal_util() {
+              let x = Some(1).unwrap();  // Should NOT match (not a handler)
+            }
+        - path: "tests/integration.rs"
+          code: |
+            fn test_handler() {
+              let result = mock.unwrap();  // Should NOT match (test context)
+            }
+
+    metadata:
+      version: "1.0"
+      created: "2025-12-20"
+      updated: "2025-12-20"
+      changelog: "Initial rule based on INC-2024-042"
