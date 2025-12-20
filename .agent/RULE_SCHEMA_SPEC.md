@@ -56,17 +56,45 @@ rules:
       repos:
         include: [glob]         # my-org/*, production-*
         exclude: [glob]         # experimental-*
-      code_context:             # Semantic scoping (beyond file paths)
+      code_context:             # Semantic scoping
         any_of:
           - kind: enum          # function, impl, module, attribute
             name_regex: string  # .*handler.*
           - kind: enum
             contains: string    # #[axum::handler]
-    
+      
+      # Rust-Specific Semantic Scoping
+      rust_context:
+        macros: [string]        # "sqlx::query!", "tokio::main"
+        attributes: [string]    # "derive(Serialize)"
+        traits: [string]        # "impl FromRequest"
+        structs_deriving: [string] 
+
+    # Operational: PR Automation Metadata
+    pr:
+      action_mode: enum         # open_pr | open_draft_pr | open_issue | comment_only
+      base_branch: string       # "main" or "default"
+      title_template: string    # "Fix {rule.id}: {rule.intent}"
+      body_template: string     # Markdown with placeholders ({incident}, {recipe})
+      labels: [string]          # ["bot", "security", "auto-fix"]
+      reviewers: [string]       # ["@security-team", "@platform-leads"]
+      assignees: [string]       # ["@author"]
+      auto_merge: boolean       # Only if confidence > 0.99 && tests pass
+
+    # Operational: Rollout Strategy
+    rollout:
+      phase: enum               # shadow | canary | broad | paused
+      canary_targets: [string]  # Specific repos to test first
+      max_open_prs: int         # Global limit (e.g. 10) to prevent flooding
+      snooze_until: date        # For temporary rules
+      requires_approval: boolean # Explicit human gate before any PR
+
     # Detection: Multi-engine support
     detection:
-      mode: enum                # union | best | first
-      detectors:
+      mode: enum                # union | best | first | short_circuit
+      requirements:             # Capabilities needed
+        needs_macro_expansion: boolean
+        needs_type_resolution: boolean
         - engine: enum          # tree_sitter | semgrep | codeql
           language: string
           query: string         # Engine-specific query

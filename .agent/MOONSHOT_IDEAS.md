@@ -438,79 +438,63 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
 > From Gemini: "What should I start coding TOMORROW?"
 
 ### WEEK 1: The Supreme Court
-*Adversarial Logic & Constitution*
+## The Roadmap (6 Weeks)
+*From Solo Dev to Autonomous Admiral*
 
-| Item | Details |
-|------|---------|
-| **Goal** | Establish adversarial loop — can't build system without control mechanism |
-| **Deliverables** | `constitution.yaml`, Builder Agent, Justice Agent |
-| **Tests** | "Bribe" Test — Justice rejects code with hardcoded password |
-| **Integration** | Pure logic simulation |
+### Week 1: the-supreme-court / Governance
+**Goal:** Establish the Laws that govern the system.
+- **Why:** Safety first. We cannot build autonomous agents without defining what they are allowed to do.
+- **Tasks:**
+    - [ ] **Constitution:** Draft `constitution.yaml` (The Law).
+    - [ ] **Justice Agent:** Build the "Judge" that validates PRs against the Constitution.
+    - [ ] **Bribe Test:** Create a test case where we try to "bribe" the Justice agent to ignore a security flaw.
+- **Deliverable:** A CLI tool `arqon justice check <pr_id>` that rejects a PR because it violates Article 1.
 
-**Artifacts:**
-- `constitution.yaml` — Supreme law ("No secrets in code", "Functions < 50 lines")
-- Builder Agent — `error_log` + `bad_code` → `fixed_code`
-- Justice Agent — `fixed_code` + `constitution` → `VERDICT: PASS/FAIL`
+### Week 2: the-nervous-system / Context
+**Goal:** Give the system eyes and ears.
+- **Why:** Agents cannot act if they cannot perceive the state of the fleet.
+- **Tasks:**
+    - [ ] **Log Stream:** Connect `oracle` to CI logs (GitHub Actions).
+    - [ ] **Error Classifier:** "Is this a syntax error, a logic error, or a flaky test?"
+    - [ ] **Context Window:** Build the `oracle/vector_store` for code semantic search.
+- **Deliverable:** Run `arqon oracle status` and see "3 repos failing CI, 1 flaky test detected."
 
----
+### Week 3: the-actuator / Healer
+**Goal:** The system takes its first physical action.
+- **Why:** Closing the loop from "Perception" to "Action."
+- **Tasks:**
+    - [ ] **Builder Agent:** `heal` module generates code fixes for simple errors.
+    - [ ] **Git Handlers:** Safe wrapper for branching, committing, pushing.
+    - [ ] **Reality Forks:** Spin up a Docker container to test the fix *before* pushing.
+- **Deliverable:** Introduce a syntax error in a dummy repo. ArqonShip detects it, fixes it, and pushes a branch.
 
-### WEEK 2: The Nervous System
-*CI/CD Hooks & Log Parsing*
+### Week 4: adaptive-immunity / Orchestrator MVP
+**Goal:** Build the central nervous system for safe cross-repo learning.
+- **Why:** Replace risky "Antibody Propagation" with governed PR campaigns.
+- **Tasks:**
+    - [ ] **Database Core:** Setup Postgres schema for Rules, Campaigns, Violations.
+    - [ ] **Rule Registry:** Implement Rule Loader (schema v1.1) + Git sync.
+    - [ ] **Canary Engine:** Build the Rollout State Machine (Canary → Early → Fleet).
+    - [ ] **Coordinator V1:** Rust service responding to GitHub webhooks (Push/PR).
+- **Deliverable:** `conductor` service running locally, managing a dummy campaign across 3 test repos.
 
-| Item | Details |
-|------|---------|
-| **Goal** | Connect brain to pain signals of reality |
-| **Deliverables** | Pain Receptor (webhook), Context Fetcher, Diff Generator |
-| **Tests** | "Time Bomb" repo — fails on even minutes, system proposes fix |
-| **Integration** | Week 1 agents → real repository data |
+### Week 5: documentation-reflector / Knowledge Graph
+**Goal:** Ensure the map matches the territory.
+- **Why:** Adaptive Immunity changes code; docs must keep up to prevent "explanation drift."
+- **Tasks:**
+    - [ ] Implement `doc-check` rule type in Living Linter.
+    - [ ] Build "Intent vs Implementation" drift detector using Oracle.
+    - [ ] Integrate with `mkdocs` for auto-generated architecture diagrams.
+- **Deliverable:** System that opens a PR to update `ARCHITECTURE.md` when code structure changes.
 
----
-
-### WEEK 3: The Actuator
-*Git Handlers & Ephemeral Forks*
-
-| Item | Details |
-|------|---------|
-| **Goal** | Give AI "hands" to manipulate environment safely |
-| **Deliverables** | Reality Forker (Docker), Injector (applies diffs), Validator (runs tests) |
-| **Tests** | "Works on My Machine" Exorcism — fix syntax error, signal "Ready to Merge" only if container passes |
-| **Integration** | Week 2 parsing → execution environments |
-
----
-
-### WEEK 4: The Stigmergic Broadcast
-*Antibody Propagation*
-
-| Item | Details |
-|------|---------|
-| **Goal** | Enable horizontal learning across 50-product ecosystem |
-| **Deliverables** | Pattern Abstractor, Fleet Scanner, Proactive PR Creator |
-| **Tests** | Fix vuln in Repo A → watch PRs auto-open in Repo B and C |
-| **Integration** | Week 3 fix mechanism → broader fleet |
-
----
-
-### WEEK 5: The Documentation Reflector
-*Self-Documenting Code*
-
-| Item | Details |
-|------|---------|
-| **Goal** | Documentation maps perfectly to code territory |
-| **Deliverables** | Observer (parses diffs), Scribe (updates CHANGELOG), Commit Signer |
-| **Tests** | Change `/login` → `/auth/login`, verify `API_DOCS.md` auto-updates |
-| **Integration** | Documentation layer on top of Actuator |
-
----
-
-### WEEK 6: The Ouroboros
-*Constitutional Self-Amendment*
-
-| Item | Details |
-|------|---------|
-| **Goal** | System optimizes its own governing laws |
-| **Deliverables** | Clerk (aggregates rejections), Speaker (proposes amendments), Governor (CLI dashboard) |
-| **Tests** | Watch system propose increasing line length rule if Builder frequently fails strict rule |
-| **Integration** | Closes the loop — outputs become new Week 1 inputs |
+### Week 6: reality-forks / Synthetic Swarms
+**Goal:** Validate risky changes before any human sees them.
+- **Why:** Increase confidence in PR campaigns by proving "it works" not just "it compiles."
+- **Tasks:**
+    - [ ] **Ephemeral Environments:** Docker-based "Reality Forks" per PR.
+    - [ ] **Swarm Agents:** Headless Chrome agents performing critical user flows.
+    - [ ] **Orchestrator Integration:** Block explicit Campaign promotion until Swarms pass.
+- **Deliverable:** A PR that merges only after a synthetic user successfully completes a purchase flow on a temporary deployment.
 
 ---
 
