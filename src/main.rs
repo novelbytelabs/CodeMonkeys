@@ -1,13 +1,13 @@
 mod config;
-mod oracle;
 mod heal;
+mod oracle;
 mod ship;
 
-use clap::{Parser, Subcommand, Args};
-use std::path::{Path, PathBuf};
-use std::fs;
 use anyhow::{Context, Result};
+use clap::{Args, Parser, Subcommand};
 use config::Config;
+use std::fs;
+use std::path::{Path, PathBuf};
 
 #[derive(Parser)]
 #[command(name = "arqon")]
@@ -40,7 +40,7 @@ struct ChatArgs {
     /// The query string
     #[arg(long, short)]
     query: String,
-    
+
     /// Use CLI output mode instead of TUI (default for now)
     #[arg(long)]
     cli: bool,
@@ -51,7 +51,7 @@ struct HealArgs {
     /// Path to the test output file (cargo test --message-format=json)
     #[arg(long)]
     log_file: Option<PathBuf>,
-    
+
     /// Maximum healing attempts (default: 2)
     #[arg(long, default_value = "2")]
     max_attempts: u32,
@@ -62,7 +62,7 @@ struct ShipArgs {
     /// Skip pre-flight checks
     #[arg(long)]
     skip_checks: bool,
-    
+
     /// Dry run (don't create PR)
     #[arg(long)]
     dry_run: bool,
@@ -71,7 +71,7 @@ struct ShipArgs {
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
-    
+
     // Load config (except for Init)
     let config = if let Commands::Init = &cli.command {
         Config::default() // Dummy
@@ -84,31 +84,87 @@ async fn main() -> Result<()> {
         Commands::Scan => {
             let root = std::env::current_dir()?;
             oracle::scan_codebase(&root).await?;
-        },
+        }
         Commands::Chat(args) => {
             let root = std::env::current_dir()?;
             let db_path = root.join(".arqon/graph.db");
             let vector_path = root.join(".arqon/vectors.lance");
-            
+
             let mut engine = oracle::query::QueryEngine::new(
                 db_path.to_str().unwrap(),
-                vector_path.to_str().unwrap()
-            ).await?;
-            
+                vector_path.to_str().unwrap(),
+            )
+            .await?;
+
             let results = engine.query(&args.query).await?;
             for res in results {
                 println!("[{}] {} (Score: {})", res.path, res.name, res.score);
             }
         }
         Commands::Heal(args) => {
+            let root = std::env::current_dir()?;
             println!("Starting self-healing pipeline...");
-            println!("Max attempts: {}", args.max_attempts);
-            println!("Heal command not yet fully implemented (LLM integration pending)");
+            println!("Max attempts: {}", config.heal.max_attempts);
+            println!("Ollama model: {}", config.heal.ollama_model);
+
+            // Parse log file if provided
+            if let Some(log_path) = &args.log_file {
+                let log_content = std::fs::read_to_string(log_path)
+                    .with_context(|| format!("Failed to read log file: {:?}", log_path))?;
+
+                let failures = heal::RustLogParser::parse_cargo_output(&log_content)?;
+
+                if failures.is_empty() {
+                    println!("No test failures found in log file.");
+                    return Ok(());
+                }
+
+                println!("Found {} test failure(s)", failures.len());
+
+                // Open Oracle store
+                let db_path = root.join(".arqon/graph.db");
+                let store = oracle::OracleStore::open(&db_path)?;
+
+                // Create healing loop with Ollama
+                let mut healing_loop = heal::HealingLoop::new(
+                    store,
+                    root.clone(),
+                    args.max_attempts,
+                    &config.heal.ollama_endpoint,
+                    &config.heal.ollama_model,
+                )?;
+
+                // Process each failure
+                for failure in &failures {
+                    println!("\n--- Healing: {} ---", failure.test_name);
+                    println!("File: {}", failure.file_path);
+                    println!("Error: {}", failure.error_message);
+
+                    match healing_loop.run(failure)? {
+                        heal::HealOutcome::Success => {
+                            println!("✅ Successfully healed!");
+                        }
+                        heal::HealOutcome::NoFixGenerated => {
+                            println!("⚠️ LLM could not generate a fix");
+                        }
+                        heal::HealOutcome::MaxAttemptsExceeded => {
+                            println!("❌ Max attempts exceeded");
+                        }
+                        other => {
+                            println!("❌ Healing failed: {:?}", other);
+                        }
+                    }
+                }
+            } else {
+                println!("No log file provided. Use --log-file to specify test output.");
+                println!("Example: cargo test --message-format=json > test.json");
+                println!("         arqon heal --log-file test.json");
+            }
         }
         Commands::Ship(args) => {
             let root = std::env::current_dir()?;
             println!("Starting release pipeline...");
-            
+
             if !args.skip_checks {
                 let checker = ship::ConstitutionCheck::new(root.clone());
                 if !checker.run_all()? {
@@ -116,18 +172,18 @@ async fn main() -> Result<()> {
                     std::process::exit(1);
                 }
             }
-            
+
             // Parse commits and calculate version
             let parser = ship::CommitParser::new(root.clone());
             let commits = parser.get_commits_since_last_tag()?;
-            
+
             let current_version = ship::SemVer::parse("0.0.0")?; // TODO: Read from Cargo.toml
             let next_version = ship::calculate_next_version(&current_version, &commits);
             let changelog = ship::generate_changelog(&next_version, &commits);
-            
-            println!("Next version: v{}", next_version.to_string());
+
+            println!("Next version: v{}", next_version);
             println!("\nChangelog:\n{}", changelog);
-            
+
             if args.dry_run {
                 println!("\n[DRY RUN] Would create release PR");
             } else {
@@ -151,8 +207,8 @@ fn handle_init(config_path: &Path) -> Result<()> {
     }
 
     let default_config = Config::default();
-    let toml_string = toml::to_string_pretty(&default_config)
-        .context("Failed to serialize default config")?;
+    let toml_string =
+        toml::to_string_pretty(&default_config).context("Failed to serialize default config")?;
 
     fs::write(config_path, toml_string)
         .with_context(|| format!("Failed to write config file to {:?}", config_path))?;

@@ -1,8 +1,7 @@
-use anyhow::Result;
 use crate::heal::parser_rust::TestFailure;
 use crate::oracle::OracleStore;
+use anyhow::Result;
 use std::fs;
-use std::path::Path;
 
 pub struct ContextBuilder {
     store: OracleStore,
@@ -20,7 +19,7 @@ impl ContextBuilder {
     pub fn new(store: OracleStore, root: std::path::PathBuf) -> Self {
         Self { store, root }
     }
-    
+
     pub fn build_context(&self, failure: &TestFailure) -> Result<HealContext> {
         // 1. Read source file
         let file_path = self.root.join(&failure.file_path);
@@ -29,7 +28,7 @@ impl ContextBuilder {
         } else {
             String::new()
         };
-        
+
         // 2. Extract snippet around the failing line (if known)
         let snippet = if let Some(line) = failure.line {
             let lines: Vec<&str> = source.lines().collect();
@@ -40,10 +39,48 @@ impl ContextBuilder {
             // Take first 50 lines if no line number
             source.lines().take(50).collect::<Vec<_>>().join("\n")
         };
-        
+
         // 3. TODO: Query store for related function signatures
-        let related_signatures = Vec::new();
-        
+        // 3. Extract identifiers from error message and query Oracle
+        let mut related_signatures = Vec::new();
+
+        // Simple tokenizer: split by non-alphanumeric
+        let tokens: Vec<&str> = failure
+            .error_message
+            .split(|c: char| !c.is_alphanumeric() && c != '_')
+            .filter(|s| s.len() > 3) // Skip short words
+            .collect();
+
+        // Dedup tokens
+        let mut unique_tokens = tokens.clone();
+        unique_tokens.sort();
+        unique_tokens.dedup();
+
+        for token in unique_tokens {
+            // Skip common keywords (very basic list)
+            if ["error", "found", "expected", "type", "function", "field"].contains(&token) {
+                continue;
+            }
+
+            if let Ok(nodes) = self.store.search_nodes(token) {
+                for (_, path, node_type, name) in nodes {
+                    // If the node name matches the token (case-insensitive done by search_nodes)
+                    // In a real impl, we'd fetch the signature from DB.
+                    // For MVP, we'll format a synthetic signature or just mention it exists.
+                    // The search_nodes returns (id, path, type, name).
+
+                    // We format it as "Defined: <type> <name> in <path>"
+                    let sig = format!("Ref: {} {} (in {})", node_type, name, path);
+                    if !related_signatures.contains(&sig) {
+                        related_signatures.push(sig);
+                    }
+                }
+            }
+        }
+
+        // Limit related signatures to avoid context overflow
+        related_signatures.truncate(5);
+
         Ok(HealContext {
             failure: failure.clone(),
             source_snippet: snippet,

@@ -1,12 +1,8 @@
-use anyhow::Result;
 use crate::oracle::store::OracleStore;
-use crate::oracle::vector_store::VectorStore;
-use crate::oracle::embed::MiniLM;
+use anyhow::Result;
 
 pub struct QueryEngine {
     store: OracleStore,
-    vector_store: VectorStore,
-    model: MiniLM,
 }
 
 #[derive(Debug)]
@@ -18,30 +14,56 @@ pub struct QueryResult {
 }
 
 impl QueryEngine {
-    pub async fn new(db_path: &str, vector_uri: &str) -> Result<Self> {
+    pub async fn new(db_path: &str, _vector_uri: &str) -> Result<Self> {
         let store = OracleStore::open(db_path)?;
-        let vector_store = VectorStore::new(vector_uri).await?;
-        let model = MiniLM::new()?;
-        
-        Ok(Self {
-            store,
-            vector_store,
-            model,
-        })
+        Ok(Self { store })
     }
 
     pub async fn query(&mut self, text: &str) -> Result<Vec<QueryResult>> {
-        // 1. Embed query
-        let vec = self.model.embed(text)?;
-        
-        // 2. Vector Search
-        let hits = self.vector_store.search(vec, 5).await?;
-        
-        // 3. Enrich with Graph Data
+        // Extract keywords from query
+        let keywords: Vec<&str> = text
+            .split_whitespace()
+            .filter(|w| w.len() > 2) // Skip short words
+            .collect();
+
         let mut results = Vec::new();
-        // TODO: Map ID back to node details via store.
-        // For MVP skeleton: return empty or mock
-        
+
+        // If we have keywords, search for each
+        if !keywords.is_empty() {
+            for keyword in &keywords {
+                if let Ok(nodes) = self.store.search_nodes(keyword) {
+                    for (id, path, node_type, name) in nodes {
+                        // Avoid duplicates
+                        if !results
+                            .iter()
+                            .any(|r: &QueryResult| r.name == name && r.path == path)
+                        {
+                            results.push(QueryResult {
+                                name,
+                                path,
+                                score: 1.0, // Simple match
+                                snippet: format!("[{}] id={}", node_type, id),
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        // If no results or no keywords, show some nodes
+        if results.is_empty() {
+            if let Ok(nodes) = self.store.get_all_nodes(20) {
+                for (id, path, node_type, name) in nodes {
+                    results.push(QueryResult {
+                        name,
+                        path,
+                        score: 0.5,
+                        snippet: format!("[{}] id={}", node_type, id),
+                    });
+                }
+            }
+        }
+
         Ok(results)
     }
 }

@@ -5,61 +5,91 @@ pub struct PromptTemplates;
 impl PromptTemplates {
     /// Generate a repair prompt for Rust code
     pub fn rust_repair(ctx: &HealContext) -> String {
-        format!(
-            r#"You are a Rust expert. Fix the following code error.
+        let related = if ctx.related_signatures.is_empty() {
+            "None".to_string()
+        } else {
+            ctx.related_signatures.join("\n")
+        };
 
-## Error
+        format!(
+            r#"You are an expert Rust developer tasked with fixing a compilation error or test failure.
+Your goal is to provide ONLY the corrected code block that fixes the issue.
+
+CONTEXT:
 File: {}
 Line: {}
-Message: {}
+Error Message:
+{}
 
-## Current Code
+RELATED CODE:
+{}
+
+SOURCE CODE:
 ```rust
 {}
 ```
 
-## Instructions
-1. Analyze the error message
-2. Provide the corrected code block
-3. Only output the fixed code, no explanations
-4. Preserve the original function signature
+INSTRUCTIONS:
+1. Analyze the error message, related code, and the source code.
+2. Determine the necessary changes to fix the error.
+3. Provide the COMPLETE corrected code block.
+4. DO NOT include any explanations, markdown headers, or conversational text.
+5. ONLY output the code block enclosed in ```rust and ``` logic.
 
-## Fixed Code
+RESPONSE:
 ```rust
 "#,
             ctx.failure.file_path,
-            ctx.failure.line.map(|l| l.to_string()).unwrap_or_else(|| "unknown".to_string()),
+            ctx.failure
+                .line
+                .map(|l| l.to_string())
+                .unwrap_or_else(|| "unknown".to_string()),
             ctx.failure.error_message,
+            related,
             ctx.source_snippet
         )
     }
 
     /// Generate a repair prompt for Python code
     pub fn python_repair(ctx: &HealContext) -> String {
+        let related = if ctx.related_signatures.is_empty() {
+            "None".to_string()
+        } else {
+            ctx.related_signatures.join("\n")
+        };
+
         format!(
-            r#"You are a Python expert. Fix the following test failure.
+            r#"You are an expert Python developer tasked with fixing a test failure.
+Your goal is to provide ONLY the corrected code block that fixes the issue.
 
-## Error
+CONTEXT:
 File: {}
-Test: {}
-Message: {}
+Test Name: {}
+Error Message:
+{}
 
-## Current Code
+RELATED CODE:
+{}
+
+SOURCE CODE:
 ```python
 {}
 ```
 
-## Instructions
-1. Analyze the error message
-2. Provide the corrected code block
-3. Only output the fixed code, no explanations
+INSTRUCTIONS:
+1. Analyze the error message, related code, and the source code.
+2. Determine the necessary changes to fix the error.
+3. Provide the COMPLETE corrected code block.
+4. DO NOT include any explanations, markdown headers, or conversational text.
+5. ONLY output the code block enclosed in ```python and ``` logic.
 
-## Fixed Code
+RESPONSE:
 ```python
 "#,
             ctx.failure.file_path,
             ctx.failure.test_name,
             ctx.failure.error_message,
+            related,
             ctx.source_snippet
         )
     }

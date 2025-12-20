@@ -1,5 +1,5 @@
-use tree_sitter::{Parser, Tree, Language};
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
+use tree_sitter::{Language, Parser, Tree};
 
 pub struct PythonParser {
     parser: Parser,
@@ -10,7 +10,8 @@ impl PythonParser {
         let mut parser = Parser::new();
         // tree-sitter 0.22+ API: LanguageFn into_raw() -> Language
         let language: Language = tree_sitter_python::LANGUAGE.into();
-        parser.set_language(&language)
+        parser
+            .set_language(&language)
             .context("Error loading Python grammar")?;
         Ok(Self { parser })
     }

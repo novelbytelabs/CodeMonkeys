@@ -41,12 +41,12 @@ pub struct RustLogParser;
 impl RustLogParser {
     pub fn parse_cargo_output(json_output: &str) -> Result<Vec<TestFailure>> {
         let mut failures = Vec::new();
-        
+
         for line in json_output.lines() {
             if line.trim().is_empty() {
                 continue;
             }
-            
+
             if let Ok(msg) = serde_json::from_str::<CargoMessage>(line) {
                 if msg.reason == "compiler-message" {
                     if let Some(compiler_msg) = msg.message {
@@ -64,7 +64,7 @@ impl RustLogParser {
                 }
             }
         }
-        
+
         Ok(failures)
     }
 }

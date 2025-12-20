@@ -1,17 +1,19 @@
+#![allow(dead_code)]
+
+mod edges;
+mod embed;
+mod graph;
+pub mod hash;
 mod parser;
 mod parser_py;
-mod graph;
-mod edges;
-mod store;
-pub mod hash;
-mod embed;
-mod vector_store;
 mod schema;
+mod store;
+mod vector_store;
 
 use anyhow::Result;
-use std::path::Path;
 use ignore::WalkBuilder; // Add 'ignore' crate for .gitignore support
-use indicatif::{ProgressBar, ProgressStyle}; // Add 'indicatif'
+use indicatif::{ProgressBar, ProgressStyle};
+use std::path::Path; // Add 'indicatif'
 
 pub use store::OracleStore;
 pub use vector_store::VectorStore;
@@ -19,11 +21,11 @@ pub mod query;
 
 pub async fn scan_codebase(root: &Path) -> Result<()> {
     println!("Scanning codebase at {:?}", root);
-    
+
     // 1. Init Stores
     let db_path = root.join(".arqon/graph.db");
     let mut store = OracleStore::open(db_path)?;
-    
+
     let vector_path = root.join(".arqon/vectors.lance");
     let vector_uri = vector_path.to_str().unwrap();
     let mut vector_store = VectorStore::new(vector_uri).await?;
@@ -36,7 +38,7 @@ pub async fn scan_codebase(root: &Path) -> Result<()> {
 
     let pb = ProgressBar::new_spinner();
     pb.set_style(ProgressStyle::default_spinner());
-    
+
     let mut graph_builder = graph::GraphBuilder::new()?;
     let mut edge_builder = edges::EdgeBuilder::new()?;
     // let embedding_model = embed::MiniLM::new()?; // Heavy load
@@ -50,17 +52,17 @@ pub async fn scan_codebase(root: &Path) -> Result<()> {
                         let ext_str = ext.to_string_lossy();
                         if ext_str == "rs" || ext_str == "py" {
                             pb.set_message(format!("Processing {:?}", path.file_name().unwrap()));
-                            
+
                             let content = std::fs::read_to_string(path)?;
                             let relative_path = path.strip_prefix(root)?.to_string_lossy();
-                            
+
                             // 3. Extract Nodes
                             let nodes = graph_builder.extract_nodes(&relative_path, &content);
                             for node in &nodes {
                                 store.insert_node(node)?;
                                 // TODO: Embed and insert into LanceDB
                             }
-                            
+
                             // 4. Extract Edges
                             let edges = edge_builder.extract_edges(&relative_path, &content);
                             for edge in edges {
@@ -73,7 +75,7 @@ pub async fn scan_codebase(root: &Path) -> Result<()> {
             Err(err) => eprintln!("Error walking path: {}", err),
         }
     }
-    
+
     pb.finish_with_message("Scan complete.");
     Ok(())
 }

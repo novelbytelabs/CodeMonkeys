@@ -45,6 +45,7 @@ chrono = "0.4"
 ignore = "0.4"
 indicatif = "0.17"
 reqwest = { version = "0.12", features = ["json", "blocking"] }
+tempfile = "3"
 
 # Arrow (for LanceDB)
 arrow-array = "54"
@@ -52,7 +53,6 @@ arrow-schema = "54"
 
 [dev-dependencies]
 insta = "1"
-tempfile = "3"
 criterion = "0.5"
 
 [[bin]]

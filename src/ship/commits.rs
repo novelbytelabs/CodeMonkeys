@@ -19,7 +19,7 @@ impl CommitParser {
     pub fn new(root: PathBuf) -> Self {
         Self { root }
     }
-    
+
     /// Get commits since last tag
     pub fn get_commits_since_last_tag(&self) -> Result<Vec<Commit>> {
         // Get last tag
@@ -27,45 +27,48 @@ impl CommitParser {
             .args(["describe", "--tags", "--abbrev=0"])
             .current_dir(&self.root)
             .output()?;
-        
+
         let last_tag = if tag_output.status.success() {
-            String::from_utf8_lossy(&tag_output.stdout).trim().to_string()
+            String::from_utf8_lossy(&tag_output.stdout)
+                .trim()
+                .to_string()
         } else {
             "".to_string()
         };
-        
+
         // Get log since tag (or all if no tag)
         let range = if last_tag.is_empty() {
             "HEAD".to_string()
         } else {
             format!("{}..HEAD", last_tag)
         };
-        
+
         let log_output = Command::new("git")
             .args(["log", "--format=%H %s", &range])
             .current_dir(&self.root)
             .output()?;
-        
+
         let log_str = String::from_utf8_lossy(&log_output.stdout);
-        let commits = log_str.lines()
+        let commits = log_str
+            .lines()
             .filter_map(|line| self.parse_commit_line(line))
             .collect();
-        
+
         Ok(commits)
     }
-    
+
     fn parse_commit_line(&self, line: &str) -> Option<Commit> {
         let parts: Vec<&str> = line.splitn(2, ' ').collect();
         if parts.len() < 2 {
             return None;
         }
-        
+
         let hash = parts[0].to_string();
         let message = parts[1];
-        
+
         // Parse conventional commit: type(scope)!: description
         let is_breaking = message.contains("BREAKING CHANGE") || message.contains("!:");
-        
+
         // Simple parser: just extract type
         let commit_type = if message.starts_with("feat") {
             "feat"
@@ -82,7 +85,7 @@ impl CommitParser {
         } else {
             "other"
         };
-        
+
         Some(Commit {
             hash,
             commit_type: commit_type.to_string(),
@@ -90,5 +93,71 @@ impl CommitParser {
             description: message.to_string(),
             is_breaking,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_commit_line_feat() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser
+            .parse_commit_line("abc123 feat: add new feature")
+            .unwrap();
+        assert_eq!(commit.hash, "abc123");
+        assert_eq!(commit.commit_type, "feat");
+        assert!(!commit.is_breaking);
+    }
+
+    #[test]
+    fn test_parse_commit_line_fix() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser.parse_commit_line("def456 fix: resolve bug").unwrap();
+        assert_eq!(commit.commit_type, "fix");
+    }
+
+    #[test]
+    fn test_parse_commit_line_breaking() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser
+            .parse_commit_line("ghi789 feat!: breaking API change")
+            .unwrap();
+        assert!(commit.is_breaking);
+    }
+
+    #[test]
+    fn test_parse_commit_line_breaking_change() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser
+            .parse_commit_line("jkl012 refactor: BREAKING CHANGE in interface")
+            .unwrap();
+        assert!(commit.is_breaking);
+    }
+
+    #[test]
+    fn test_parse_commit_line_chore() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser
+            .parse_commit_line("mno345 chore: update deps")
+            .unwrap();
+        assert_eq!(commit.commit_type, "chore");
+    }
+
+    #[test]
+    fn test_parse_commit_line_other() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let commit = parser
+            .parse_commit_line("pqr678 random commit message")
+            .unwrap();
+        assert_eq!(commit.commit_type, "other");
+    }
+
+    #[test]
+    fn test_parse_commit_line_invalid() {
+        let parser = CommitParser::new(PathBuf::from("."));
+        let result = parser.parse_commit_line("no-space");
+        assert!(result.is_none());
     }
 }

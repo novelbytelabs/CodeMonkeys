@@ -1,8 +1,8 @@
-use tree_sitter::{Node, TreeCursor};
-use anyhow::Result;
 use crate::oracle::parser::RustParser;
 use crate::oracle::parser_py::PythonParser;
-use sha2::{Sha256, Digest};
+use anyhow::Result;
+use sha2::{Digest, Sha256};
+use tree_sitter::{Node, TreeCursor};
 
 #[derive(Debug, Clone)]
 pub struct GraphNode {
@@ -47,16 +47,22 @@ impl GraphBuilder {
         nodes
     }
 
-    fn visit_rust_node(&self, cursor: &mut TreeCursor, path: &str, content: &str, nodes: &mut Vec<GraphNode>) {
+    fn visit_rust_node(
+        &self,
+        cursor: &mut TreeCursor,
+        path: &str,
+        content: &str,
+        nodes: &mut Vec<GraphNode>,
+    ) {
         let node = cursor.node();
         let kind = node.kind();
-        
+
         if kind == "function_item" || kind == "struct_item" || kind == "impl_item" {
-             if let Some(name_node) = node.child_by_field_name("name") {
+            if let Some(name_node) = node.child_by_field_name("name") {
                 let name = extract_text(name_node, content);
                 let signature = extract_text(node, content); // Simplified: full text as signature hash source
                 let hash = compute_hash(&signature);
-                
+
                 nodes.push(GraphNode {
                     path: path.to_string(),
                     node_type: kind.replace("_item", ""), // "function", "struct", "impl"
@@ -66,7 +72,7 @@ impl GraphBuilder {
                     signature_hash: hash,
                     docstring: None, // TODO: Extract doc comments
                 });
-             }
+            }
         }
 
         if cursor.goto_first_child() {
@@ -80,9 +86,9 @@ impl GraphBuilder {
         }
     }
 
-    fn extract_python(&mut self, path: &str, content: &str) -> Vec<GraphNode> {
+    fn extract_python(&mut self, _path: &str, _content: &str) -> Vec<GraphNode> {
         // Todo: Implement Python node extraction similar to Rust
-        vec![] 
+        vec![]
     }
 }
 

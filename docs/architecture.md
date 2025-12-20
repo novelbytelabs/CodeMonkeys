@@ -20,7 +20,7 @@ Provides intelligent codebase understanding through dual indexing:
 |-----------|---------------|
 | `parser.rs` | Tree-sitter AST parsing for Rust |
 | `parser_py.rs` | Tree-sitter AST parsing for Python |
-| `graph.rs` | Extract code entities (functions, structs, classes) |
+| `graph.rs` | Extract code entities (functions, structs, classes) |AC
 | `edges.rs` | Extract relationships (calls, imports) |
 | `store.rs` | SQLite persistence for graph data |
 | `schema.rs` | Database schema migrations |
@@ -137,3 +137,68 @@ Schema: code_vectors
 - **Lazy model loading**: Embedding model loaded on first use
 - **Batch vector inserts**: LanceDB batch operations
 - **Async I/O**: Tokio runtime for concurrent operations
+
+---
+
+## Fleet Architecture (Moonshot)
+
+ArqonShip is designed to scale from a single product to 50+ products across multiple companies.
+
+### Two-Layer Model
+
+```
+┌───────────────────────────────────────────────┐
+│              ARQON ORG                        │
+│  Fleet registry + Swarm DB + Cross-repo ops  │
+└───────────────────┬───────────────────────────┘
+                    │
+    ┌───────────────┼───────────────┐
+    ▼               ▼               ▼
+┌────────┐     ┌────────┐     ┌────────┐
+│ArqonShip     │ArqonShip     │ArqonShip
+│ (repo1)│     │ (repo2)│     │ (repoN)│
+└────────┘     └────────┘     └────────┘
+```
+
+### ArqonShip Pillars
+
+| Pillar | Job |
+|--------|-----|
+| **Oracle** | Code graph + semantic vectors |
+| **Heal** | LLM repair + verify + rollback |
+| **Docs** | Living documentation |
+| **Ship** | Auto-release when gates pass |
+| **Watch** | Event listener (hybrid triggers) |
+
+### Trigger Modes (Hybrid)
+
+| Mode | Trigger | Best For |
+|------|---------|----------|
+| **GitHub Actions** | CI failure event | Zero-setup, runs in CI |
+| **Webhooks** | Push/PR/release events | Real-time local response |
+| **Cron** | Time-based polling | Fallback, offline mode |
+
+### Swarm Intelligence
+
+Each ArqonShip instance shares telemetry with a central Swarm DB:
+
+| Store | Data | Path |
+|-------|------|------|
+| SQLite | Error patterns, fix templates | `~/.arqon/swarm.db` |
+| LanceDB | Semantic embeddings | `~/.arqon/swarm_vectors/` |
+
+Patterns learned in one repo inform fixes in all others.
+
+### ArqonOrg Capabilities
+
+- **Fleet Registry**: All companies, products, repos
+- **Multi-Account Auth**: Different GitHub tokens per org
+- **Cross-Repo Ops**: `arqonorg apply --all`
+- **Dashboard**: Fleet health at a glance
+
+### Moonshot Goals
+
+1. **Fix bugs while you sleep** — Daemon heals CI failures overnight
+2. **Auto-cut releases** — Ship when all gates pass
+3. **Cross-repo docs** — Update 50 READMEs at once
+
