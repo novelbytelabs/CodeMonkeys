@@ -3,25 +3,26 @@
 **Version:** 0.1 (Bootstrap)
 
 ## 0. How to Resume (Start Here)
-- **Last Checkpoint**: P4 complete (Hardened generator + gc_runs + validity badges).
-- **Current Milestone**: P5 (Constitution implementation + governance enforcement).
+- **Last Checkpoint**: P5 complete (Governance + Silverback + preflight).
+- **Current Milestone**: P6 (CI enforcement wiring).
 - **Commit Hashes**:
     - P2: `2c8822f` (Bootstrap MVP)
     - P3: `371806e` (Schemas + report generator)
     - P4: `730fb7f` (Hardened generator + gc_runs)
-- **Branch Status**: `000-dash-mvp` ready to merge to `main`.
+    - P5: `9dc9b4c` (Governance + Silverback + preflight)
+- **Branch Status**: `main` is current. Tag: `v0.1.0-dash`.
 - **Next 3 Tasks**:
-    1. Merge to main + tag `v0.1.0-dash`.
-    2. Create `AUTONOMY_GOVERNANCE.md` (enforceable rules).
-    3. Add Silverback validator + preflight scripts.
+    1. Wire CI (pytest + Silverback + artifacts).
+    2. Make CI a required check.
+    3. Begin Nexus interface stubs (P7).
 - **Open Decisions**:
-    - [Decision]: How strict to make Silverback in bootstrap (fail vs warn).
-    - [Decision]: Which sections are truly mandatory vs recommended.
+    - [Decision]: CI artifact retention policy.
+    - [Decision]: When to enable branch protection.
 - **Canonical 'Start Here' Files**:
     - `CONTEXT_SNAPSHOT.md` (This file)
-    - `docs/pm/01_SYSTEM_CONTRACT.md` (Roles)
+    - `docs/pm/AUTONOMY_GOVERNANCE.md` (Governance rules)
     - `docs/pm/RUN_ARTIFACT_CONTRACT.md` (Artifact contract)
-    - `specs/000-dash-mvp/spec.md` (Dash MVP spec)
+    - `scripts/preflight.sh` (Local gate)
 
 ## 1. Overview
 Code Monkeys is an autonomous software production factory for a solo operator. It consists of two swarms:

@@ -1,0 +1,77 @@
+# Code Monkeys CI Workflow
+#
+# Runs on push/PR to main:
+# 1. pytest (schema validation tests)
+# 2. Silverback validation (spec + artifact checks)
+# 3. Generate run report
+# 4. Upload artifacts
+
+name: Code Monkeys CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.10"
+
+jobs:
+  validate:
+    name: Validate & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest jsonschema
+
+      - name: Run pytest (schema tests)
+        run: |
+          pytest tests/dash/ -v --tb=short | tee pytest_output.log
+          echo "PYTEST_EXIT_CODE=${PIPESTATUS[0]}" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: Run Silverback validation
+        run: |
+          python scripts/silverback_validate.py --all | tee silverback_output.log
+          echo "SILVERBACK_EXIT_CODE=${PIPESTATUS[0]}" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: Generate run report
+        run: |
+          python scripts/generate_run_report.py codemonkeys-dash --test-path tests/dash/
+        continue-on-error: true
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-artifacts
+          path: |
+            pytest_output.log
+            silverback_output.log
+            dash/runs/codemonkeys-dash/last_run.json
+          retention-days: 30
+        if: always()
+
+      - name: Check results
+        run: |
+          if [ "$PYTEST_EXIT_CODE" != "0" ]; then
+            echo "❌ pytest failed"
+            exit 1
+          fi
+          if [ "$SILVERBACK_EXIT_CODE" != "0" ]; then
+            echo "❌ Silverback validation failed"
+            exit 1
+          fi
+          echo "✅ All checks passed"
