@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1",
+  "generated_at": "2025-12-21T00:00:00Z",
+  "products": [
+    {
+      "product_id": "codemonkeys-dash",
+      "display_name": "Code Monkeys Dash",
+      "repo": "local",
+      "path": "./",
+      "owner": "nexus",
+      "status": "bootstrap"
+    }
+  ]
+}

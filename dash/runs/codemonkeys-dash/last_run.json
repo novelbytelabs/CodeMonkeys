@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.1",
+  "product_id": "codemonkeys-dash",
+  "run_id": "run_0001",
+  "started_at": "2025-12-21T00:00:00Z",
+  "ended_at": "2025-12-21T00:01:00Z",
+  "status": "failed",
+  "summary": "CI failed: tests failing",
+  "evidence": {
+    "paths": [
+      "runs/run_0001/logs.txt",
+      "runs/run_0001/test-report.json",
+      "runs/run_0001/screenshot.png"
+    ]
+  },
+  "banana_economy": {
+    "budget_tokens": 50000,
+    "spent_tokens": 1200,
+    "budget_minutes": 90,
+    "spent_minutes": 8,
+    "max_ci_heal_attempts": 2,
+    "ci_heal_attempts_used": 1
+  },
+  "kill_switch": {
+    "enabled": false,
+    "reason": ""
+  },
+  "pr_wave": {
+    "state": "none",
+    "open_prs": 0,
+    "last_update": "2025-12-21T00:01:00Z"
+  }
+}
