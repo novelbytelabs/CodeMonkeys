@@ -1,9 +1,9 @@
-site_name: ArqonShip
-site_description: Constitution-governed automation that fixes bugs while you sleep, ships releases automatically, and scales to 50+ products.
+site_name: CodeMonkeys Ship
+site_description: Constitution-governed DevSecOps automation that keeps CI green, keeps docs true, and ships audited releases—at fleet scale (50+ products).
 site_author: Novel Byte Labs
-site_url: https://novelbytelabs.github.io/ArqonShip/
-repo_name: novelbytelabs/ArqonShip
-repo_url: https://github.com/novelbytelabs/ArqonShip
+site_url: https://novelbytelabs.github.io/CodeMonkeys/
+repo_name: novelbytelabs/CodeMonkeys
+repo_url: https://github.com/novelbytelabs/CodeMonkeys
 
 theme:
   name: material
@@ -34,7 +34,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/novelbytelabs/ArqonShip
+      link: https://github.com/novelbytelabs/CodeMonkeys
   generator: false
 
 markdown_extensions:
@@ -63,3 +63,24 @@ nav:
   - CLI Reference: cli-reference.md
   - Configuration: configuration.md
   - Developer Guide: developer-guide.md
+  - CodeMonkeys:
+      - Master Architecture: agent/CODEMONKEYS_MASTER_ARCHITECTURE.md
+      - Feature Map: agent/CODEMONKEYS_FEATURE_MAP.md
+      - Architecture v2: agent/CODEMONKEYS_ARCHITECTURE_v2.md
+      - Synthesis: agent/CODEMONKEYS_SYNTHESIS.md
+      - Brainstorm: agent/CODEMONKEYS_BRAINSTORM.md
+  - Ship:
+      - Tooling Stack: agent/SHIP_TOOLING_STACK.md
+      - Integration Plan: agent/SHIP_INTEGRATION_PLAN.md
+  - Design Docs:
+      - Vision: agent/VISION.md
+      - Product Line: agent/PRODUCT_LINE.md
+      - Fleet Architecture: agent/FLEET_ARCHITECTURE.md
+      - Ultimate Architecture: agent/ULTIMATE_ARCHITECTURE.md
+      - Orchestrator: agent/ORCHESTRATOR_ARCHITECTURE.md
+      - Adaptive Immunity: agent/ADAPTIVE_IMMUNITY.md
+      - Rule Schema: agent/RULE_SCHEMA_SPEC.md
+  - Reference:
+      - Constitution: agent/constitution.md
+      - Moonshot Ideas: agent/MOONSHOT_IDEAS.md
+      - Context: agent/context.md

@@ -1,6 +1,7 @@
-# ArqonShip
+# Code Monkeys Ship
 
-> **The Solo Product Factory**: Constitution-governed automation that fixes bugs while you sleep, ships releases automatically, and scales to 50+ products.
+> **Code Monkeys Ship — The Solo Shipping Factory**: 
+> Constitution-governed DevSecOps automation that keeps CI green, keeps docs true, and ships audited releases end-to-end—at fleet scale (50+ products), even while you’re offline.
 
 ---
 
@@ -15,11 +16,11 @@ Every repo needs:
 - 🚀 Releases that follow rules
 - ⏰ Hours of maintenance you don't have
 
-**ArqonShip does all of it. Automatically. While you sleep.**
+**Code Monkeys Ship does all of it. Automatically. While you sleep.**
 
 ---
 
-## What ArqonShip Does
+## What Code Monkeys Ship Does
 
 <div class="grid cards" markdown>
 
@@ -27,42 +28,43 @@ Every repo needs:
 
     ---
 
-    Semantic code understanding via graph + vectors.
-    Query your codebase in natural language.
+    Code graph + semantic indexing
 
 -   :stethoscope: **Heal**
 
     ---
 
-    LLM-powered CI repair.
-    Wake up to green builds.
+    Self-healing CI with LLM-powered fixes
 
 -   :books: **Docs**
 
     ---
 
-    Living documentation.
-    README never goes stale.
+    Living documentation that stays in sync
 
 -   :rocket: **Ship**
 
     ---
 
-    Governed releases.
-    One-click publish with guardrails.
+    Governed releases (semver, changelog, tags)
 
--   :eye: **Watch**
+-   :package: **Publish**
 
     ---
 
-    Always-on monitoring.
-    Catches issues before you do.
+    Packages (crates.io, PyPI, Docker)
+
+-   :mega: **Announce**
+
+    ---
+
+    Website, release notes, marketing copy
 
 </div>
 
 ---
 
-## Why ArqonShip?
+## Why Code Monkeys Ship?
 
 | Feature | Benefit |
 |---------|---------|
@@ -77,10 +79,10 @@ Every repo needs:
 
 ```
 You: *sleeping*
-ArqonShip: Detected CI failure (E0308: type mismatch)
-ArqonShip: Generated fix via Qwen-7B
-ArqonShip: Applied fix, verified, committed
-ArqonShip: All tests passing ✅
+codemonkeys ship: Detected CI failure (E0308: type mismatch)
+codemonkeys ship: Generated fix via Qwen-7B
+codemonkeys ship: Applied fix, verified, committed
+codemonkeys ship: All tests passing ✅
 You: *wake up* → Green CI, fixed code, audit log
 ```
 
@@ -93,8 +95,9 @@ echo 'fn broken() { let x: i32 = "oops"; }' > tests/broken.rs
 # Generate failure log
 cargo test --message-format=json > fail.json
 
-# Watch ArqonShip fix it
-arqonship heal --log-file fail.json
+# Code Monkeys Ship heals it automatically via Watch
+# Or manually trigger:
+codemonkeys ship heal --log-file fail.json
 ```
 
 ---
@@ -104,33 +107,29 @@ arqonship heal --log-file fail.json
 === "Install"
 
     ```bash
-    cargo install --path .
+    cargo install codemonkeys
     ```
 
-=== "Initialize"
+=== "Setup"
 
     ```bash
-    arqonship init
-    arqonship scan
+    codemonkeys init              # Bootstrap project
+    codemonkeys ship              # Start Ship services
     ```
 
 === "Query"
 
     ```bash
-    arqonship chat -q "What functions handle errors?"
+    codemonkeys ship chat -q "What functions handle errors?"
+    codemonkeys ship chat --docs -q "How do I configure CI?"
     ```
 
-=== "Heal"
+=== "Release"
 
     ```bash
-    cargo test --message-format=json > test.json
-    arqonship heal --log-file test.json
-    ```
-
-=== "Ship"
-
-    ```bash
-    arqonship ship --dry-run
+    codemonkeys ship --dry-run    # Preview release
+    codemonkeys ship release      # Cut release
+    codemonkeys ship publish      # Publish to registries
     ```
 
 ---
@@ -139,33 +138,74 @@ arqonship heal --log-file fail.json
 
 | Command | Description |
 |---------|-------------|
-| `arqonship init` | Initialize ArqonShip in current repo |
-| `arqonship scan` | Build Codebase Oracle |
-| `arqonship chat` | Query codebase with natural language |
-| `arqonship heal` | Autonomous self-healing |
-| `arqonship ship` | Governed release pipeline |
-| `arqonship watch` | *(Coming)* Always-on daemon |
+| `codemonkeys ship` | Full release pipeline |
+| `codemonkeys ship docs` | Generate documentation |
+| `codemonkeys ship website` | Generate website |
+| `codemonkeys ship ci` | Setup/update CI/CD |
+| `codemonkeys ship pr` | Create PR with governance |
+| `codemonkeys ship release` | Version bump + changelog |
+| `codemonkeys ship publish` | Publish to registries |
+| `codemonkeys ship monitor` | Setup monitoring |
+| `codemonkeys ship chat` | Query codebase/docs with natural language |
+| `codemonkeys ship heal` | Manually trigger CI repair |
+| `codemonkeys ship watch` | Always-on daemon *(Coming)* |
 
 ---
 
 ## The Bigger Picture
 
-ArqonShip is part of a complete product factory:
+Code Monkeys Ship operates at **two levels**:
+
+### 🏠 Local (Per-Product)
+
+Each product runs its own Ship instance:
+
+- Heal, Docs, Release, Monitor for **this repo**
+- Fully autonomous, works offline
+
+### 🌐 Fleet (Cross-Product)
+
+All Ship instances report to a central **Code Monkeys Org**:
+
+- Telemetry & logs from all products
+- Cross-project learning (fix in one → propagate to many)
+- Unified dashboard for 50+ products
+- Multi-company orchestration
 
 ```mermaid
 graph TD
-    A[ArqonInit] -->|Bootstrap| B[ArqonDev]
-    B -->|Spec → Code| C[ArqonShip]
-    C -->|Heal + Ship| D[ArqonOrg]
-    D -->|Fleet Management| E[50+ Products]
+    subgraph "Local (per-product)"
+        A1[codemonkeys ship] --> B1[Heal]
+        A1 --> B2[Docs]
+        A1 --> B3[Release]
+        A1 --> B4[Monitor]
+    end
+    
+    subgraph "Fleet (global)"
+        B1 --> C[Code Monkeys Org]
+        B2 --> C
+        B3 --> C
+        B4 --> C
+        C --> D[Swarm Intelligence]
+        C --> E[Fleet Dashboard]
+        C --> F[Cross-Project Memory]
+    end
 ```
 
-| Layer | Product | Job |
-|-------|---------|-----|
-| Bootstrap | **ArqonInit** | 0 → working repo |
-| Front Half | **ArqonDev** | Spec → Plan → Tasks |
-| Back Half | **ArqonShip** | Heal → Docs → Ship |
-| Fleet | **ArqonOrg** | Multi-company orchestration |
+| Layer | Scope | What Happens |
+|-------|-------|--------------|
+| **Local** | This product | Heal, Docs, Release, Monitor |
+| **Fleet** | All 50+ products | Telemetry, learning, unified view |
+
+---
+
+## The Complete Factory
+
+| Pillar | Command | Job |
+|--------|---------|-----|
+| Bootstrap | `codemonkeys init` | 0 → working repo |
+| Front Half | `codemonkeys dev` | Constitution → Spec → Plan → Implement → Secure → Test |
+| Back Half | `codemonkeys ship` | Heal → Docs → Release → Monitor (local + fleet) |
 
 **You write Constitution + Spec. The system does the rest.**
 
