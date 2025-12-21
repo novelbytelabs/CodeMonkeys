@@ -3,20 +3,20 @@
 **Version:** 0.1 (Bootstrap)
 
 ## 0. How to Resume (Start Here)
-- **Last Checkpoint**: P0 done / P1 in progress.
-- **Current Milestone**: P1 (Bootstrap Framework & Contracts).
+- **Last Checkpoint**: P2 complete (Dash MVP Pilot shipped).
+- **Current Milestone**: P3 (Formalize schemas + automate report generation).
 - **Next 3 Tasks**:
-    1. Create `specs/000-dash-mvp/spec.md` (P2).
-    2. Run Spec-Kit pipeline (Spec -> Plan -> Tasks) for Dash MVP.
-    3. Build smallest runnable Dash MVP (fixtures -> status).
+    1. Add formal JSON Schema files (`products.schema.json`, `last_run.schema.json`).
+    2. Add run report generator script (`scripts/generate_run_report.py`).
+    3. Add Run Artifact Contract (`docs/pm/RUN_ARTIFACT_CONTRACT.md`).
 - **Open Decisions**:
-    - [Decision]: Constitution strictness for bootstrap (start loose vs start strict).
-    - [Decision]: Dash MVP tech stack (Static vs Local App).
+    - [Decision]: Where to store run artifacts long-term (local vs cloud).
+    - [Decision]: How to version schemas (SemVer for artifacts).
 - **Canonical 'Start Here' Files**:
     - `CONTEXT_SNAPSHOT.md` (This file)
     - `docs/pm/01_SYSTEM_CONTRACT.md` (Roles)
     - `docs/agent/CODEMONKEYS_MASTER_ARCHITECTURE.md` (Tech)
-    - `task.md` (Active list)
+    - `specs/000-dash-mvp/spec.md` (Current feature)
 
 ## 1. Overview
 Code Monkeys is an autonomous software production factory for a solo operator. It consists of two swarms:
