@@ -3,23 +3,25 @@
 **Version:** 0.1 (Bootstrap)
 
 ## 0. How to Resume (Start Here)
-- **Last Checkpoint**: P3 complete (Formal schemas + report generator).
-- **Current Milestone**: P4 (Dash as operating console).
+- **Last Checkpoint**: P4 complete (Hardened generator + gc_runs + validity badges).
+- **Current Milestone**: P5 (Constitution implementation + governance enforcement).
 - **Commit Hashes**:
     - P2: `2c8822f` (Bootstrap MVP)
     - P3: `371806e` (Schemas + report generator)
+    - P4: `730fb7f` (Hardened generator + gc_runs)
+- **Branch Status**: `000-dash-mvp` ready to merge to `main`.
 - **Next 3 Tasks**:
-    1. Verify P4 (hardened generator, gc_runs, Dash validity badges).
-    2. Merge `000-dash-mvp` to main.
-    3. Begin Constitution implementation (Silverback agent stubs).
+    1. Merge to main + tag `v0.1.0-dash`.
+    2. Create `AUTONOMY_GOVERNANCE.md` (enforceable rules).
+    3. Add Silverback validator + preflight scripts.
 - **Open Decisions**:
-    - [Decision]: Banana Economy token tracking implementation.
-    - [Decision]: Run history API vs manifest file approach.
+    - [Decision]: How strict to make Silverback in bootstrap (fail vs warn).
+    - [Decision]: Which sections are truly mandatory vs recommended.
 - **Canonical 'Start Here' Files**:
     - `CONTEXT_SNAPSHOT.md` (This file)
     - `docs/pm/01_SYSTEM_CONTRACT.md` (Roles)
     - `docs/pm/RUN_ARTIFACT_CONTRACT.md` (Artifact contract)
-    - `specs/000-dash-mvp/spec.md` (Current feature)
+    - `specs/000-dash-mvp/spec.md` (Dash MVP spec)
 
 ## 1. Overview
 Code Monkeys is an autonomous software production factory for a solo operator. It consists of two swarms:
