@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/last_run.schema.json",
+  "title": "Run Report",
+  "description": "Run report artifact produced by Code Monkeys pipeline",
+  "type": "object",
+  "required": ["schema_version", "product_id", "run_id", "started_at", "ended_at", "status", "summary", "evidence", "banana_economy", "kill_switch", "pr_wave"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version for compatibility checking",
+      "const": "0.1"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product identifier this run belongs to"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Unique run identifier"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when run started"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when run ended"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "failed", "in_progress", "cancelled"],
+      "description": "Run outcome status"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Human-readable summary of the run outcome"
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["paths"],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of paths to evidence artifacts (logs, screenshots, reports)"
+        }
+      }
+    },
+    "banana_economy": {
+      "type": "object",
+      "required": ["budget_tokens", "spent_tokens", "budget_minutes", "spent_minutes", "max_ci_heal_attempts", "ci_heal_attempts_used"],
+      "properties": {
+        "budget_tokens": { "type": "integer", "minimum": 0 },
+        "spent_tokens": { "type": "integer", "minimum": 0 },
+        "budget_minutes": { "type": "integer", "minimum": 0 },
+        "spent_minutes": { "type": "integer", "minimum": 0 },
+        "max_ci_heal_attempts": { "type": "integer", "minimum": 0 },
+        "ci_heal_attempts_used": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "kill_switch": {
+      "type": "object",
+      "required": ["enabled", "reason"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "reason": { "type": "string" }
+      }
+    },
+    "pr_wave": {
+      "type": "object",
+      "required": ["state", "open_prs", "last_update"],
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": ["none", "pending", "active", "completed"],
+          "description": "PR wave state"
+        },
+        "open_prs": { "type": "integer", "minimum": 0 },
+        "last_update": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

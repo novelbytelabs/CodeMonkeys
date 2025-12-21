@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/products.schema.json",
+  "title": "Products Registry",
+  "description": "Registry of products monitored by Code Monkeys Dash",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "products"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version for compatibility checking",
+      "const": "0.1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this file was generated"
+    },
+    "products": {
+      "type": "array",
+      "description": "List of products in the fleet",
+      "items": {
+        "type": "object",
+        "required": ["product_id", "display_name", "repo", "path", "owner", "status"],
+        "properties": {
+          "product_id": {
+            "type": "string",
+            "description": "Unique identifier for the product (slug format)"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Human-readable product name"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository location (local, github, etc.)"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative or absolute path to the product root"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Owner agent or team (e.g., nexus, human)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["bootstrap", "active", "deprecated", "archived"],
+            "description": "Current lifecycle status"
+          }
+        }
+      }
+    }
+  }
+}

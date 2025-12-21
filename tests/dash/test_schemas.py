@@ -1,57 +1,88 @@
+"""
+Schema validation tests for Dash MVP artifacts.
+Validates JSON fixtures against formal JSON Schema files.
+"""
 import json
-import pytest
 import os
+import pytest
 
-SCHEMA_VERSION = "0.1"
+try:
+    from jsonschema import validate, ValidationError
+    HAS_JSONSCHEMA = True
+except ImportError:
+    HAS_JSONSCHEMA = False
+
+SCHEMA_DIR = "dash/schemas"
+FIXTURES = {
+    "products": ("dash/products.json", "products.schema.json"),
+    "last_run": ("dash/runs/codemonkeys-dash/last_run.json", "last_run.schema.json"),
+}
 
 def load_json(path):
+    """Load JSON file and return parsed data."""
     assert os.path.exists(path), f"File not found: {path}"
     with open(path) as f:
         return json.load(f)
 
-def test_products_json_validity():
-    """AC-004: Validate products.json structure"""
+def load_schema(name):
+    """Load JSON Schema file."""
+    path = os.path.join(SCHEMA_DIR, name)
+    return load_json(path)
+
+
+@pytest.mark.skipif(not HAS_JSONSCHEMA, reason="jsonschema not installed")
+def test_products_json_schema():
+    """AC-004: Validate products.json against formal schema."""
+    fixture_path, schema_name = FIXTURES["products"]
+    data = load_json(fixture_path)
+    schema = load_schema(schema_name)
+    
+    # This will raise ValidationError if invalid
+    validate(instance=data, schema=schema)
+    
+    # Additional assertions
+    assert data["schema_version"] == "0.1"
+    assert len(data["products"]) >= 1
+
+
+@pytest.mark.skipif(not HAS_JSONSCHEMA, reason="jsonschema not installed")
+def test_last_run_json_schema():
+    """AC-004: Validate last_run.json against formal schema."""
+    fixture_path, schema_name = FIXTURES["last_run"]
+    data = load_json(fixture_path)
+    schema = load_schema(schema_name)
+    
+    # This will raise ValidationError if invalid
+    validate(instance=data, schema=schema)
+    
+    # Additional assertions
+    assert data["schema_version"] == "0.1"
+    assert data["product_id"] == "codemonkeys-dash"
+
+
+def test_products_json_structure():
+    """Fallback test if jsonschema not available (inline checks)."""
     data = load_json("dash/products.json")
     
-    # Schema checks
-    assert data.get("schema_version") == SCHEMA_VERSION
+    assert data.get("schema_version") == "0.1"
     assert "generated_at" in data
     assert isinstance(data.get("products"), list)
     
-    # Product entry checks
     for p in data["products"]:
         assert "product_id" in p
         assert "display_name" in p
-        assert "repo" in p
-        assert "path" in p
         assert "owner" in p
         assert "status" in p
 
-def test_last_run_json_validity():
-    """AC-004: Validate last_run.json structure"""
-    product_id = "codemonkeys-dash"
-    path = f"dash/runs/{product_id}/last_run.json"
-    data = load_json(path)
+
+def test_last_run_json_structure():
+    """Fallback test if jsonschema not available (inline checks)."""
+    data = load_json("dash/runs/codemonkeys-dash/last_run.json")
     
-    # Schema checks
-    assert data.get("schema_version") == SCHEMA_VERSION
-    assert data.get("product_id") == product_id
+    assert data.get("schema_version") == "0.1"
     assert "run_id" in data
-    assert "started_at" in data
     assert "status" in data
-    assert "summary" in data
-    
-    # Evidence checks
     assert "evidence" in data
     assert isinstance(data["evidence"].get("paths"), list)
-    
-    # Economy checks
-    econ = data.get("banana_economy")
-    assert econ is not None
-    assert "budget_tokens" in econ
-    assert "spent_tokens" in econ
-    
-    # Kill switch checks
-    ks = data.get("kill_switch")
-    assert ks is not None
-    assert "enabled" in ks
+    assert "banana_economy" in data
+    assert "kill_switch" in data
