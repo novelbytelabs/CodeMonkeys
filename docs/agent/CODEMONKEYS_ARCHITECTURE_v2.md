@@ -1,4 +1,9 @@
+# [DEPRECATED] CodeMonkeys v0.1: Refined Architecture
+
+> **NOTE:** This document is deprecated. Its content has been integrated into [CODEMONKEYS_MASTER_ARCHITECTURE.md](./CODEMONKEYS_MASTER_ARCHITECTURE.md) as **Appendix A** on 2025-12-21. Please refer to the Master Architecture for the canonical source of truth.
+
 # CodeMonkeys v0.1: Refined Architecture (Post-Critique)
+
 
 > **Critiques Applied:** Gemini, Grok, GPT-5.2 (2025-12-20)
 
