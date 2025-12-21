@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1",
+  "decision_id": "dec_20251221_001",
+  "request_id": "req_20251221_001",
+  "type": "budget_grant",
+  "created_at": "2025-12-21T15:05:00Z",
+  "status": "issued",
+  "target": "codemonkeys-dash",
+  "payload": {
+    "granted_tokens": 25000,
+    "new_total_budget": 75000,
+    "expires_at": "2025-12-22T00:00:00Z"
+  },
+  "rationale": "Extension approved: within daily allocation limit, valid justification",
+  "governance_check": {
+    "compliant": true,
+    "rules_checked": ["budget_extension_limit", "daily_allocation_cap"],
+    "violations": []
+  }
+}

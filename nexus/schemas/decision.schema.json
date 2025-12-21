@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/nexus_decision.schema.json",
+  "title": "Nexus Decision",
+  "description": "Decision or directive issued by Nexus",
+  "type": "object",
+  "required": ["schema_version", "decision_id", "type", "created_at", "status", "payload"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Unique identifier for this decision"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "ID of the request this decision responds to (if applicable)"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["approval", "rejection", "directive", "allocation", "budget_grant", "kill_switch_toggle"],
+      "description": "Type of decision"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["issued", "acknowledged", "executed", "failed"],
+      "description": "Execution status of the decision"
+    },
+    "target": {
+      "type": "string",
+      "description": "Who/what this decision is directed at (product_id, agent)"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Decision-specific data"
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Human-readable explanation of the decision"
+    },
+    "governance_check": {
+      "type": "object",
+      "description": "Record of governance validation",
+      "properties": {
+        "compliant": { "type": "boolean" },
+        "rules_checked": { "type": "array", "items": { "type": "string" } },
+        "violations": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

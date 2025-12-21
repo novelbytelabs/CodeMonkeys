@@ -128,7 +128,16 @@ A kill switch is a mechanism that **immediately halts** all autonomous operation
 - `preflight.sh` runs before commits.
 - Human reviews evidence packs.
 
-### 6.2 Production (Future)
+### 6.2 CI Enforcement (Active)
+- `.github/workflows/codemonkeys-ci.yml` runs on all PRs to main.
+- **Checks enforced**:
+  - pytest (schema validation tests)
+  - Silverback validation (spec readiness + artifact validity)
+  - Run report generation (`last_run.json` must exist)
+- **Artifacts uploaded**: pytest log, Silverback log, last_run.json
+- **Failure = blocked merge** (when branch protection enabled).
+
+### 6.3 Production (Future)
 - CI gates prevent non-compliant merges.
 - Nexus cannot approve its own changes.
 - Automated evidence collection and validation.

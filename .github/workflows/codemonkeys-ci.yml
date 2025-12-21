@@ -3,8 +3,9 @@
 # Runs on push/PR to main:
 # 1. pytest (schema validation tests)
 # 2. Silverback validation (spec + artifact checks)
-# 3. Generate run report
-# 4. Upload artifacts
+# 3. Generate run report (CI mode)
+# 4. Verify artifact exists
+# 5. Upload artifacts
 
 name: Code Monkeys CI
 
@@ -38,22 +39,26 @@ jobs:
 
       - name: Run pytest (schema tests)
         run: |
-          pytest tests/dash/ -v --tb=short | tee pytest_output.log
-          echo "PYTEST_EXIT_CODE=${PIPESTATUS[0]}" >> $GITHUB_ENV
-        continue-on-error: true
+          pytest tests/dash/ -v --tb=short 2>&1 | tee pytest_output.log
 
       - name: Run Silverback validation
         run: |
-          python scripts/silverback_validate.py --all | tee silverback_output.log
-          echo "SILVERBACK_EXIT_CODE=${PIPESTATUS[0]}" >> $GITHUB_ENV
-        continue-on-error: true
+          python scripts/silverback_validate.py --all 2>&1 | tee silverback_output.log
 
-      - name: Generate run report
+      - name: Generate run report (CI mode)
         run: |
-          python scripts/generate_run_report.py codemonkeys-dash --test-path tests/dash/
-        continue-on-error: true
+          python scripts/generate_run_report.py codemonkeys-dash --ci --test-path tests/dash/
 
-      - name: Upload test artifacts
+      - name: Verify artifact exists (Evidence is mandatory)
+        run: |
+          if [ ! -f "dash/runs/codemonkeys-dash/last_run.json" ]; then
+            echo "FATAL: last_run.json was not generated. Evidence is mandatory."
+            exit 1
+          fi
+          echo "last_run.json exists"
+          cat dash/runs/codemonkeys-dash/last_run.json
+
+      - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ci-artifacts
@@ -63,15 +68,3 @@ jobs:
             dash/runs/codemonkeys-dash/last_run.json
           retention-days: 30
         if: always()
-
-      - name: Check results
-        run: |
-          if [ "$PYTEST_EXIT_CODE" != "0" ]; then
-            echo "❌ pytest failed"
-            exit 1
-          fi
-          if [ "$SILVERBACK_EXIT_CODE" != "0" ]; then
-            echo "❌ Silverback validation failed"
-            exit 1
-          fi
-          echo "✅ All checks passed"
