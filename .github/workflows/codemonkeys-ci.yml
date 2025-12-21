@@ -1,19 +1,21 @@
 # Code Monkeys CI Workflow
 #
-# Runs on push/PR to main:
-# 1. pytest (schema validation tests)
-# 2. Silverback validation (spec + artifact checks)
-# 3. Generate run report (CI mode)
-# 4. Verify artifact exists
-# 5. Upload artifacts
+# Branching Model:
+#   main  = stable/release (PRs only)
+#   dev   = integration (feature branches merge here)
+#   feature/* = work branches
+#
+# Runs on:
+#   - Push to dev
+#   - PRs to dev or main
 
 name: Code Monkeys CI
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev, main]
 
 env:
   PYTHON_VERSION: "3.10"
