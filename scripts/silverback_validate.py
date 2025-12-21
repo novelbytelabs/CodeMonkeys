@@ -2,11 +2,13 @@
 """
 Silverback Validator (Bootstrap)
 
-Validates that specs are implementation-ready and run artifacts are valid.
+Validates that specs are implementation-ready, run artifacts are valid,
+and Nexus inbox/outbox artifacts conform to their schemas.
 
 Usage:
     python scripts/silverback_validate.py --spec specs/000-dash-mvp/spec.md
     python scripts/silverback_validate.py --run-artifact dash/runs/codemonkeys-dash/last_run.json
+    python scripts/silverback_validate.py --nexus  # Validate Nexus inbox/outbox
     python scripts/silverback_validate.py --all
 
 Exit codes:
@@ -16,7 +18,6 @@ Exit codes:
 """
 import argparse
 import json
-import os
 import re
 import sys
 from pathlib import Path
@@ -41,7 +42,10 @@ MANDATORY_SECTIONS = [
     "Traceability Map",
 ]
 
-SCHEMA_DIR = Path("dash/schemas")
+DASH_SCHEMA_DIR = Path("dash/schemas")
+NEXUS_SCHEMA_DIR = Path("nexus/schemas")
+NEXUS_INBOX_DIR = Path("nexus/inbox")
+NEXUS_OUTBOX_DIR = Path("nexus/outbox")
 
 
 class ValidationResult:
@@ -74,7 +78,6 @@ def validate_spec(spec_path: Path, result: ValidationResult):
     content = spec_path.read_text()
 
     for section in MANDATORY_SECTIONS:
-        # Match section header (## or ###)
         pattern = rf"##+ {re.escape(section)}"
         match = re.search(pattern, content, re.IGNORECASE)
         
@@ -82,16 +85,14 @@ def validate_spec(spec_path: Path, result: ValidationResult):
             result.error(f"Missing section: '{section}'")
             continue
 
-        # Check if section has content (not just placeholders)
         section_start = match.end()
         next_section = re.search(r"\n##+ ", content[section_start:])
         section_end = section_start + next_section.start() if next_section else len(content)
         section_content = content[section_start:section_end].strip()
 
-        # Check for blank or placeholder-only content
         placeholder_patterns = [
-            r"\[.*?\]",  # [placeholder]
-            r"<.*?>",    # <placeholder>
+            r"\[.*?\]",
+            r"<.*?>",
             r"ACTION REQUIRED",
             r"NEEDS CLARIFICATION",
         ]
@@ -100,10 +101,9 @@ def validate_spec(spec_path: Path, result: ValidationResult):
         for p in placeholder_patterns:
             cleaned = re.sub(p, "", cleaned)
         
-        # Remove markdown formatting and check if anything remains
         cleaned = re.sub(r"[#*_\-|`]", "", cleaned).strip()
         
-        if len(cleaned) < 20:  # Too short to be real content
+        if len(cleaned) < 20:
             result.warning(f"Section '{section}' appears to be placeholder-only")
         else:
             result.ok(f"Section '{section}' has content")
@@ -115,7 +115,6 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
         result.error(f"Run artifact not found: {artifact_path}")
         return None
 
-    # Load artifact
     try:
         data = json.loads(artifact_path.read_text())
     except json.JSONDecodeError as e:
@@ -124,8 +123,7 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
 
     result.ok(f"JSON parsed: {artifact_path}")
 
-    # Schema validation
-    schema_path = SCHEMA_DIR / "last_run.schema.json"
+    schema_path = DASH_SCHEMA_DIR / "last_run.schema.json"
     if HAS_JSONSCHEMA and schema_path.exists():
         try:
             schema = json.loads(schema_path.read_text())
@@ -136,12 +134,11 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
     else:
         result.warning("Schema validation skipped (jsonschema not available or schema missing)")
 
-    # Check evidence paths exist
     evidence_paths = data.get("evidence", {}).get("paths", [])
     if not evidence_paths:
         result.warning("No evidence paths in artifact")
     else:
-        base_dir = Path("dash")  # Evidence paths are relative to dash/
+        base_dir = Path("dash")
         for ep in evidence_paths:
             full_path = base_dir / ep
             if full_path.exists():
@@ -152,11 +149,86 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
     return data
 
 
+def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_type: str, result: ValidationResult):
+    """Validate a Nexus artifact (inbox or outbox) against its schema."""
+    if not artifact_path.exists():
+        result.error(f"Nexus {artifact_type} not found: {artifact_path}")
+        return None
+
+    try:
+        data = json.loads(artifact_path.read_text())
+    except json.JSONDecodeError as e:
+        result.error(f"Invalid JSON in {artifact_path}: {e}")
+        return None
+
+    result.ok(f"JSON parsed: {artifact_path}")
+
+    # Validate schema version
+    if data.get("schema_version") != "0.1":
+        result.warning(f"Unexpected schema version in {artifact_path}: {data.get('schema_version')}")
+
+    # Schema validation
+    if HAS_JSONSCHEMA and schema_path.exists():
+        try:
+            schema = json.loads(schema_path.read_text())
+            validate(instance=data, schema=schema)
+            result.ok(f"Schema validation passed: {artifact_path.name}")
+        except ValidationError as e:
+            result.error(f"Schema validation failed for {artifact_path.name}: {e.message}")
+    else:
+        result.warning(f"Schema validation skipped for {artifact_path.name}")
+
+    # For decisions, check governance compliance field
+    if artifact_type == "outbox" and "governance_check" in data:
+        gc = data["governance_check"]
+        if gc.get("compliant"):
+            result.ok(f"Governance compliant: {artifact_path.name}")
+        else:
+            violations = gc.get("violations", [])
+            result.warning(f"Governance violations in {artifact_path.name}: {violations}")
+
+    return data
+
+
+def validate_nexus_inbox(result: ValidationResult):
+    """Validate all Nexus inbox artifacts."""
+    if not NEXUS_INBOX_DIR.exists():
+        result.warning("Nexus inbox directory not found")
+        return
+
+    schema_path = NEXUS_SCHEMA_DIR / "request.schema.json"
+    files = list(NEXUS_INBOX_DIR.glob("*.json"))
+    
+    if not files:
+        result.warning("No inbox files found")
+        return
+
+    for filepath in files:
+        validate_nexus_artifact(filepath, schema_path, "inbox", result)
+
+
+def validate_nexus_outbox(result: ValidationResult):
+    """Validate all Nexus outbox artifacts."""
+    if not NEXUS_OUTBOX_DIR.exists():
+        result.warning("Nexus outbox directory not found")
+        return
+
+    schema_path = NEXUS_SCHEMA_DIR / "decision.schema.json"
+    files = list(NEXUS_OUTBOX_DIR.glob("*.json"))
+    
+    if not files:
+        result.warning("No outbox files found")
+        return
+
+    for filepath in files:
+        validate_nexus_artifact(filepath, schema_path, "outbox", result)
+
+
 def validate_all(result: ValidationResult):
     """Run all validations for the current project."""
     print("\n=== Silverback Validation (Bootstrap) ===\n")
 
-    # Find specs
+    # Validate specs
     specs_dir = Path("specs")
     if specs_dir.exists():
         for spec_dir in specs_dir.iterdir():
@@ -166,7 +238,7 @@ def validate_all(result: ValidationResult):
                     print(f"\n--- Validating spec: {spec_file} ---")
                     validate_spec(spec_file, result)
 
-    # Find run artifacts
+    # Validate run artifacts
     runs_dir = Path("dash/runs")
     if runs_dir.exists():
         for product_dir in runs_dir.iterdir():
@@ -176,11 +248,20 @@ def validate_all(result: ValidationResult):
                     print(f"\n--- Validating artifact: {last_run} ---")
                     validate_run_artifact(last_run, result)
 
+    # Validate Nexus inbox
+    print("\n--- Validating Nexus inbox ---")
+    validate_nexus_inbox(result)
+
+    # Validate Nexus outbox
+    print("\n--- Validating Nexus outbox ---")
+    validate_nexus_outbox(result)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Silverback Validator")
     parser.add_argument("--spec", help="Validate a specific spec file")
     parser.add_argument("--run-artifact", help="Validate a specific run artifact")
+    parser.add_argument("--nexus", action="store_true", help="Validate Nexus inbox/outbox only")
     parser.add_argument("--all", action="store_true", help="Validate all specs and artifacts")
     args = parser.parse_args()
 
@@ -192,10 +273,15 @@ def main():
     elif args.run_artifact:
         print(f"\n--- Validating artifact: {args.run_artifact} ---")
         validate_run_artifact(Path(args.run_artifact), result)
+    elif args.nexus:
+        print("\n=== Silverback Validation (Nexus) ===\n")
+        print("--- Validating Nexus inbox ---")
+        validate_nexus_inbox(result)
+        print("\n--- Validating Nexus outbox ---")
+        validate_nexus_outbox(result)
     elif args.all:
         validate_all(result)
     else:
-        # Default: validate all
         validate_all(result)
 
     # Summary
