@@ -11,6 +11,7 @@
 **Goal:** Ship can trigger workflows, poll status, and read logs.
 
 **Tasks:**
+
 - [ ] Create `github::ActionsClient` with Octocrab
 - [ ] Implement `trigger_workflow(repo, workflow_id, inputs)`
 - [ ] Implement `poll_run_status(repo, run_id)` with timeout
@@ -18,6 +19,7 @@
 - [ ] Rate limiting with token bucket
 
 **Files:**
+
 - `crates/ship/src/github/actions.rs`
 - `crates/ship/src/github/rate_limit.rs`
 
@@ -28,15 +30,18 @@
 **Goal:** Ship can run playbooks with variables.
 
 **Tasks:**
+
 - [ ] Create `ansible::Runner` struct
 - [ ] Implement `run_playbook(playbook_path, extra_vars)`
 - [ ] Capture stdout/stderr, parse for errors
 - [ ] Timeout handling for hung playbooks
 
 **Files:**
+
 - `crates/ship/src/ansible/runner.rs`
 
 **Playbook Library:**
+
 - `playbooks/deploy-rust-binary.yml`
 - `playbooks/publish-crates-io.yml`
 - `playbooks/publish-docker.yml`
@@ -49,12 +54,14 @@
 **Goal:** Ship can decrypt secrets at deploy time.
 
 **Tasks:**
+
 - [ ] Create `secrets::SopsDecryptor`
 - [ ] Implement `decrypt_file(path)` → returns plaintext
 - [ ] Age key loaded from `~/.config/sops/age/keys.txt`
 - [ ] Never log decrypted values
 
 **Files:**
+
 - `crates/ship/src/secrets/sops.rs`
 
 ---
@@ -64,6 +71,7 @@
 **Goal:** Ship can run Trivy and cargo-audit, parse results.
 
 **Tasks:**
+
 - [ ] Create `security::TrivyScanner`
 - [ ] Implement `scan_image(image_ref)` → `Vec<Vulnerability>`
 - [ ] Create `security::CargoAuditScanner`
@@ -71,6 +79,7 @@
 - [ ] Unified `SecurityReport` type
 
 **Files:**
+
 - `crates/ship/src/security/trivy.rs`
 - `crates/ship/src/security/cargo_audit.rs`
 - `crates/ship/src/security/report.rs`
@@ -84,6 +93,7 @@
 **Integrates:** GitHub Actions + Ollama
 
 **Flow:**
+
 1. Watch receives CI failure event
 2. Fetch logs via GitHub Actions API
 3. Parse error, send to Ollama for fix
@@ -98,6 +108,7 @@
 **Integrates:** MkDocs + GitHub Pages
 
 **Flow:**
+
 1. Detect docs drift (code changed, docs stale)
 2. Regenerate docs via `mkdocs build`
 3. Push to `gh-pages` branch
@@ -110,6 +121,7 @@
 **Integrates:** Ansible + Registries
 
 **Flow:**
+
 1. Detect release conditions (tags, CI green)
 2. Decrypt secrets via SOPS
 3. Run security scans (Trivy, cargo-audit)
@@ -123,6 +135,7 @@
 **Integrates:** Webhooks
 
 **Flow:**
+
 1. All events logged to Swarm DB
 2. Errors trigger webhook → phone notification
 3. Periodic health check of all products
@@ -136,6 +149,7 @@
 **Goal:** Run operations across all 50 products.
 
 **Tasks:**
+
 - [ ] `ship status --all` aggregates all product states
 - [ ] `ship fleet update-deps` runs cargo-audit + update across fleet
 - [ ] Canary ladder for fleet-wide changes

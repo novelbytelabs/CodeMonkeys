@@ -8,16 +8,26 @@
 
 **Security is not an afterthought — it is a design element.**
 
+**Dev = DevSec** | **Ship = Ops** → Complete **DevSecOps**
+
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                    THE FULL LOOP                                 │
-│                                                                  │
-│   Constitution → Spec → Plan → Tasks → Analysis →               │
-│                                                                  │
-│            → Implement → SECURE → Test →                         │
-│                            ↑                                     │
-│                     NOT OPTIONAL                                 │
-└──────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                           THE COMPLETE DEVSECOPS LOOP                        │
+│                                                                              │
+│   ┌─────────┐   ┌──────────────────────────────────────────────┐   ┌───────┐ │
+│   │  INIT   │ → │  DEV (DevSec)                                │ → │ SHIP  │ │
+│   │         │   │                                              │   │ (Ops) │ │
+│   │ Scaffold│   │ Constitution → Spec → Plan → Tasks →         │   │       │ │
+│   │ Onboard │   │ Analysis → Implement → Secure → Test         │   │ Heal  │ │
+│   │ Gap Fix │   │                                              │   │ Docs  │ │
+│   └─────────┘   └──────────────────────────────────────────────┘   │Release│ │
+│                                                                    │Publish│ │
+│       ↓                           ↓                                │Announce││
+│   "Make it               "Make it work"                            │Monitor│ │
+│    exist"                "Make it safe"                            └───────┘ │
+│                                                                       ↓      │
+│                                                              "Make it live"  │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -25,9 +35,9 @@
 ## The Three Pillars
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      CODEMONKEYS                                │
-│                                                                 │
+┌────────────────────────────────────────────────────────────────┐
+│                      CODEMONKEYS                               │
+│                                                                │
 │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐          │
 │   │    INIT     │   │     DEV     │   │    SHIP     │          │
 │   │             │   │             │   │             │          │
@@ -35,11 +45,11 @@
 │   │  Onboard    │   │   Coding    │   │   Release   │          │
 │   │  Gap Fix    │   │   Security  │   │   Publish   │          │
 │   └─────────────┘   └─────────────┘   └─────────────┘          │
-│                                                                 │
-│        ↓                  ↓                  ↓                  │
+│                                                                │
+│        ↓                  ↓                  ↓                 │
 │   "Make it exist"   "Make it work"    "Make it live"           │
-│                      "Make it safe"                             │
-└─────────────────────────────────────────────────────────────────┘
+│                      "Make it safe"                            │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -96,7 +106,7 @@ codemonkeys init --analyze            # Gap analysis (dry run)
 │   4. Tasks         →  Break down into tickets (T1, T2...)    │
 │   5. Analysis      →  Review plan, identify risks            │
 │   6. Implement     →  Write code (Code Monkey)               │
-│   7. SECURE        →  Security checks (NOT OPTIONAL)         │
+│   7. Secure        →  Security checks (NOT OPTIONAL)         │
 │   8. Test          →  Verify correctness (Chaos Monkey)      │
 │                                                              │
 │   Loop until all tasks complete.                             │
@@ -107,11 +117,14 @@ codemonkeys init --analyze            # Gap analysis (dry run)
 
 ```bash
 codemonkeys dev                       # Full loop
-codemonkeys dev constitution          # Edit/enforce governance
+codemonkeys dev constitution          # Create/update Constitution
 codemonkeys dev spec "Add OAuth"      # Create specification
+codemonkeys dev clarify               # Clarify underspecified areas
 codemonkeys dev plan                  # Generate architecture plan
 codemonkeys dev tasks                 # Break into tickets
-codemonkeys dev analyze               # Risk analysis, review
+codemonkeys dev taskstoissues         # Convert tasks to GitHub issues
+codemonkeys dev analyze               # Cross-artifact consistency check
+codemonkeys dev checklist             # Generate custom checklist
 codemonkeys dev implement             # Code generation
 codemonkeys dev secure                # Security scan + fixes
 codemonkeys dev test                  # Run tests + chaos
@@ -126,7 +139,7 @@ codemonkeys dev test                  # Run tests + chaos
 | 🦧 **Foreman** | Planner, ticket breaker | Plan, Tasks |
 | 🐵 **Chaos Monkey** | Fuzzer, adversary | Test |
 | 🐵 **Scout** | Reconnaissance | Analysis |
-| 🔒 **Security Monkey** | Security specialist | **Secure** (NEW) |
+| 🔒 **Security Monkey** | Security specialist | **Secure** |
 
 ## Security (Baked In)
 
@@ -191,9 +204,9 @@ codemonkeys fleet prioritize          # Which project needs attention?
 
 ## Cross-Project Memory
 
-- Learn from fixes in Project A, apply to Project B
-- Shared Constitution templates
-- Unified security policies
+- Learn from fixes in Project A, apply to Project B  
+- Shared Constitution templates  
+- Unified security policies  
 
 ---
 
@@ -206,8 +219,8 @@ codemonkeys fleet prioritize          # Which project needs attention?
 | LLM calls | 4 |
 | Security scans | 3 |
 
-**Prevents:** Infinite loops, runaway costs.
-**Enables:** Autonomous operation within bounds.
+**Prevents:** Infinite loops, runaway costs.  
+**Enables:** Autonomous operation within bounds.  
 
 ---
 
@@ -248,7 +261,7 @@ codemonkeys --tui
 ## From AI Collaboration (Gemini, Grok, GPT)
 - Foreman (Planner agent)
 - Scout (Reconnaissance agent)
-- Security Monkey (NEW agent for Secure phase)
+- Security Monkey (Agent for Secure phase)
 - Multi-wallet Banana Economy
 - governance.lock with hashes
 - RunReport artifact format

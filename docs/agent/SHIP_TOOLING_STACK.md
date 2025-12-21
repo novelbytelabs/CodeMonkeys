@@ -78,24 +78,48 @@ Ship orchestrates external tools — it doesn't replace them. Each tool is calle
 
 ## Integration Architecture
 
+```mermaid
+graph TB
+    subgraph Ship["CODE MONKEYS SHIP"]
+        direction LR
+        Oracle[Oracle]
+        Heal[Heal]
+        Docs[Docs]
+        Release[Release]
+        Publish[Publish]
+        Announce[Announce]
+        Monitor[Monitor]
+    end
+    
+    subgraph Tools["External Tools"]
+        direction LR
+        SQLite["SQLite + LanceDB"]
+        Actions["GitHub Actions + Ollama"]
+        MkDocs["MkDocs + GitHub Pages"]
+        Ansible["Ansible"]
+        Registries["Registries"]
+        Browser["Browser Automation"]
+        Webhooks["Webhooks"]
+    end
+    
+    Oracle --> SQLite
+    Heal --> Actions
+    Docs --> MkDocs
+    Release --> Ansible
+    Publish --> Registries
+    Announce --> Browser
+    Monitor --> Webhooks
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    CODE MONKEYS SHIP                        │
-│                                                             │
-│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐       │
-│   │  Heal   │  │  Docs   │  │ Release │  │ Monitor │       │
-│   └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘       │
-│        │            │            │            │             │
-└────────┼────────────┼────────────┼────────────┼─────────────┘
-         │            │            │            │
-         ▼            ▼            ▼            ▼
-    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐
-    │ GitHub  │  │ MkDocs  │  │ Ansible │  │Webhooks │
-    │ Actions │  │   +     │  │    +    │  │         │
-    │         │  │ GitHub  │  │Registries│ │         │
-    │         │  │ Pages   │  │         │  │         │
-    └─────────┘  └─────────┘  └─────────┘  └─────────┘
-```
+
+| Pillar | External Tool | Purpose |
+|--------|---------------|---------|
+| **Oracle** | SQLite + LanceDB | Code graph, semantic search |
+| **Heal** | GitHub Actions + Ollama | CI repair, fix generation |
+| **Docs** | MkDocs + GitHub Pages | Documentation generation/hosting |
+| **Release** | Ansible | Version bump, changelog, tags |
+| **Publish** | Registries (crates.io, PyPI, Docker) | Package publishing |
+| **Announce** | Browser Automation | Website, release notes, social |
+| **Monitor** | Webhooks | Health checks, alerts |
 
 ---
 

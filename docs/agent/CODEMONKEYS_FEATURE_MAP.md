@@ -82,7 +82,7 @@ Silverback  Foreman  Foreman  Foreman  Scout   CodeMonkey  Security  Chaos
 - [ ] Whole-block replacement (Constitution XVII.3)
 - [ ] Scope enforcement (write_allowlist/denylist)
 
-#### `codemonkeys dev secure` ⚠️ NEW
+#### `codemonkeys dev secure`
 - [ ] Secret scan (gitleaks, builtin regex)
 - [ ] Dependency audit (cargo-audit, pip-audit)
 - [ ] SAST (Semgrep, CodeQL)
@@ -94,11 +94,11 @@ Silverback  Foreman  Foreman  Foreman  Scout   CodeMonkey  Security  Chaos
 #### `codemonkeys dev test`
 - [ ] Run tests (cargo test, pytest)
 - [ ] Chaos Monkey fuzzing (v0.2)
-  - Fuzz lane: CLI, HTTP, Function
-  - Proptest (stable), cargo-fuzz (nightly)
+    - Fuzz lane: CLI, HTTP, Function
+    - Proptest (stable), cargo-fuzz (nightly)
 - [ ] Synthetic User Swarms (v0.3)
-  - Headless browser agents
-  - Distinct personas ("The Hacker", "The Power User")
+    - Headless browser agents
+    - Distinct personas ("The Hacker", "The Power User")
 
 ---
 
