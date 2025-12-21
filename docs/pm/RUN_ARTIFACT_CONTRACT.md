@@ -89,3 +89,25 @@ dash/
 ### Production Mode
 - Required: `pytest_output.log`, `last_run.json`
 - Recommended: `test-report.json` (structured), screenshots
+
+## 7. Retention Policy
+
+### Default Retention
+- **Keep last N runs**: 10 (configurable via `gc_runs.py --keep N`)
+- **Cleanup frequency**: Before each new run or via cron
+
+### Garbage Collection Script
+```bash
+# Keep last 10 runs for all products
+python scripts/gc_runs.py --keep 10
+
+# Keep last 5 runs for a specific product
+python scripts/gc_runs.py --keep 5 --product codemonkeys-dash
+
+# Dry run (show what would be removed)
+python scripts/gc_runs.py --keep 3 --dry-run
+```
+
+### What Gets Deleted
+- Run directories older than the Nth most recent
+- `last_run.json` is **never** deleted (only overwritten by new runs)

@@ -150,3 +150,38 @@ h1 {
     border-radius: 6px;
     margin-bottom: 1rem;
 }
+
+/* Validity badges */
+.status-badges {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.validity {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+.validity.valid { background: rgba(35, 134, 54, 0.2); color: #3fb950; }
+.validity.invalid { background: rgba(218, 54, 51, 0.2); color: #f85149; }
+
+/* Kill switch state */
+.kill-true { color: var(--danger); font-weight: bold; }
+.kill-false { color: var(--success); }
+
+/* History section */
+.history-section {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border-color);
+}
+.history-note {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+.history-note code {
+    background: var(--border-color);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+}

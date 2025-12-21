@@ -4,6 +4,12 @@ Generate Run Report for Code Monkeys Dash.
 
 Runs pytest, captures output, and writes a structured last_run.json artifact.
 
+Features:
+- Atomic file writes (prevents partial/corrupted artifacts)
+- Computes actual spent_minutes from timestamps
+- Ensures log file exists even on timeout/exception
+- Validates report against schema before exiting success
+
 Usage:
     python scripts/generate_run_report.py <product_id> [--test-path <path>]
 
@@ -18,16 +24,54 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+try:
+    from jsonschema import validate, ValidationError
+    HAS_JSONSCHEMA = True
+except ImportError:
+    HAS_JSONSCHEMA = False
+
+SCHEMA_PATH = Path("dash/schemas/last_run.schema.json")
+
 
 def get_timestamp():
     """Return current timestamp in ISO 8601 format."""
     return datetime.now(timezone.utc).isoformat()
 
 
+def parse_timestamp(ts: str) -> datetime:
+    """Parse ISO 8601 timestamp."""
+    return datetime.fromisoformat(ts)
+
+
+def compute_spent_minutes(start: str, end: str) -> float:
+    """Compute minutes elapsed between start and end timestamps."""
+    start_dt = parse_timestamp(start)
+    end_dt = parse_timestamp(end)
+    delta = (end_dt - start_dt).total_seconds()
+    return round(delta / 60.0, 2)
+
+
 def generate_run_id():
     """Generate a unique run ID based on timestamp."""
     now = datetime.now(timezone.utc)
     return f"run_{now.strftime('%Y%m%d_%H%M%S')}"
+
+
+def atomic_write_json(path: Path, data: dict):
+    """
+    Write JSON atomically using a temp file + os.replace.
+    Prevents partial/corrupted artifacts if interrupted mid-write.
+    """
+    tmp_path = path.with_suffix(".json.tmp")
+    tmp_path.write_text(json.dumps(data, indent=2))
+    os.replace(tmp_path, path)
+
+
+def ensure_log_file(log_path: Path, content: str):
+    """Ensure log file exists with at least some content."""
+    if not log_path.exists():
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text(content or "[No output captured]")
 
 
 def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
@@ -51,7 +95,8 @@ def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
         )
         
         # Write full output to log file
-        output_file.write_text(result.stdout + result.stderr)
+        full_output = result.stdout + "\n" + result.stderr
+        ensure_log_file(output_file, full_output)
         
         # Parse summary
         if result.returncode == 0:
@@ -59,15 +104,43 @@ def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
         else:
             # Try to extract failure summary
             lines = result.stdout.split('\n')
-            summary_line = [l for l in lines if 'failed' in l.lower() or 'error' in l.lower()]
-            summary = summary_line[0] if summary_line else "Tests failed"
+            summary_lines = [l for l in lines if 'failed' in l.lower() or 'error' in l.lower()]
+            summary = summary_lines[0] if summary_lines else "Tests failed"
         
         return result.returncode, summary
         
-    except subprocess.TimeoutExpired:
-        return 2, "Test run timed out"
+    except subprocess.TimeoutExpired as e:
+        # Ensure log file exists even on timeout
+        partial_output = f"[TIMEOUT after 300s]\nPartial stdout:\n{e.stdout or ''}\nPartial stderr:\n{e.stderr or ''}"
+        ensure_log_file(output_file, partial_output)
+        return 2, "Test run timed out (300s)"
+        
     except Exception as e:
+        # Ensure log file exists on any exception
+        error_content = f"[EXCEPTION]\n{type(e).__name__}: {e}"
+        ensure_log_file(output_file, error_content)
         return 2, f"Error running tests: {e}"
+
+
+def validate_report(report: dict) -> tuple[bool, str]:
+    """
+    Validate report against JSON schema.
+    
+    Returns:
+        tuple: (is_valid, error_message)
+    """
+    if not HAS_JSONSCHEMA:
+        return True, "jsonschema not installed, skipping validation"
+    
+    if not SCHEMA_PATH.exists():
+        return True, f"Schema not found at {SCHEMA_PATH}, skipping validation"
+    
+    try:
+        schema = json.loads(SCHEMA_PATH.read_text())
+        validate(instance=report, schema=schema)
+        return True, "Schema validation passed"
+    except ValidationError as e:
+        return False, f"Schema validation failed: {e.message}"
 
 
 def generate_report(
@@ -80,6 +153,8 @@ def generate_report(
     evidence_paths: list[str]
 ) -> dict:
     """Generate a run report dictionary."""
+    spent_minutes = compute_spent_minutes(start_time, end_time)
+    
     return {
         "schema_version": "0.1",
         "product_id": product_id,
@@ -93,9 +168,9 @@ def generate_report(
         },
         "banana_economy": {
             "budget_tokens": 50000,
-            "spent_tokens": 0,  # Not tracked yet
+            "spent_tokens": 0,  # Token tracking not implemented yet
             "budget_minutes": 90,
-            "spent_minutes": 0,  # Calculate from start/end
+            "spent_minutes": spent_minutes,
             "max_ci_heal_attempts": 2,
             "ci_heal_attempts_used": 0
         },
@@ -155,9 +230,17 @@ def main():
         evidence_paths=evidence_paths
     )
 
-    # Write report
-    report_path.write_text(json.dumps(report, indent=2))
-    print(f"[*] Report written to: {report_path}")
+    # Validate report against schema
+    is_valid, validation_msg = validate_report(report)
+    print(f"[*] {validation_msg}")
+    
+    if not is_valid:
+        print("[!] ERROR: Generated report is invalid. Exiting with error.")
+        return 1
+
+    # Write report atomically
+    atomic_write_json(report_path, report)
+    print(f"[*] Report written atomically to: {report_path}")
 
     return exit_code
 

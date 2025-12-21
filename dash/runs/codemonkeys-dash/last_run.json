@@ -1,21 +1,21 @@
 {
   "schema_version": "0.1",
   "product_id": "codemonkeys-dash",
-  "run_id": "run_20251221_180911",
-  "started_at": "2025-12-21T18:09:11.380345+00:00",
-  "ended_at": "2025-12-21T18:09:13.774033+00:00",
+  "run_id": "run_20251221_183208",
+  "started_at": "2025-12-21T18:32:08.114084+00:00",
+  "ended_at": "2025-12-21T18:32:10.664411+00:00",
   "status": "success",
   "summary": "All tests passed",
   "evidence": {
     "paths": [
-      "runs/codemonkeys-dash/run_20251221_180911/pytest_output.log"
+      "runs/codemonkeys-dash/run_20251221_183208/pytest_output.log"
     ]
   },
   "banana_economy": {
     "budget_tokens": 50000,
     "spent_tokens": 0,
     "budget_minutes": 90,
-    "spent_minutes": 0,
+    "spent_minutes": 0.04,
     "max_ci_heal_attempts": 2,
     "ci_heal_attempts_used": 0
   },
@@ -26,6 +26,6 @@
   "pr_wave": {
     "state": "none",
     "open_prs": 0,
-    "last_update": "2025-12-21T18:09:13.774033+00:00"
+    "last_update": "2025-12-21T18:32:10.664411+00:00"
   }
 }

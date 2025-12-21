@@ -3,19 +3,22 @@
 **Version:** 0.1 (Bootstrap)
 
 ## 0. How to Resume (Start Here)
-- **Last Checkpoint**: P2 complete (Dash MVP Pilot shipped).
-- **Current Milestone**: P3 (Formalize schemas + automate report generation).
+- **Last Checkpoint**: P3 complete (Formal schemas + report generator).
+- **Current Milestone**: P4 (Dash as operating console).
+- **Commit Hashes**:
+    - P2: `2c8822f` (Bootstrap MVP)
+    - P3: `371806e` (Schemas + report generator)
 - **Next 3 Tasks**:
-    1. Add formal JSON Schema files (`products.schema.json`, `last_run.schema.json`).
-    2. Add run report generator script (`scripts/generate_run_report.py`).
-    3. Add Run Artifact Contract (`docs/pm/RUN_ARTIFACT_CONTRACT.md`).
+    1. Verify P4 (hardened generator, gc_runs, Dash validity badges).
+    2. Merge `000-dash-mvp` to main.
+    3. Begin Constitution implementation (Silverback agent stubs).
 - **Open Decisions**:
-    - [Decision]: Where to store run artifacts long-term (local vs cloud).
-    - [Decision]: How to version schemas (SemVer for artifacts).
+    - [Decision]: Banana Economy token tracking implementation.
+    - [Decision]: Run history API vs manifest file approach.
 - **Canonical 'Start Here' Files**:
     - `CONTEXT_SNAPSHOT.md` (This file)
     - `docs/pm/01_SYSTEM_CONTRACT.md` (Roles)
-    - `docs/agent/CODEMONKEYS_MASTER_ARCHITECTURE.md` (Tech)
+    - `docs/pm/RUN_ARTIFACT_CONTRACT.md` (Artifact contract)
     - `specs/000-dash-mvp/spec.md` (Current feature)
 
 ## 1. Overview

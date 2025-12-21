@@ -56,7 +56,7 @@
         "budget_tokens": { "type": "integer", "minimum": 0 },
         "spent_tokens": { "type": "integer", "minimum": 0 },
         "budget_minutes": { "type": "integer", "minimum": 0 },
-        "spent_minutes": { "type": "integer", "minimum": 0 },
+        "spent_minutes": { "type": "number", "minimum": 0 },
         "max_ci_heal_attempts": { "type": "integer", "minimum": 0 },
         "ci_heal_attempts_used": { "type": "integer", "minimum": 0 }
       }
