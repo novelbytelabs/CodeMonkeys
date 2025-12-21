@@ -32,6 +32,11 @@
       "enum": ["issued", "acknowledged", "executed", "failed"],
       "description": "Execution status of the decision"
     },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when decision was executed"
+    },
     "target": {
       "type": "string",
       "description": "Who/what this decision is directed at (product_id, agent)"
