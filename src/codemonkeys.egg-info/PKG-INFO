@@ -9,6 +9,7 @@ Requires-Dist: click>=8.0.0
 Requires-Dist: jsonschema>=4.0.0
 Requires-Dist: rich>=10.0.0
 Requires-Dist: pytest>=7.0.0
+Requires-Dist: python-frontmatter>=1.0.0
 Dynamic: license-file
 
 # ArqonShip 🚀

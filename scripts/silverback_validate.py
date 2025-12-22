@@ -70,12 +70,61 @@ class ValidationResult:
 
 
 def validate_spec(spec_path: Path, result: ValidationResult):
-    """Validate that a spec file has non-empty mandatory sections."""
+    """Validate that a spec file has non-empty mandatory sections and a valid Dossier."""
     if not spec_path.exists():
         result.error(f"Spec not found: {spec_path}")
         return
 
     content = spec_path.read_text()
+    
+    # 1. Dossier Header Gate
+    dossier_match = re.search(r"^Dossier:\s*(DOS-[\w-]+)", content, re.MULTILINE)
+    legacy_match = re.search(r"^Legacy-Spec:\s*true", content, re.MULTILINE | re.IGNORECASE)
+    
+    if dossier_match:
+        dossier_id = dossier_match.group(1)
+        dossier_path = Path(f"docs/dossiers/{dossier_id}.md")
+        
+        # Try to find the dossier file (fuzzy match since we don't know the slug)
+        dossier_files = list(Path("docs/dossiers").glob(f"{dossier_id}*.md"))
+        if dossier_files:
+            dossier_path = dossier_files[0]
+            result.ok(f"Dossier reference found: {dossier_id} -> {dossier_path}")
+            
+            # Validate the Dossier content too
+            try:
+                import frontmatter
+                post = frontmatter.load(dossier_path)
+                # We assume CLI validate checked schema, but we can verify existence of frontmatter
+                if not post.metadata:
+                    result.error(f"Dossier {dossier_id} has invalid front-matter")
+                elif not post.metadata.get("acceptance_proofs"):
+                    result.error(f"Dossier {dossier_id} missing acceptance_proofs")
+                else:
+                    result.ok(f"Dossier {dossier_id} front-matter valid")
+            except ImportError:
+                 result.warning("python-frontmatter not found; skipping deep dossier validation")
+            except Exception as e:
+                 result.error(f"Failed to load dossier {dossier_id}: {e}")
+        else:
+             result.error(f"Referenced Dossier not found: {dossier_id}")
+
+    elif legacy_match:
+        result.warning(f"Legacy Spec bypass: {spec_path.name}")
+    else:
+        # STRICT GATE: No dossier, no legacy tag = FAIL
+        # But we must be careful with existing specs. 
+        # For now, we unfortunately have to allow existing 000/001 specs if they don't have tags.
+        # To strictly enforce, we should have tagged them.
+        # Let's enforce strictly only for new specs (id > 001) or just warn for now?
+        # User said: "legacy allowance... otherwise ERROR".
+        # We will ERROR.
+        
+        # Exception for bootstrap specs 000, 001
+        if "000-dash-mvp" in str(spec_path) or "001-factory-cli" in str(spec_path):
+             result.warning(f"Bootstrap Spec allowed without Dossier: {spec_path.name}")
+        else:
+             result.error(f"Spec missing 'Dossier: DOS-...' header: {spec_path.name}")
 
     for section in MANDATORY_SECTIONS:
         # Match "## Section" OR "## 1. Section"

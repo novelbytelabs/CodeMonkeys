@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Design Dossier Front-matter",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dossier_id",
+    "product_id",
+    "owner",
+    "status",
+    "hypothesis",
+    "mvp_boundary",
+    "acceptance_proofs",
+    "constitution_refs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["0.1"]
+    },
+    "dossier_id": {
+      "type": "string",
+      "pattern": "^DOS-\\d{8}-[\\w-]+$"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "approved", "rejected", "legacy"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "hypothesis": {
+      "type": "object",
+      "required": ["claim"],
+      "properties": {
+        "problem": { "type": "string" },
+        "claim": { "type": "string" },
+        "falsification": { "type": "string" }
+      }
+    },
+    "mvp_boundary": {
+      "type": "object",
+      "required": ["in_scope", "non_goals"],
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "non_goals": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "acceptance_proofs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "constitution_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

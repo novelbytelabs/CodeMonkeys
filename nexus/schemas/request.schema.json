@@ -16,7 +16,14 @@
     },
     "type": {
       "type": "string",
-      "enum": ["escalation", "approval_request", "budget_extension", "kill_switch_override", "scope_change"],
+      "enum": [
+        "escalation",
+        "approval_request",
+        "budget_extension",
+        "kill_switch_override",
+        "scope_change",
+        "clarification_required"
+      ],
       "description": "Type of request"
     },
     "source": {

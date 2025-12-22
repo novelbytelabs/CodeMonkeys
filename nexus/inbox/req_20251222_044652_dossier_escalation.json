@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1",
+  "request_id": "req_20251222_044652_dossier_escalation",
+  "type": "clarification_required",
+  "source": "silverback-dossier-validator",
+  "created_at": "2025-12-22T04:46:52.782548Z",
+  "priority": "high",
+  "status": "pending",
+  "payload": {
+    "dossier": "docs/dossiers/DOS-20251222-test-product.md",
+    "validation_errors": [
+      "Placeholder detected in proofs: [Proof 1: e.g. CLI command returns 0]",
+      "Placeholder detected in proofs: [Proof 2: e.g. Artifact X exists]"
+    ],
+    "instructions": "Please update the Dossier with missing proofs or fields."
+  }
+}
