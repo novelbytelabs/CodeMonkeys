@@ -78,7 +78,8 @@ def validate_spec(spec_path: Path, result: ValidationResult):
     content = spec_path.read_text()
 
     for section in MANDATORY_SECTIONS:
-        pattern = rf"##+ {re.escape(section)}"
+        # Match "## Section" OR "## 1. Section"
+        pattern = rf"##+\s+(\d+\.\s+)?{re.escape(section)}"
         match = re.search(pattern, content, re.IGNORECASE)
         
         if not match:
