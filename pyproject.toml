@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codemonkeys"
+version = "0.1.0"
+description = "Autonomous software production factory control plane"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.0.0",
+    "jsonschema>=4.0.0",
+    "rich>=10.0.0",  # For pretty CLI output
+    "pytest>=7.0.0"
+]
+
+[project.scripts]
+codemonkeys = "codemonkeys.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
