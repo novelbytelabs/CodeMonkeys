@@ -37,7 +37,7 @@ Define the **operating contract** for Human ↔ Nexus ↔ Swarms, and determine 
 - ORCHESTRATOR_ARCHITECTURE.md (Ship orchestrator)
 - RULE_SCHEMA_SPEC.md (Living Linter rule schema)
 - SHIP_INTEGRATION_PLAN.md (external tool integration plan)
-- constitution.md (legacy ArqonShip constitution; to be distilled into a single Code Monkeys Constitution)
+- constitution.md (legacy Code Monkeys constitution; to be distilled into a single Code Monkeys Constitution)
 
 ## Near-term deliverables (PM-defined)
 1) SYSTEM_CONTRACT.md (authority & responsibility split; gates; kill switch)

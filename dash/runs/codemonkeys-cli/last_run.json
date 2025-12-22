@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "product_id": "arqonship-cli",
+  "product_id": "codemonkeys-cli",
   "run_id": "run_20251220_140000",
   "started_at": "2025-12-20T14:00:00Z",
   "ended_at": "2025-12-20T14:05:23Z",
@@ -8,7 +8,7 @@
   "summary": "All tests passed (42 tests)",
   "evidence": {
     "paths": [
-      "runs/arqonship-cli/run_20251220_140000/pytest_output.log"
+      "runs/codemonkeys-cli/run_20251220_140000/pytest_output.log"
     ]
   },
   "banana_economy": {

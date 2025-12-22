@@ -1,30 +1,30 @@
 <!--
 Sync Impact Report:
 
-- ArqonShip Constitution v1.4.1 → v1.6.0 (2025-12-19)
+- Code Monkeys Constitution v1.4.1 → v1.6.0 (2025-12-19)
 
 ## Amendment Summary (v1.6.0)
-Added comprehensive governance for the **ArqonShip** DevSecOps automation layer. This defines the "Constitution Gap" principles for Codebase Oracle (indexing), Self-Healing CI (LLM safety), Automations, and CLI contracts.
+Added comprehensive governance for the **Code Monkeys** DevSecOps automation layer. This defines the "Constitution Gap" principles for Codebase Oracle (indexing), Self-Healing CI (LLM safety), Automations, and CLI contracts.
 
 ## Added Sections (New Core Principles)
-- **XVI. Codebase Oracle Principles**: Governance for `arqon scan`, graph determinism, and local privacy.
-- **XVII. Self-Healing CI Principles**: Safety rails for `arqon heal`, LLM prompt governance, and jailbreak prevention.
+- **XVI. Codebase Oracle Principles**: Governance for `codemonkeys scan`, graph determinism, and local privacy.
+- **XVII. Self-Healing CI Principles**: Safety rails for `codemonkeys heal`, LLM prompt governance, and jailbreak prevention.
 - **XVIII. CI/CD Automation Principles**: Integrity rules for GitHub Actions and auto-merge.
-- **XIX. ArqonShip CLI Contracts**: Stability guarantees for the ArqonShip CLI and artifacts.
+- **XIX. Code Monkeys CLI Contracts**: Stability guarantees for the Code Monkeys CLI and artifacts.
 
 ## Templates Requiring Updates
-- ✅ None immediate (ArqonShip is additive).
+- ✅ None immediate (Code Monkeys is additive).
 -->
 
-# ArqonShip Constitution
+# Code Monkeys Constitution
 
 **Version**: 1.6.0  
 **Ratification Date**: 2025-12-13  
 **Last Amended**: 2025-12-19  
 
-This document defines the **non-negotiable principles** that govern how ArqonShip is designed, evolved, and maintained.
+This document defines the **non-negotiable principles** that govern how Code Monkeys is designed, evolved, and maintained.
 
-It exists to protect ArqonShip from accidental bloat, regression, silent breakage, and “clever” shortcuts that erode trust.
+It exists to protect Code Monkeys from accidental bloat, regression, silent breakage, and “clever” shortcuts that erode trust.
 
 If a decision conflicts with this constitution, **the decision is wrong**.
 
@@ -238,7 +238,7 @@ If a situation, decision, or design choice is not explicitly covered by this Con
 
 ## 1. The Vision
 
-**ArqonShip is a probe-gated optimization engine for time-to-target—and a runtime control primitive for microsecond-latency adaptation.**
+**Code Monkeys is a probe-gated optimization engine for time-to-target—and a runtime control primitive for microsecond-latency adaptation.**
 
 It is built to be clearly competitive for two product-aligned use cases:
 
@@ -249,15 +249,15 @@ It is built to be clearly competitive for two product-aligned use cases:
 
 * **Discovery Offline, Adaptation Online:** Offline discovery (Tier Ω) generates and evaluates candidates; online adaptation (Tier 2) selects among approved variants and proposes bounded deltas.
 * **Law Control:** Online tuning of "physics knobs" (diffusion, noise, decay, damping, constraint weights) within allowlisted parameters and strict safety envelopes.
-* **Microsecond Latency:** ArqonShip is designed for 1–10ms decision latency, enabling embedding in live control loops without blocking the dataplane.
+* **Microsecond Latency:** Code Monkeys is designed for 1–10ms decision latency, enabling embedding in live control loops without blocking the dataplane.
 
 ## 2. The Scope
 
-To achieve this vision, we must be ruthless about what ArqonShip **is** and what it **is not**.
+To achieve this vision, we must be ruthless about what Code Monkeys **is** and what it **is not**.
 
 ### 2.1 In Scope (The Core Product)
 
-ArqonShip is **probe-gated optimization** and **runtime adaptation**. It is responsible for:
+Code Monkeys is **probe-gated optimization** and **runtime adaptation**. It is responsible for:
 
 * **The Probe Phase:** Deterministic sampling to gather an initial signal and candidates.
 * **The Classification Phase:** A fixed-size test that labels the landscape (e.g., structured vs chaotic) and produces a score.
@@ -269,7 +269,7 @@ ArqonShip is **probe-gated optimization** and **runtime adaptation**. It is resp
 
 ### 2.2 Out of Scope (The Boundaries)
 
-ArqonShip is **not**:
+Code Monkeys is **not**:
 
 * **A general-purpose ML training framework.** It tunes; it does not train end-to-end pipelines.
 * **A distributed execution platform.** It may integrate with external evaluators, but it does not provide a cluster runtime.
@@ -293,7 +293,7 @@ We define evolution in three distinct epochs. Engineering decisions must align w
 
 # II. Core Principles
 
-This section defines the engineering laws that govern ArqonShip. These are not guidelines; they are constraints. Code that violates these principles will be rejected during Review.
+This section defines the engineering laws that govern Code Monkeys. These are not guidelines; they are constraints. Code that violates these principles will be rejected during Review.
 
 ### 1. Architectural Invariance (The Gate Pattern)
 
@@ -441,7 +441,7 @@ Probes must support stateless parallel execution.
 
 * **Stateless Sharding:** A probe MUST produce identical samples for (seed, index) regardless of worker count.
 * **Collision-Free:** Disjoint index ranges MUST produce disjoint samples.
-* **SDK Parity:** `ArqonProbe` (Python) MUST expose identical behavior to Rust core.
+* **SDK Parity:** `CodeMonkeysProbe` (Python) MUST expose identical behavior to Rust core.
 * **Verification:** Bitwise hash of sorted sample coordinates MUST match single-worker vs multi-worker configurations.
 
 ### 16. Adaptive Engine Specification
@@ -515,7 +515,7 @@ Streaming telemetry MUST be compact, fixed-schema, and lock-free in the push pat
 
 ### 20. Tier Architecture Model
 
-ArqonShip operates with a strict three-tier architecture. These tiers are **non-optional** and govern all runtime behavior.
+Code Monkeys operates with a strict three-tier architecture. These tiers are **non-optional** and govern all runtime behavior.
 
 | Tier | Role | Responsibilities | Prohibitions |
 |:---|:---|:---|:---|
@@ -685,7 +685,7 @@ The system may manage governed experiment namespaces (“Realities”) as first-
 
 ### 1. The "Boring Code" Manifesto
 
-We value clarity over cleverness. ArqonShip must be readable by a junior engineer at 3 AM.
+We value clarity over cleverness. Code Monkeys must be readable by a junior engineer at 3 AM.
 
 * **Readability First:** If a "clever" one-liner creates cognitive load, expand it.
 * **Explicit over Implicit:** Magic behavior, monkey-patching, and hidden control flow are forbidden.
@@ -774,7 +774,7 @@ Optimization systems die when state becomes ambiguous.
 
 ### 1. TDD as the Working Standard
 
-Test-Driven Development (TDD) is the **default and expected workflow** for all ArqonShip components.
+Test-Driven Development (TDD) is the **default and expected workflow** for all Code Monkeys components.
 
 * **The Workflow:**
   1. **Specify:** Define behavior in `/specs/` (SDD-first).
@@ -826,7 +826,7 @@ Reference implementation: `benchmarks/test_probe_guardrails.py`
 
 # V. Lifecycle & Automation
 
-ArqonShip does not “ship code”; it manufactures **artifacts** through a controlled factory.
+Code Monkeys does not “ship code”; it manufactures **artifacts** through a controlled factory.
 
 ### 1. The Factory Mandate
 
@@ -848,7 +848,7 @@ Manual releases are forbidden for production claims. CI is the source of truth.
 
 # VI. Operational Excellence
 
-ArqonShip is correctness-sensitive infrastructure for optimization. The way it behaves under real objectives is as important as the way it behaves in tests.
+Code Monkeys is correctness-sensitive infrastructure for optimization. The way it behaves under real objectives is as important as the way it behaves in tests.
 
 ### 1. Performance & Capacity Invariants
 
@@ -864,11 +864,11 @@ ArqonShip is correctness-sensitive infrastructure for optimization. The way it b
 
 # VII. Governance & Amendment
 
-Governance defines how ArqonShip protects its mission and how this Constitution itself may change.
+Governance defines how Code Monkeys protects its mission and how this Constitution itself may change.
 
 ### 1. Scope Protection
 
-ArqonShip is probe-gated optimization for the two target use cases. Scope creep is a bug.
+Code Monkeys is probe-gated optimization for the two target use cases. Scope creep is a bug.
 
 ### 2. Complexity Budget
 
@@ -1067,7 +1067,7 @@ For the Adaptive Engine control loop, the following event types are REQUIRED:
 
 # X. Data Governance & Retention
 
-ArqonShip may handle sensitive objective data. Data is an asset and a liability.
+Code Monkeys may handle sensitive objective data. Data is an asset and a liability.
 
 ### 1. Data Classification
 
@@ -1105,7 +1105,7 @@ Benchmark artifacts MUST follow a declarative schema:
 
 Python bindings MUST maintain parity with Rust core:
 
-* **Determinism Parity:** `ArqonProbe` and `ArqonSolver` (Python) MUST produce identical results to Rust core for same (seed, config).
+* **Determinism Parity:** `CodeMonkeysProbe` and `CodeMonkeysSolver` (Python) MUST produce identical results to Rust core for same (seed, config).
 * **Sharding Verification:** Bitwise hash of sorted samples MUST match single-worker vs multi-worker configurations.
 * **Binding Changes:** Require parity tests in CI before merge.
 
@@ -1128,7 +1128,7 @@ To prevent interpretation drift (especially for Spec Kit agents), we define core
 
 | Term | Definition |
 | :--- | :--- |
-| **ArqonShip** | The probe-gated optimization engine described by this Constitution. |
+| **Code Monkeys** | The probe-gated optimization engine described by this Constitution. |
 | **Probe** | Deterministic initial sampling phase to gather candidates and signal. |
 | **Classify** | Fixed-size test producing a label and score to drive mode selection. |
 | **Mode** | The chosen refinement strategy family (structured vs chaotic). |
@@ -1281,56 +1281,56 @@ This section defines the **non-negotiable** nomenclature and positioning hierarc
 
 ### 1. The Hierarchy Implementation
 
-The Arqon stack is always presented in this specific order of authority:
+The Code Monkeys stack is always presented in this specific order of authority:
 
 | Level | Canonical Term | Usage Scope |
 |:---|:---|:---|
-| **Company** | **Arqon Tech** | Organization, copyright, legal, "Built by..." credits |
-| **Product** | **Arqon Runtime Optimizer** | The User-Facing Product, the Website, the Solution |
+| **Company** | **Code Monkeys** | Organization, copyright, legal, "Built by..." credits |
+| **Product** | **Code Monkeys Factory** | The User-Facing Product, the Website, the Solution |
 | **Category** | **Runtime Optimization Infrastructure** | The functional category we own (genericized) |
-| **Engine** | **ArqonShip** | The internal Rust core, the algorithm, the technical "powered by" component |
+| **Engine** | **Code Monkeys** | The internal Rust core, the algorithm, the technical "powered by" component |
 
 ### 2. Mandatory Rules
 
 #### Rule 1: Product vs. Engine Separation
-*   **The Product is "Arqon Runtime Optimizer"**. This is the title of the website, the H1 of the home page, and how we refer to the solution in sales/marketing contexts.
-*   **The Engine is "ArqonShip"**. This refers *strictly* to the underlying technical artifacts (crates, algorithms, inner loops).
-    *   *Correct:* "Arqon Runtime Optimizer is powered by the sub-microsecond ArqonShip engine."
-    *   *Incorrect:* "Download ArqonShip to optimize your cloud." (User downloads the Product, which contains the Engine).
+*   **The Product is "Code Monkeys Factory"**. This is the title of the website, the H1 of the home page, and how we refer to the solution in sales/marketing contexts.
+*   **The Engine is "Code Monkeys"**. This refers *strictly* to the underlying technical artifacts (crates, algorithms, inner loops).
+    *   *Correct:* "Code Monkeys Factory is powered by the sub-microsecond Code Monkeys engine."
+    *   *Incorrect:* "Download Code Monkeys to optimize your cloud." (User downloads the Product, which contains the Engine).
 
 #### Rule 2: Title Case Branding
-*   **Arqon Runtime Optimizer** is a proper noun. Always Title Case.
-*   **ArqonShip** is a proper noun / code identifier. Always CamelCase with "HPO".
+*   **Code Monkeys Factory** is a proper noun. Always Title Case.
+*   **Code Monkeys** is a proper noun / code identifier. Always CamelCase with "HPO".
 *   "Runtime optimization" (the activity) is lowercase unless part of the formal Category name.
 
 #### Rule 3: Category Ownership
-*   We do not brand the category as "Arqon Optimization". We use the generic **Runtime Optimization Infrastructure** to establish the standard.
+*   We do not brand the category as "Code Monkeys Optimization". We use the generic **Runtime Optimization Infrastructure** to establish the standard.
 *   *Why?* We want to own the generic term "Runtime Optimization" in the user's mind, just as "Search" or "Databases" are categories.
 
 #### Rule 4: Stack Presentation Order
 When introducing the project, follow: **Company → Product → Category → Engine**.
-*   *Example:* "Arqon Tech presents Arqon Runtime Optimizer, the first Runtime Optimization Infrastructure powered by the ArqonShip engine."
+*   *Example:* "Code Monkeys presents Code Monkeys Factory, the first Runtime Optimization Infrastructure powered by the Code Monkeys engine."
 
 ### 3. Copy & Positioning Standards
 
 #### Headline Standards
-*   **H1**: Arqon Runtime Optimizer
+*   **H1**: Code Monkeys Factory
 *   **Subhead**: "Runtime optimization infrastructure for live production systems."
-*   **Support**: "Deterministic, guardrailed, sub-microsecond control loops—powered by ArqonShip."
+*   **Support**: "Deterministic, guardrailed, sub-microsecond control loops—powered by Code Monkeys."
 
 #### Glossary & Do/Don't
 
 | Term | Definition | Do | Don't |
 |:---|:---|:---|:---|
-| **Arqon Tech** | The company/entity. | "Copyright 2025 Arqon Tech" | "Copyright ArqonShip" |
-| **Arqon Runtime Optimizer** | The commercial/downloadable product. | "Install Arqon Runtime Optimizer" | "Install ArqonShip" (unless specifically referring to the crate) |
+| **Code Monkeys** | The company/entity. | "Copyright 2025 Code Monkeys" | "Copyright Code Monkeys" |
+| **Code Monkeys Factory** | The commercial/downloadable product. | "Install Code Monkeys Factory" | "Install Code Monkeys" (unless specifically referring to the crate) |
 | **Runtime Optimization** | The activity/category. | "The leader in Runtime Optimization" | "The leader in Hyperparameter Tuning" (too offline) |
-| **ArqonShip** | The Rust core engine. | "Powered by ArqonShip" | "Arqon HPO" (space), "ArqonShip" (unless code) |
+| **Code Monkeys** | The Rust core engine. | "Powered by Code Monkeys" | "Code Monkeys" (space), "Code Monkeys" (unless code) |
 
 ### 4. Migration Note
-*   The crate name remains `ArqonShip` in `Cargo.toml` and PyPI for limits of identifier stability.
-*   The documentation site title moves to **Arqon Runtime Optimizer**.
-*   The repo name may remain `ArqonShip` or move to `arqon-runtime-optimizer` at discretion of Ops, but the *public name* is migrated.
+*   The crate name remains `Code Monkeys` in `Cargo.toml` and PyPI for limits of identifier stability.
+*   The documentation site title moves to **Code Monkeys Factory**.
+*   The repo name may remain `Code Monkeys` or move to `codemonkeys-runtime-optimizer` at discretion of Ops, but the *public name* is migrated.
 
 ---
 
@@ -1346,19 +1346,19 @@ When introducing the project, follow: **Company → Product → Category → Eng
 
 ---
 
-# XVI. Codebase Oracle Principles (ArqonShip)
+# XVI. Codebase Oracle Principles (Code Monkeys)
 
- Governance for the `arqon scan` and indexing subsystem.
+ Governance for the `codemonkeys scan` and indexing subsystem.
 
 ### 1. Graph Determinism
 - **Immutability:** AST parsing (Tree-sitter) must be deterministic. The same codebase state must ALWAYS produce the exact same graph structure and edge set.
 - **Reproducibility:** Embeddings generation must use pinned model versions. Randomness in embeddings (e.g. dropout during inference) is forbidden.
-- **Verification:** `arqon scan --verify` must hash the generated graph and match against the artifact hash.
+- **Verification:** `codemonkeys scan --verify` must hash the generated graph and match against the artifact hash.
 
 ### 2. Schema Stability
-- The `.arqon/graph.json` schema is a **public compatibility surface**.
+- The `.codemonkeys/graph.json` schema is a **public compatibility surface**.
 - Changes to `GraphNode` or `GraphEdge` structures require semantic versioning.
-- Breaking schema changes require a MAJOR version bump of the ArqonShip CLI.
+- Breaking schema changes require a MAJOR version bump of the Code Monkeys CLI.
 - All artifacts must include a schema version header.
 
 ### 3. Privacy & Local-First
@@ -1368,14 +1368,14 @@ When introducing the project, follow: **Company → Product → Category → Eng
 
 ### 4. Incremental Scan Safety
 - **Atomic Updates:** Partial scans must not corrupt the graph state.
-- **Rollback:** If a scan fails mid-update, the `.arqon/` directory must revert to the previous valid state.
+- **Rollback:** If a scan fails mid-update, the `.codemonkeys/` directory must revert to the previous valid state.
 - **Corruption Detection:** The system must detect corrupted artifacts on startup and trigger a full rebuild.
 
 ---
 
-# XVII. Self-Healing CI Principles (ArqonShip)
+# XVII. Self-Healing CI Principles (Code Monkeys)
 
-Safety rails for the `arqon heal` autonomous repair features.
+Safety rails for the `codemonkeys heal` autonomous repair features.
 
 ### 1. LLM Governance
 - **Versioned Prompts:** All prompts used for code generation must be version-controlled in the repo.
@@ -1401,14 +1401,14 @@ Safety rails for the `arqon heal` autonomous repair features.
 
 ---
 
-# XVIII. CI/CD Automation Principles (ArqonShip)
+# XVIII. CI/CD Automation Principles (Code Monkeys)
 
 Integrity rules for the fully automated pipeline.
 
 ### 1. GitHub Actions Integrity
-- **Mandatory Checks:** Automated operations (`arqon ship`, self-healing) must run ALL required checks.
+- **Mandatory Checks:** Automated operations (`codemonkeys ship`, self-healing) must run ALL required checks.
 - **No Bypasses:** The use of `[skip ci]` or bypass flags by the automation is forbidden unless strictly scoped to documentation-only updates.
-- **Token Scope:** The `GITHUB_TOKEN` used by ArqonShip must have the minimal necessary scopes (read repo, contents; write PRs).
+- **Token Scope:** The `GITHUB_TOKEN` used by Code Monkeys must have the minimal necessary scopes (read repo, contents; write PRs).
 
 ### 2. Auto-Merge Safety
 - **Green CI Mandatory:** Auto-merge is only permitted if the CI suite is fully passing.
@@ -1417,12 +1417,12 @@ Integrity rules for the fully automated pipeline.
 - **Failure Notification:** If auto-merge fails, the system must notify the user (via PR comment), not retry silently.
 
 ### 3. Rate Limiting & Quotas
-- **API Citizenship:** `arqon ship` must implement exponential backoff for all GitHub API calls.
+- **API Citizenship:** `codemonkeys ship` must implement exponential backoff for all GitHub API calls.
 - **Quota Management:** The system must enforce a rate limit (e.g., max 10 PR status polls per minute) to prevent exhausting the user's API quota.
 
 ---
 
-# XIX. ArqonShip CLI Contracts
+# XIX. Code Monkeys CLI Contracts
 
 Stability guarantees for the developer tools.
 
@@ -1432,14 +1432,14 @@ Stability guarantees for the developer tools.
 - **Deprecation Policy:** Deprecated commands must show warnings for at least 1 MINOR version before removal.
 
 ### 2. Configuration Contract
-- **Schema Versioning:** The `.arqon/config.toml` file must be versioned.
+- **Schema Versioning:** The `.codemonkeys/config.toml` file must be versioned.
 - **Fail Fast:** Invalid configuration must cause the CLI to exit immediately with a helpful error message.
-- **Automated Migration:** Breaking config changes must be accompanied by an `arqon migrate-config` capability.
+- **Automated Migration:** Breaking config changes must be accompanied by an `codemonkeys migrate-config` capability.
 
 ### 3. Artifact Lifecycle
-- **Freshness:** `.arqon/graph.json` must be updated on every `arqon scan`.
-- **Garbage Collection:** `.arqon/vectors.lance/` must have a configurable GC policy (e.g., delete vectors older than 30 days) to prevent unrestricted disk usage growth.
-- **Metadata:** All generated artifacts must include: schema version, creation timestamp, and ArqonShip version.
+- **Freshness:** `.codemonkeys/graph.json` must be updated on every `codemonkeys scan`.
+- **Garbage Collection:** `.codemonkeys/vectors.lance/` must have a configurable GC policy (e.g., delete vectors older than 30 days) to prevent unrestricted disk usage growth.
+- **Metadata:** All generated artifacts must include: schema version, creation timestamp, and Code Monkeys version.
 
 ---
 
@@ -1459,5 +1459,5 @@ Strict enforcement mechanisms for the Autonomous Fleet.
     - File > 500 lines = BLOCK.
 - **Coverage:** No PR may decrease test coverage.
 
-**Version**: 2.0.0 (ArqonShip)
+**Version**: 2.0.0 (Code Monkeys)
 **Ratified**: 2025-12-20  

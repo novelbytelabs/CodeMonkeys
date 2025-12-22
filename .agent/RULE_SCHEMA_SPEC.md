@@ -184,7 +184,7 @@ rules:
 ## File Organization
 
 ```
-.arqonship/
+.codemonkeys/
 ├── constitution.toml          # Governance rules
 ├── rules/
 │   ├── pack.yaml              # Pack metadata

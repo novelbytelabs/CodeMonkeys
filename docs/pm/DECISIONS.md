@@ -58,6 +58,15 @@ Each entry follows:
 
 ---
 
+### DEC-0005: Naming — Arqon/ArqonShip Forbidden
+**Date**: 2025-12-22  
+**Decision**: "Arqon" and "ArqonShip" are forbidden in all new code and documentation. The project identity is "Code Monkeys" with CLI command `codemonkeys`.  
+**Why**: ArqonShip was the legacy name for a different project (HPO optimizer). This repo hosts the Code Monkeys Factory, not ArqonShip.  
+**Alternatives Rejected**: Keeping "Arqon" branding (confusing), renaming the repo immediately (too disruptive for current sprint).  
+**Consequences**: All docs updated. Host repo folder remains `/ArqonShip` temporarily until a clean break is made. Final publish target is `codemonkeys/` repo.
+
+---
+
 ## How to Add a Decision
 
 1. Create new entry with next DEC-NNNN number

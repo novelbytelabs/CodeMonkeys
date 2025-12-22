@@ -1,4 +1,4 @@
-# Mind-Blowing ArqonShip Ideas
+# Mind-Blowing Code Monkeys Ideas
 
 > Brainstormed with Google Gemini + ChatGPT on 2024-12-19
 
@@ -65,7 +65,7 @@ Every code change updates a semantic knowledge graph. Docs regenerate from graph
 - Jenkins = circulatory system (builds + tests)
 - Terraform = skeletal system (infra)
 - Ansible = nervous system (config)
-- ArqonShip = brain coordinating all
+- Code Monkeys = brain coordinating all
 
 ### 7. Predictive Release Automation With Risk Forecasting
 Before shipping, predict: deployment risk, user impact, rollback probability, security exposure, performance regressions.
@@ -74,9 +74,9 @@ Before shipping, predict: deployment risk, user impact, rollback probability, se
 Identify shared patterns, duplicate logic, vulnerabilities, platformization opportunities. Auto-execute fleet-wide refactors.
 
 ### 9. Autonomous Compliance & Policy Enforcement
-Constitution defines rules for security, data, deployment, access. ArqonShip enforces everywhere with zero manual effort.
+Constitution defines rules for security, data, deployment, access. Code Monkeys enforces everywhere with zero manual effort.
 
-### 10. Meta-Automation: ArqonShip Improves Its Own Automation
+### 10. Meta-Automation: Code Monkeys Improves Its Own Automation
 Continuously audits workflows, measures ROI, identifies bottlenecks, generates new automations, retires obsolete ones.
 
 ---
@@ -103,9 +103,9 @@ Continuously audits workflows, measures ROI, identifies bottlenecks, generates n
 
 ---
 
-## The Ultimate ArqonShip
+## The Ultimate Code Monkeys
 
-**ArqonShip is not a DevOps tool. It's a self-evolving autonomous organism that:**
+**Code Monkeys is not a DevOps tool. It's a self-evolving autonomous organism that:**
 
 1. **Governs itself** with an adversarial Constitution that formally verifies its own amendments
 2. **Learns across products** — bugs fixed in one vaccinate all others
@@ -118,7 +118,7 @@ Continuously audits workflows, measures ROI, identifies bottlenecks, generates n
 9. **Refactors everywhere** — spots patterns and fixes them fleet-wide
 10. **Improves its own automation** — the system evolves itself
 
-**You write Constitution + Spec. ArqonShip does everything else.**
+**You write Constitution + Spec. Code Monkeys does everything else.**
 
 ---
 
@@ -448,7 +448,7 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
     - [ ] **Constitution:** Draft `constitution.yaml` (The Law).
     - [ ] **Justice Agent:** Build the "Judge" that validates PRs against the Constitution.
     - [ ] **Bribe Test:** Create a test case where we try to "bribe" the Justice agent to ignore a security flaw.
-- **Deliverable:** A CLI tool `arqon justice check <pr_id>` that rejects a PR because it violates Article 1.
+- **Deliverable:** A CLI tool `codemonkeys justice check <pr_id>` that rejects a PR because it violates Article 1.
 
 ### Week 2: the-nervous-system / Context
 **Goal:** Give the system eyes and ears.
@@ -457,7 +457,7 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
     - [ ] **Log Stream:** Connect `oracle` to CI logs (GitHub Actions).
     - [ ] **Error Classifier:** "Is this a syntax error, a logic error, or a flaky test?"
     - [ ] **Context Window:** Build the `oracle/vector_store` for code semantic search.
-- **Deliverable:** Run `arqon oracle status` and see "3 repos failing CI, 1 flaky test detected."
+- **Deliverable:** Run `codemonkeys oracle status` and see "3 repos failing CI, 1 flaky test detected."
 
 ### Week 3: the-actuator / Healer
 **Goal:** The system takes its first physical action.
@@ -466,7 +466,7 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
     - [ ] **Builder Agent:** `heal` module generates code fixes for simple errors.
     - [ ] **Git Handlers:** Safe wrapper for branching, committing, pushing.
     - [ ] **Reality Forks:** Spin up a Docker container to test the fix *before* pushing.
-- **Deliverable:** Introduce a syntax error in a dummy repo. ArqonShip detects it, fixes it, and pushes a branch.
+- **Deliverable:** Introduce a syntax error in a dummy repo. Code Monkeys detects it, fixes it, and pushes a branch.
 
 ### Week 4: adaptive-immunity / Orchestrator MVP
 **Goal:** Build the central nervous system for safe cross-repo learning.
@@ -508,7 +508,7 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
 
 ---
 
-## Summary: The ArqonShip Mega-Architecture
+## Summary: The Code Monkeys Mega-Architecture
 
 | Layer | Concept | Source |
 |-------|---------|--------|
@@ -524,4 +524,4 @@ Solo developer as "Force of Nature" managing 50 products through single interfac
 - Google AI Mode: 10 + Stigmergic Architecture
 
 **The Vision:**
-> ArqonShip is not a tool. It's a *self-evolving autonomous organism* that learns, heals, attacks itself, writes its own laws, and collapses your intent into reality across 50+ products simultaneously.
+> Code Monkeys is not a tool. It's a *self-evolving autonomous organism* that learns, heals, attacks itself, writes its own laws, and collapses your intent into reality across 50+ products simultaneously.

@@ -1,16 +1,16 @@
-# ArqonShip Configuration Reference
+# Code Monkeys Configuration Reference
 
 ## Configuration File
 
-ArqonShip uses `.arqonship/config.toml` for project-level settings.
+Code Monkeys uses `.codemonkeys/config.toml` for project-level settings.
 
 ### Generating Default Config
 
 ```bash
-arqonship init
+codemonkeys init
 ```
 
-Creates `.arqonship/config.toml` with defaults.
+Creates `.codemonkeys/config.toml` with defaults.
 
 ## Full Configuration Schema
 
@@ -37,7 +37,7 @@ exclude_globs = [
 ]
 
 # Path to store/cache model files
-model_path = "~/.arqonship/models/"
+model_path = "~/.codemonkeys/models/"
 
 [heal]
 # Maximum repair attempts before giving up (Constitution XVII.1)
@@ -71,7 +71,7 @@ version_scheme = "semver"
 |--------|------|---------|-------------|
 | `include_globs` | string[] | `["src/**/*.rs", "src/**/*.py"]` | Files to parse and index |
 | `exclude_globs` | string[] | `["target/", "venv/", ".git/"]` | Paths to skip |
-| `model_path` | string | `"~/.arqonship/models/"` | Model cache directory |
+| `model_path` | string | `"~/.codemonkeys/models/"` | Model cache directory |
 
 ### `[heal]` Section
 
@@ -92,7 +92,7 @@ version_scheme = "semver"
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `GITHUB_TOKEN` | GitHub API token for PR creation | For `arqonship ship` |
+| `GITHUB_TOKEN` | GitHub API token for PR creation | For `codemonkeys ship` |
 | `ARQON_CONFIG` | Override config file path | No |
 | `ARQON_MODEL_CACHE` | Override model cache directory | No |
 
@@ -100,11 +100,11 @@ version_scheme = "semver"
 
 | Path | Purpose |
 |------|---------|
-| `.arqonship/config.toml` | Project configuration |
-| `.arqonship/graph.db` | SQLite graph database |
-| `.arqonship/vectors.lance/` | LanceDB vector storage |
-| `~/.arqonship/models/` | Cached AI models |
-| `~/.arqonship/audit.db` | Global audit log |
+| `.codemonkeys/config.toml` | Project configuration |
+| `.codemonkeys/graph.db` | SQLite graph database |
+| `.codemonkeys/vectors.lance/` | LanceDB vector storage |
+| `~/.codemonkeys/models/` | Cached AI models |
+| `~/.codemonkeys/audit.db` | Global audit log |
 
 ## Example Configurations
 

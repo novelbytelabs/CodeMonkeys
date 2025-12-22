@@ -1,10 +1,10 @@
-# ArqonShip Domain Context (DDD)
+# Code Monkeys Domain Context (DDD)
 > *The Ubiquitous Language of the Autonomous Fleet*
 
 ## 1. Domain Entities (The Nouns)
 
 ### The Fleet
-*   **Repo**: A single git repository managed by ArqonShip.
+*   **Repo**: A single git repository managed by Code Monkeys.
 *   **Campaign**: A coordinated set of actions (e.g., "Upgrade React") applied across multiple Repos.
 *   **Wave**: A subset of Repos targeted in a specific phase of a Campaign (Canary, Early, Fleet).
 

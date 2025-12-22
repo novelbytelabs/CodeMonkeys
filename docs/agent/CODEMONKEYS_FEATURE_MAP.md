@@ -1,7 +1,7 @@
 # CodeMonkeys: Complete Feature Mapping
 
 > Synthesized from all docs/ and .agent/ documentation.
-> ArqonShip becomes `codemonkeys ship`.
+> Code Monkeys becomes `codemonkeys ship`.
 
 ---
 
@@ -12,8 +12,8 @@
 ### From Existing Docs:
 | Source | Feature | Notes |
 |--------|---------|-------|
-| VISION.md | ArqonInit | "0 → working repo with CI/release wiring" |
-| docs/index.md | `arqonship init` | Creates `.arqonship/` + config |
+| VISION.md | CodeMonkeysInit | "0 → working repo with CI/release wiring" |
+| docs/index.md | `codemonkeys init` | Creates `.codemonkeys/` + config |
 | configuration.md | Default templates | Rust/Python/Full-stack configs |
 
 ### Features for `codemonkeys init`:
@@ -33,7 +33,7 @@
 ### From Existing Docs:
 | Source | Feature | Maps To |
 |--------|---------|---------|
-| VISION.md | ArqonDev | "Spec → Plan → Tasks → Tests (SDD+TDD)" |
+| VISION.md | CodeMonkeysDev | "Spec → Plan → Tasks → Tests (SDD+TDD)" |
 | MOONSHOT_IDEAS.md | Adversarial Justice LLM | `dev secure` |
 | MOONSHOT_IDEAS.md | Living Knowledge Graph | `dev analyze` |
 | architecture.md | Oracle Module | `dev analyze` (code understanding) |
@@ -109,11 +109,11 @@ Silverback  Foreman  Foreman  Foreman  Scout   CodeMonkey  Security  Chaos
 ### From Existing Docs:
 | Source | Feature | Maps To |
 |--------|---------|---------|
-| VISION.md | ArqonShip | "Heal → Docs → Ship → Publish → Announce" |
+| VISION.md | Code Monkeys | "Heal → Docs → Ship → Publish → Announce" |
 | architecture.md | Ship Module | `ship release` |
 | architecture.md | Oracle | Powers `ship docs` |
-| docs/cli-reference.md | `arqonship ship` | `codemonkeys ship release` |
-| FLEET_ARCHITECTURE.md | ArqonOrg | `ship fleet` |
+| docs/cli-reference.md | `codemonkeys ship` | `codemonkeys ship release` |
+| FLEET_ARCHITECTURE.md | CodeMonkeysOrg | `ship fleet` |
 | ULTIMATE_ARCHITECTURE.md | Jenkins/Ansible/Terraform | `ship deploy` |
 | MOONSHOT_IDEAS.md | Self-Directing Documentary | `ship docs` |
 | MOONSHOT_IDEAS.md | Predictive Risk Forecast | `ship analyze` |
