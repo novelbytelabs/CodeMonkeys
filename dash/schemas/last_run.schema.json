@@ -75,7 +75,7 @@
       "properties": {
         "state": {
           "type": "string",
-          "enum": ["none", "pending", "active", "completed"],
+          "enum": ["none", "pending", "active", "completed", "idle", "blocked", "merging"],
           "description": "PR wave state"
         },
         "open_prs": { "type": "integer", "minimum": 0 },

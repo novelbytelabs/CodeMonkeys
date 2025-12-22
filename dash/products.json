@@ -1,14 +1,45 @@
 {
   "schema_version": "0.1",
-  "generated_at": "2025-12-21T00:00:00Z",
   "products": [
     {
       "product_id": "codemonkeys-dash",
       "display_name": "Code Monkeys Dash",
-      "repo": "local",
-      "path": "./",
-      "owner": "nexus",
-      "status": "bootstrap"
+      "owner": "Nexus",
+      "status": "active",
+      "spec_path": "specs/000-dash-mvp/spec.md",
+      "run_evidence_path": "dash/runs/codemonkeys-dash/"
+    },
+    {
+      "product_id": "arqonship-cli",
+      "display_name": "ArqonShip CLI",
+      "owner": "CodeMonkeys",
+      "status": "active",
+      "spec_path": "specs/001-arqonship-cli/spec.md",
+      "run_evidence_path": "dash/runs/arqonship-cli/"
+    },
+    {
+      "product_id": "spec-kit",
+      "display_name": "Spec Kit",
+      "owner": "CodeMonkeys",
+      "status": "pending",
+      "spec_path": "specs/002-spec-kit/spec.md",
+      "run_evidence_path": "dash/runs/spec-kit/"
+    },
+    {
+      "product_id": "banana-economy",
+      "display_name": "Banana Economy",
+      "owner": "Nexus",
+      "status": "development",
+      "spec_path": "specs/003-banana-economy/spec.md",
+      "run_evidence_path": "dash/runs/banana-economy/"
+    },
+    {
+      "product_id": "silverback-agent",
+      "display_name": "Silverback Agent",
+      "owner": "Nexus",
+      "status": "planned",
+      "spec_path": "specs/004-silverback-agent/spec.md",
+      "run_evidence_path": "dash/runs/silverback-agent/"
     }
   ]
 }

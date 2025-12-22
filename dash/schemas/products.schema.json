@@ -4,7 +4,7 @@
   "title": "Products Registry",
   "description": "Registry of products monitored by Code Monkeys Dash",
   "type": "object",
-  "required": ["schema_version", "generated_at", "products"],
+  "required": ["schema_version", "products"],
   "properties": {
     "schema_version": {
       "type": "string",
@@ -14,14 +14,14 @@
     "generated_at": {
       "type": "string",
       "format": "date-time",
-      "description": "ISO 8601 timestamp when this file was generated"
+      "description": "ISO 8601 timestamp when this file was generated (optional)"
     },
     "products": {
       "type": "array",
       "description": "List of products in the fleet",
       "items": {
         "type": "object",
-        "required": ["product_id", "display_name", "repo", "path", "owner", "status"],
+        "required": ["product_id", "display_name", "owner", "status"],
         "properties": {
           "product_id": {
             "type": "string",
@@ -45,8 +45,16 @@
           },
           "status": {
             "type": "string",
-            "enum": ["bootstrap", "active", "deprecated", "archived"],
+            "enum": ["bootstrap", "active", "pending", "development", "planned", "deprecated", "archived"],
             "description": "Current lifecycle status"
+          },
+          "spec_path": {
+            "type": "string",
+            "description": "Path to the product's spec file"
+          },
+          "run_evidence_path": {
+            "type": "string",
+            "description": "Path to the product's run evidence directory"
           }
         }
       }

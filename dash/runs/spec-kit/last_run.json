@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "product_id": "spec-kit",
+  "run_id": "run_20251219_100000",
+  "started_at": "2025-12-19T10:00:00Z",
+  "ended_at": "2025-12-19T10:02:15Z",
+  "status": "failed",
+  "summary": "2 tests failed: test_spec_parsing, test_plan_generation",
+  "evidence": {
+    "paths": [
+      "runs/spec-kit/run_20251219_100000/pytest_output.log"
+    ]
+  },
+  "banana_economy": {
+    "budget_tokens": 50000,
+    "spent_tokens": 8000,
+    "budget_minutes": 90,
+    "spent_minutes": 2.25,
+    "max_ci_heal_attempts": 2,
+    "ci_heal_attempts_used": 1
+  },
+  "kill_switch": {
+    "enabled": false,
+    "reason": ""
+  },
+  "pr_wave": {
+    "state": "blocked",
+    "open_prs": 1,
+    "last_update": "2025-12-19T10:02:15Z"
+  }
+}

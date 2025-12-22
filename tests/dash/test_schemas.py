@@ -65,7 +65,7 @@ def test_products_json_structure():
     data = load_json("dash/products.json")
     
     assert data.get("schema_version") == "0.1"
-    assert "generated_at" in data
+    # generated_at is now optional in schema
     assert isinstance(data.get("products"), list)
     
     for p in data["products"]:

@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "product_id": "arqonship-cli",
+  "run_id": "run_20251220_140000",
+  "started_at": "2025-12-20T14:00:00Z",
+  "ended_at": "2025-12-20T14:05:23Z",
+  "status": "success",
+  "summary": "All tests passed (42 tests)",
+  "evidence": {
+    "paths": [
+      "runs/arqonship-cli/run_20251220_140000/pytest_output.log"
+    ]
+  },
+  "banana_economy": {
+    "budget_tokens": 50000,
+    "spent_tokens": 12500,
+    "budget_minutes": 90,
+    "spent_minutes": 5.38,
+    "max_ci_heal_attempts": 2,
+    "ci_heal_attempts_used": 0
+  },
+  "kill_switch": {
+    "enabled": false,
+    "reason": ""
+  },
+  "pr_wave": {
+    "state": "idle",
+    "open_prs": 0,
+    "last_update": "2025-12-20T14:05:23Z"
+  }
+}
