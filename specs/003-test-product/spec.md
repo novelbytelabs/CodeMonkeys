@@ -29,8 +29,13 @@ This will pass verification.
 - **Stop Condition**: Kill switch.
 
 ## 7. Constraints & Non-goals
-**Non-goals**:
-- [Out of scope item]
+### Constraints
+- **C-001**: Must remain deterministic and self-contained (no network calls).
+- **C-002**: Must generate valid "happy path" artifacts for pipeline verification.
+
+### Non-goals
+- **NG-001**: No production shipping or release tagging.
+- **NG-002**: No integration with external services or secret material.
 
 ## 8. Evidence Plan
 - **Artifacts**: Standard run artifacts.

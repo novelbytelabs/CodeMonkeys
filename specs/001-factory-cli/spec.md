@@ -1,5 +1,7 @@
 # Spec: Factory Core CLI
 
+Dossier: DOS-20251222-factory-cli
+Constitution: constitution.md
 **Status**: Draft  
 **Owner**: Nexus  
 **Epic**: Factory Core CLI (Sprint 1)

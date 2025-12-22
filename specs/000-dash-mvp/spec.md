@@ -1,5 +1,8 @@
 # Spec: Code Monkeys Dash MVP (v0.1)
 
+Dossier: DOS-20251222-dash-mvp
+Constitution: constitution.md
+
 ## Intent
 Build a bootstrap dashboard that allows a solo operator (and later Nexus) to monitor the fleet and see “what’s real” via structured artifacts.
 
