@@ -10,12 +10,12 @@
       "run_evidence_path": "dash/runs/codemonkeys-dash/"
     },
     {
-      "product_id": "arqonship-cli",
-      "display_name": "ArqonShip CLI",
+      "product_id": "codemonkeys-cli",
+      "display_name": "Code Monkeys CLI",
       "owner": "CodeMonkeys",
       "status": "active",
-      "spec_path": "specs/001-arqonship-cli/spec.md",
-      "run_evidence_path": "dash/runs/arqonship-cli/"
+      "spec_path": "specs/001-factory-cli/spec.md",
+      "run_evidence_path": "dash/runs/codemonkeys-cli/"
     },
     {
       "product_id": "spec-kit",
