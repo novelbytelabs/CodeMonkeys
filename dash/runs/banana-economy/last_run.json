@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "product_id": "banana-economy",
+  "run_id": "run_20251221_090000",
+  "started_at": "2025-12-21T09:00:00Z",
+  "ended_at": "2025-12-21T09:08:45Z",
+  "status": "success",
+  "summary": "All tests passed (18 tests)",
+  "evidence": {
+    "paths": [
+      "runs/banana-economy/run_20251221_090000/pytest_output.log"
+    ]
+  },
+  "banana_economy": {
+    "budget_tokens": 75000,
+    "spent_tokens": 22000,
+    "budget_minutes": 120,
+    "spent_minutes": 8.75,
+    "max_ci_heal_attempts": 3,
+    "ci_heal_attempts_used": 0
+  },
+  "kill_switch": {
+    "enabled": false,
+    "reason": ""
+  },
+  "pr_wave": {
+    "state": "merging",
+    "open_prs": 2,
+    "last_update": "2025-12-21T09:08:45Z"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1",
+  "request_id": "req_20251221_001",
+  "type": "budget_extension",
+  "source": "codemonkeys-dash",
+  "created_at": "2025-12-21T15:00:00Z",
+  "status": "pending",
+  "priority": "normal",
+  "payload": {
+    "current_budget_tokens": 50000,
+    "spent_tokens": 48000,
+    "requested_extension": 25000,
+    "justification": "Schema validation tests require additional iterations"
+  }
+}

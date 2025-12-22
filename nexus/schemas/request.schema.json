@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codemonkeys.dev/schemas/nexus_request.schema.json",
+  "title": "Nexus Request",
+  "description": "Request or escalation sent to Nexus for decision",
+  "type": "object",
+  "required": ["schema_version", "request_id", "type", "source", "created_at", "status", "payload"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Unique identifier for this request"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["escalation", "approval_request", "budget_extension", "kill_switch_override", "scope_change"],
+      "description": "Type of request"
+    },
+    "source": {
+      "type": "string",
+      "description": "Who/what originated this request (product_id, agent, human)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "deferred"],
+      "description": "Current status of the request"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "normal", "high", "critical"],
+      "default": "normal"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Request-specific data"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolution": {
+      "type": "object",
+      "properties": {
+        "decision": { "type": "string" },
+        "reason": { "type": "string" },
+        "resolved_by": { "type": "string" }
+      }
+    }
+  }
+}

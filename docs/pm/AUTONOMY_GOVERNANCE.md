@@ -128,7 +128,16 @@ A kill switch is a mechanism that **immediately halts** all autonomous operation
 - `preflight.sh` runs before commits.
 - Human reviews evidence packs.
 
-### 6.2 Production (Future)
+### 6.2 CI Enforcement (Active)
+- `.github/workflows/codemonkeys-ci.yml` runs on all PRs to main.
+- **Checks enforced**:
+  - pytest (schema validation tests)
+  - Silverback validation (spec readiness + artifact validity)
+  - Run report generation (`last_run.json` must exist)
+- **Artifacts uploaded**: pytest log, Silverback log, last_run.json
+- **Failure = blocked merge** (when branch protection enabled).
+
+### 6.3 Production (Future)
 - CI gates prevent non-compliant merges.
 - Nexus cannot approve its own changes.
 - Automated evidence collection and validation.
@@ -142,3 +151,37 @@ This document can only be amended by:
 3. Updated version number.
 
 No agent may self-modify governance rules.
+
+---
+
+## 8. Branching Workflow
+
+### Branch Roles
+| Branch | Purpose | Direct Commits |
+|--------|---------|----------------|
+| `main` | Stable/release | ❌ PRs only |
+| `dev` | Integration | ❌ PRs only |
+| `feature/*` | Work branches | ✅ |
+
+### PR Flow
+1. Create `feature/<name>` from `dev`
+2. Work on feature, commit freely
+3. PR `feature/*` → `dev` (CI must pass)
+4. PR `dev` → `main` when ready for release (CI + review)
+
+### Starting New Work
+```bash
+git checkout dev
+git pull origin dev
+git checkout -b feature/<short-name>
+git push -u origin feature/<short-name>
+```
+
+### CI Triggers
+- Push to `dev`: runs CI
+- PR to `dev`: runs CI
+- PR to `main`: runs CI
+
+### Branch Protection (Recommended)
+- `main`: Require PRs, require status checks, no direct pushes
+- `dev`: Require status checks

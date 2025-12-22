@@ -12,7 +12,7 @@
     ]
   },
   "banana_economy": {
-    "budget_tokens": 50000,
+    "budget_tokens": 75000,
     "spent_tokens": 0,
     "budget_minutes": 90,
     "spent_minutes": 0.04,

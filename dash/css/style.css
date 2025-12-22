@@ -185,3 +185,32 @@ h1 {
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
 }
+
+/* Nexus section */
+.nexus-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.nexus-card {
+    border-left: 3px solid var(--accent);
+}
+.nexus-card.decision {
+    border-left-color: var(--success);
+}
+
+.empty-state {
+    color: var(--text-secondary);
+    padding: 1rem;
+    text-align: center;
+}
+
+.priority-critical { color: var(--danger); font-weight: bold; }
+.priority-high { color: var(--warning); }
+.priority-normal { color: var(--text-primary); }
+.priority-low { color: var(--text-secondary); }
+
+.governance-ok { color: var(--success); }
+.governance-fail { color: var(--danger); font-weight: bold; }
+

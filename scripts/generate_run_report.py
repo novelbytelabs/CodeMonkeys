@@ -9,12 +9,14 @@ Features:
 - Computes actual spent_minutes from timestamps
 - Ensures log file exists even on timeout/exception
 - Validates report against schema before exiting success
+- CI mode (--ci) runs without conda dependency
 
 Usage:
+    # Local (with conda)
     python scripts/generate_run_report.py <product_id> [--test-path <path>]
 
-Example:
-    python scripts/generate_run_report.py codemonkeys-dash --test-path tests/dash/
+    # CI (without conda)
+    python scripts/generate_run_report.py <product_id> --ci --test-path tests/dash/
 """
 import argparse
 import json
@@ -69,22 +71,32 @@ def atomic_write_json(path: Path, data: dict):
 
 def ensure_log_file(log_path: Path, content: str):
     """Ensure log file exists with at least some content."""
-    if not log_path.exists():
+    if not log_path.parent.exists():
         log_path.parent.mkdir(parents=True, exist_ok=True)
     log_path.write_text(content or "[No output captured]")
 
 
-def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
+def run_pytest(test_path: str, output_file: Path, ci_mode: bool = False) -> tuple[int, str]:
     """
     Run pytest and capture output.
+
+    Args:
+        test_path: Path to tests
+        output_file: Path to write pytest output
+        ci_mode: If True, run pytest directly (no conda)
 
     Returns:
         tuple: (exit_code, summary)
     """
-    cmd = [
-        "conda", "run", "-n", "helios-gpu-118",
-        "pytest", test_path, "-v", "--tb=short"
-    ]
+    if ci_mode:
+        # CI mode: run pytest directly
+        cmd = ["pytest", test_path, "-v", "--tb=short"]
+    else:
+        # Local mode: use conda environment
+        cmd = [
+            "conda", "run", "-n", "helios-gpu-118",
+            "pytest", test_path, "-v", "--tb=short"
+        ]
 
     try:
         result = subprocess.run(
@@ -93,11 +105,11 @@ def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
             text=True,
             timeout=300  # 5 minute timeout
         )
-        
+
         # Write full output to log file
         full_output = result.stdout + "\n" + result.stderr
         ensure_log_file(output_file, full_output)
-        
+
         # Parse summary
         if result.returncode == 0:
             summary = "All tests passed"
@@ -106,15 +118,17 @@ def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
             lines = result.stdout.split('\n')
             summary_lines = [l for l in lines if 'failed' in l.lower() or 'error' in l.lower()]
             summary = summary_lines[0] if summary_lines else "Tests failed"
-        
+
         return result.returncode, summary
-        
+
     except subprocess.TimeoutExpired as e:
         # Ensure log file exists even on timeout
-        partial_output = f"[TIMEOUT after 300s]\nPartial stdout:\n{e.stdout or ''}\nPartial stderr:\n{e.stderr or ''}"
+        stdout = e.stdout.decode() if e.stdout else ''
+        stderr = e.stderr.decode() if e.stderr else ''
+        partial_output = f"[TIMEOUT after 300s]\nPartial stdout:\n{stdout}\nPartial stderr:\n{stderr}"
         ensure_log_file(output_file, partial_output)
         return 2, "Test run timed out (300s)"
-        
+
     except Exception as e:
         # Ensure log file exists on any exception
         error_content = f"[EXCEPTION]\n{type(e).__name__}: {e}"
@@ -125,16 +139,16 @@ def run_pytest(test_path: str, output_file: Path) -> tuple[int, str]:
 def validate_report(report: dict) -> tuple[bool, str]:
     """
     Validate report against JSON schema.
-    
+
     Returns:
         tuple: (is_valid, error_message)
     """
     if not HAS_JSONSCHEMA:
         return True, "jsonschema not installed, skipping validation"
-    
+
     if not SCHEMA_PATH.exists():
         return True, f"Schema not found at {SCHEMA_PATH}, skipping validation"
-    
+
     try:
         schema = json.loads(SCHEMA_PATH.read_text())
         validate(instance=report, schema=schema)
@@ -154,7 +168,7 @@ def generate_report(
 ) -> dict:
     """Generate a run report dictionary."""
     spent_minutes = compute_spent_minutes(start_time, end_time)
-    
+
     return {
         "schema_version": "0.1",
         "product_id": product_id,
@@ -191,6 +205,7 @@ def main():
     parser.add_argument("product_id", help="Product identifier (e.g., codemonkeys-dash)")
     parser.add_argument("--test-path", default="tests/", help="Path to tests")
     parser.add_argument("--output-dir", default="dash/runs", help="Output directory")
+    parser.add_argument("--ci", action="store_true", help="CI mode: run pytest directly (no conda)")
     args = parser.parse_args()
 
     # Setup paths
@@ -205,10 +220,11 @@ def main():
     print(f"[*] Starting run: {run_id}")
     print(f"[*] Product: {args.product_id}")
     print(f"[*] Test path: {args.test_path}")
+    print(f"[*] CI mode: {args.ci}")
 
     # Run tests
     start_time = get_timestamp()
-    exit_code, summary = run_pytest(args.test_path, log_path)
+    exit_code, summary = run_pytest(args.test_path, log_path, ci_mode=args.ci)
     end_time = get_timestamp()
 
     print(f"[*] Exit code: {exit_code}")
@@ -233,7 +249,7 @@ def main():
     # Validate report against schema
     is_valid, validation_msg = validate_report(report)
     print(f"[*] {validation_msg}")
-    
+
     if not is_valid:
         print("[!] ERROR: Generated report is invalid. Exiting with error.")
         return 1
