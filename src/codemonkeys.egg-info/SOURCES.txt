@@ -11,8 +11,10 @@ src/codemonkeys.egg-info/requires.txt
 src/codemonkeys.egg-info/top_level.txt
 src/codemonkeys/commands/__init__.py
 src/codemonkeys/commands/dash.py
+src/codemonkeys/commands/dossier.py
 src/codemonkeys/commands/fleet.py
 src/codemonkeys/commands/nexus.py
 src/codemonkeys/commands/run.py
+src/codemonkeys/commands/ship.py
 src/codemonkeys/commands/silverback.py
 src/codemonkeys/core/__init__.py

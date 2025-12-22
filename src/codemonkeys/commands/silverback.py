@@ -19,6 +19,7 @@ def silverback(validate_all, nexus, target):
     if nexus:
         cmd.append("--nexus")
     if target:
+        cmd.append("--spec")
         cmd.append(target)
         
     try:

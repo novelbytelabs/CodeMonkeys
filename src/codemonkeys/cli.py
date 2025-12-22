@@ -6,6 +6,7 @@ from codemonkeys.commands.silverback import silverback
 from codemonkeys.commands.nexus import nexus
 from codemonkeys.commands.fleet import fleet
 from codemonkeys.commands.dossier import dossier
+from codemonkeys.commands.ship import ship
 
 console = Console()
 
@@ -20,6 +21,7 @@ cli.add_command(silverback)
 cli.add_command(nexus)
 cli.add_command(fleet)
 cli.add_command(dossier)
+cli.add_command(ship)
 
 if __name__ == "__main__":
     cli()
