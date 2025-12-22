@@ -13,7 +13,7 @@ def silverback(validate_all, nexus, target):
     """Run Silverback validation."""
     console.print("[bold blue]Code Monkeys Factory :: Silverback Validation[/bold blue]")
     
-    cmd = ["python", "scripts/silverback_validate.py"]
+    cmd = [sys.executable, "scripts/silverback_validate.py"]
     if validate_all:
         cmd.append("--all")
     if nexus:

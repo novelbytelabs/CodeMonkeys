@@ -29,6 +29,48 @@ except ImportError:
     HAS_JSONSCHEMA = False
 
 
+# Placeholder detection helpers
+FILLER_ONLY_RE = re.compile(r"^\s*(tbd|todo|none|n/?a|na|\.\.\.)\s*$", re.IGNORECASE)
+CONSTRAINT_MARKER_RE = re.compile(r"\b(?:C|NG|AC)-\d{3}\b")
+
+
+def _is_placeholder_only(section_content: str) -> bool:
+    """Check if section content is placeholder-only or has real content."""
+    raw = (section_content or "").strip()
+    if not raw:
+        return True
+
+    # If the author is using explicit requirement markers, treat as real content
+    if CONSTRAINT_MARKER_RE.search(raw):
+        return False
+
+    placeholder_patterns = [
+        r"\[.*?\]",
+        r"<.*?>",
+        r"ACTION REQUIRED",
+        r"NEEDS CLARIFICATION",
+    ]
+
+    cleaned = raw
+    for p in placeholder_patterns:
+        cleaned = re.sub(p, " ", cleaned, flags=re.IGNORECASE)
+
+    # Strip markdown noise but keep words
+    cleaned = re.sub(r"(?m)^\s*[-*+]\s*", "", cleaned)   # bullet markers
+    cleaned = re.sub(r"[`*_#]", "", cleaned)             # formatting chars
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+
+    if not cleaned:
+        return True
+    if FILLER_ONLY_RE.match(cleaned):
+        return True
+
+    # Heuristic: require either enough alnum density or enough "real" words
+    alnum_chars = len(re.sub(r"[^A-Za-z0-9]", "", cleaned))
+    word_count = len(re.findall(r"[A-Za-z0-9]{3,}", cleaned))
+    return (alnum_chars < 15) and (word_count < 3)
+
+
 # Mandatory spec sections that must not be blank
 MANDATORY_SECTIONS = [
     "Intent",
@@ -143,24 +185,12 @@ def validate_spec(spec_path: Path, result: ValidationResult):
             continue
 
         section_start = match.end()
-        next_section = re.search(r"\n##+ ", content[section_start:])
+        # Only look for same-level (##) headers as section boundaries, not ### subsections
+        next_section = re.search(r"\n## ", content[section_start:])
         section_end = section_start + next_section.start() if next_section else len(content)
         section_content = content[section_start:section_end].strip()
 
-        placeholder_patterns = [
-            r"\[.*?\]",
-            r"<.*?>",
-            r"ACTION REQUIRED",
-            r"NEEDS CLARIFICATION",
-        ]
-
-        cleaned = section_content
-        for p in placeholder_patterns:
-            cleaned = re.sub(p, "", cleaned)
-        
-        cleaned = re.sub(r"[#*_\-|`]", "", cleaned).strip()
-        
-        if len(cleaned) < 20:
+        if _is_placeholder_only(section_content):
             result.warning(f"Section '{section}' appears to be placeholder-only")
         else:
             result.ok(f"Section '{section}' has content")

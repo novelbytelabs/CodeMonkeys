@@ -11,10 +11,13 @@ We need to test governance.
 This will pass verification.
 
 ## 2. User Stories
-- **As a User**, I want [feature] so that [benefit].
+- **As a Developer**, I want a test product entry to validate the governance pipeline without requiring a real product.
+- **As an Operator**, I want to verify that Dash renders test products correctly before adding production products.
 
 ## 3. Functional Requirements
-1.  **Requirement 1**: ...
+- **FR-001**: Provide a minimal product entry in `dash/products.json` for demonstration/testing.
+- **FR-002**: Maintain a `dash/runs/test-product/last_run.json` that conforms to schema.
+- **FR-003**: Include at least one evidence artifact referenced by last_run.json.
 
 ## 4. Acceptance Criteria
 1. Proof 1: Valid proof
