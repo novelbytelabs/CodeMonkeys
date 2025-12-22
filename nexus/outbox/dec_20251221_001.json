@@ -4,7 +4,7 @@
   "request_id": "req_20251221_001",
   "type": "budget_grant",
   "created_at": "2025-12-21T15:05:00Z",
-  "status": "issued",
+  "status": "executed",
   "target": "codemonkeys-dash",
   "payload": {
     "granted_tokens": 25000,
@@ -14,7 +14,11 @@
   "rationale": "Extension approved: within daily allocation limit, valid justification",
   "governance_check": {
     "compliant": true,
-    "rules_checked": ["budget_extension_limit", "daily_allocation_cap"],
+    "rules_checked": [
+      "budget_extension_limit",
+      "daily_allocation_cap"
+    ],
     "violations": []
-  }
+  },
+  "executed_at": "2025-12-21T23:25:02.639030+00:00"
 }
