@@ -20,7 +20,7 @@
     "job_id": {
       "type": "string",
       "description": "Unique identifier for this work order",
-      "pattern": "^wo_[a-z0-9-]+_[a-z_]+_\\d{3}$"
+      "pattern": "^wo_[a-z0-9-]+_[a-z_]+(_\\d{8}_\\d{6})?_\\d{3}$"
     },
     "product_id": {
       "type": "string",
