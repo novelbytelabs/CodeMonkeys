@@ -67,6 +67,15 @@ Each entry follows:
 
 ---
 
+### DEC-0006: Warnings Treated as Errors on Main
+**Date**: 2025-12-22  
+**Decision**: Silverback warnings are treated as errors on `main` branch. CI must fail if warnings > 0 on `main`.  
+**Why**: We achieved 0 warnings with v0.4.1. Keeping the signal strong prevents governance drift from creeping back.  
+**Alternatives Rejected**: Warnings allowed on main (too weak), only count specific warning types (adds complexity).  
+**Consequences**: All specs must have complete sections before merge to main. CI enforces `codemonkeys silverback --all` with warning-as-error mode.
+
+---
+
 ## How to Add a Decision
 
 1. Create new entry with next DEC-NNNN number
