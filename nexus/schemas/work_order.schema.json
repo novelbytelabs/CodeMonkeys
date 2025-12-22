@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "work_order.schema.json",
+  "title": "Work Order Schema",
+  "description": "Schema for Oracle work order artifacts",
+  "type": "object",
+  "required": [
+    "job_id",
+    "product_id",
+    "intent",
+    "inputs",
+    "budget",
+    "stop_conditions",
+    "priority",
+    "created_at",
+    "constitution_refs",
+    "evidence_expectations"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier for this work order",
+      "pattern": "^wo_[a-z0-9-]+_[a-z_]+_\\d{3}$"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product this work order applies to"
+    },
+    "intent": {
+      "type": "string",
+      "description": "Type of action to perform",
+      "enum": ["validate", "test", "regenerate_report"]
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Intent-specific input parameters"
+    },
+    "budget": {
+      "type": "object",
+      "description": "Execution budget limits",
+      "required": ["max_actions"],
+      "properties": {
+        "max_actions": {
+          "type": "integer",
+          "description": "Maximum sub-steps allowed",
+          "minimum": 1
+        },
+        "max_seconds": {
+          "type": "integer",
+          "description": "Optional wall-time limit in seconds",
+          "minimum": 1
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "description": "Conditions that should halt execution",
+      "items": {
+        "type": "string",
+        "enum": ["on_test_fail", "on_silverback_fail", "on_missing_evidence"]
+      }
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Priority score (higher = more urgent)",
+      "minimum": 0
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of work order creation",
+      "format": "date-time"
+    },
+    "constitution_refs": {
+      "type": "array",
+      "description": "Constitutional documents this work order is governed by",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "evidence_expectations": {
+      "type": "array",
+      "description": "Paths to evidence artifacts expected after execution",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the work order",
+      "enum": ["pending", "running", "completed", "failed", "skipped"],
+      "default": "pending"
+    },
+    "result": {
+      "type": "object",
+      "description": "Execution result (populated after run)",
+      "properties": {
+        "exit_code": { "type": "integer" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "evidence_produced": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "error_message": { "type": "string" }
+      }
+    }
+  }
+}

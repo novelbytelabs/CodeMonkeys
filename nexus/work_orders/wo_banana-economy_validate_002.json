@@ -1,0 +1,24 @@
+{
+  "job_id": "wo_banana-economy_validate_002",
+  "product_id": "banana-economy",
+  "intent": "validate",
+  "inputs": {},
+  "budget": {
+    "max_actions": 1,
+    "max_seconds": 120
+  },
+  "stop_conditions": [
+    "on_silverback_fail",
+    "on_test_fail",
+    "on_missing_evidence"
+  ],
+  "priority": 50,
+  "created_at": "2025-12-22T14:20:51.322419Z",
+  "constitution_refs": [
+    "constitution.md"
+  ],
+  "evidence_expectations": [
+    "dash/runs/banana-economy/last_run.json"
+  ],
+  "status": "pending"
+}

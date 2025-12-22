@@ -1,0 +1,13 @@
+{
+  "job_id": "wo_codemonkeys-cli_validate_001",
+  "product_id": "codemonkeys-cli",
+  "intent": "validate",
+  "inputs": {},
+  "budget": { "max_actions": 1, "max_seconds": 60 },
+  "stop_conditions": ["on_silverback_fail", "on_missing_evidence"],
+  "priority": 10,
+  "created_at": "2025-12-22T12:00:00Z",
+  "constitution_refs": ["constitution.md"],
+  "evidence_expectations": ["dash/runs/codemonkeys-cli/last_run.json"],
+  "status": "pending"
+}
