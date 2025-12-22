@@ -12,12 +12,13 @@ This registry defines the documents that are considered "Law" or "Contract" with
 | Document | Type | Owner | Approval | Silverback Logic |
 |---|---|---|---|---|
 | `constitution.md` | Supreme Law | Human | Manual | Must exist, must contain Preamble |
-| `docs/pm/00_VISION_STRATEGY.md` | Strategy | Human | Manual | Must exist, check pilllrs |
-| `docs/pm/AUTONOMY_GOVERNANCE.md` | Governance | Human | Manual | Must exist, check rules |
-| `docs/pm/GOVERNED_DOCS.md` | Registry | Nexus | Human | Start here |
+| `constitution.md` | Constitution | Human | Human | **Primary Law** |
+| `docs/pm/00_VISION_STRATEGY.md` | Strategy | Human | Manual | Must exist |
+| `docs/pm/AUTONOMY_GOVERNANCE.md` | Governance | Human | Manual | Must exist |
+| `docs/pm/GOVERNED_DOCS.md` | Registry | Nexus | Human | Registry of Law |
+| `docs/pm/DESIGN_DOSSIER_TEMPLATE.md` | Template | Nexus | Human | Must match Schema |
+| `docs/dossiers/*.md` | Contract | Nexus | Human | Must match Template/Schema |
 | `specs/**/*.md` | Contract | Nexus | Auto/Human | Must follow templates |
-| `nexus/schemas/*.json` | Schema | Nexus | Auto | JSON Schema validation |
-| `dash/schemas/*.json` | Schema | Nexus | Auto | JSON Schema validation |
 
 ## Header Requirements
 

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Governed Docs Registry",
+  "type": "object",
+  "properties": {
+    "registry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type", "owner", "approval"],
+        "properties": {
+          "path": { "type": "string" },
+          "type": { "type": "string" },
+          "owner": { "type": "string" },
+          "approval": { "type": "string" }
+        }
+      }
+    }
+  }
+}
