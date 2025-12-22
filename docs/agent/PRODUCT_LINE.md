@@ -14,12 +14,12 @@
 
 ## Product Lines
 
-### 1. Arqon Tech (MAS Division)
+### 1. Code Monkeys (MAS Division)
 **Focus:** Multi-Agent Systems & Runtime Optimization
 
 | Product | Engine | Binary | Purpose |
 |---------|--------|--------|---------|
-| **Arqon Runtime Optimizer** | ArqonHPO | `arqon` | Probe-gated optimization, runtime adaptation |
+| **Code Monkeys Factory** | CodeMonkeys | `codemonkeys` | Probe-gated optimization, runtime adaptation |
 
 **Tagline:** *"Runtime optimization infrastructure for live production systems."*
 
@@ -50,7 +50,7 @@
 - **Usage:** Copyright notices, legal, "A Novel Byte Labs project"
 - **Style:** Professional, understated
 
-### Arqon Tech
+### Code Monkeys
 - **Usage:** MAS/optimization products only
 - **Style:** Enterprise, technical, performance-focused
 - **Colors:** Dark mode, blues/purples
@@ -67,16 +67,16 @@
 
 ```
 github.com/novelbytelabs/
-├── ArqonHPO/           # Rust core for runtime optimization
-├── CodeMonkeys/        # DevSecOps automation (formerly ArqonShip)
+├── CodeMonkeys/           # Rust core for runtime optimization
+├── CodeMonkeys/        # DevSecOps automation (formerly Code Monkeys)
 └── (other projects)
 ```
 
 ---
 
-## Note on ArqonShip
+## Note on Code Monkeys
 
-**ArqonShip** was the original codename for CodeMonkeys during development.
+**Code Monkeys** was the original codename for CodeMonkeys during development.
 It is now **deprecated** as a product name.
 
 ---

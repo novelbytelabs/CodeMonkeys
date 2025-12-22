@@ -1,14 +1,14 @@
-# ArqonShip Architecture
+# Code Monkeys Architecture
 
 ## Overview
 
-ArqonShip is a DevSecOps automation system implementing three core capabilities:
+Code Monkeys is a DevSecOps automation system implementing three core capabilities:
 
 1. **Codebase Oracle** - Intelligent code understanding via graph + vector duality
 2. **Self-Healing CI** - Autonomous repair of test failures
 3. **Governed Releases** - Constitution-compliant release pipeline
 
-![ArqonShip Architecture](../assets/images/diagram-ArqonCLI.svg)
+![Code Monkeys Architecture](../assets/images/diagram-CodeMonkeysCLI.svg)
 
 ## Module Architecture
 
@@ -142,25 +142,25 @@ Schema: code_vectors
 
 ## Fleet Architecture (Moonshot)
 
-ArqonShip is designed to scale from a single product to 50+ products across multiple companies.
+Code Monkeys is designed to scale from a single product to 50+ products across multiple companies.
 
 ### Two-Layer Model
 
 ```
 ┌───────────────────────────────────────────────┐
-│              ARQON ORG                        │
+│              CODEMONKEYS ORG                        │
 │  Fleet registry + Swarm DB + Cross-repo ops  │
 └───────────────────┬───────────────────────────┘
                     │
     ┌───────────────┼───────────────┐
     ▼               ▼               ▼
 ┌────────┐     ┌────────┐     ┌────────┐
-│ArqonShip     │ArqonShip     │ArqonShip
+│Code Monkeys     │Code Monkeys     │Code Monkeys
 │ (repo1)│     │ (repo2)│     │ (repoN)│
 └────────┘     └────────┘     └────────┘
 ```
 
-### ArqonShip Pillars
+### Code Monkeys Pillars
 
 | Pillar | Job |
 |--------|-----|
@@ -180,20 +180,20 @@ ArqonShip is designed to scale from a single product to 50+ products across mult
 
 ### Swarm Intelligence
 
-Each ArqonShip instance shares telemetry with a central Swarm DB:
+Each Code Monkeys instance shares telemetry with a central Swarm DB:
 
 | Store | Data | Path |
 |-------|------|------|
-| SQLite | Error patterns, fix templates | `~/.arqon/swarm.db` |
-| LanceDB | Semantic embeddings | `~/.arqon/swarm_vectors/` |
+| SQLite | Error patterns, fix templates | `~/.codemonkeys/swarm.db` |
+| LanceDB | Semantic embeddings | `~/.codemonkeys/swarm_vectors/` |
 
 Patterns learned in one repo inform fixes in all others.
 
-### ArqonOrg Capabilities
+### CodeMonkeysOrg Capabilities
 
 - **Fleet Registry**: All companies, products, repos
 - **Multi-Account Auth**: Different GitHub tokens per org
-- **Cross-Repo Ops**: `arqonorg apply --all`
+- **Cross-Repo Ops**: `codemonkeysorg apply --all`
 - **Dashboard**: Fleet health at a glance
 
 ### Moonshot Goals

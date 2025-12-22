@@ -1,10 +1,10 @@
-# Ultimate ArqonShip Architecture
+# Ultimate Code Monkeys Architecture
 
 ## Vision
 
-**One system to rule them all.** ArqonShip orchestrates Jenkins, Ansible, Terraform, and browser automation so you don't have to touch them directly.
+**One system to rule them all.** Code Monkeys orchestrates Jenkins, Ansible, Terraform, and browser automation so you don't have to touch them directly.
 
-You write **Constitution + Spec**. ArqonShip does everything else.
+You write **Constitution + Spec**. Code Monkeys does everything else.
 
 ---
 
@@ -17,7 +17,7 @@ You write **Constitution + Spec**. ArqonShip does everything else.
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│                      ARQON ORG                               │
+│                      CODEMONKEYS ORG                               │
 │   Fleet Management · Swarm Intelligence · Multi-Company      │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -52,13 +52,13 @@ You write **Constitution + Spec**. ArqonShip does everything else.
 - Gates for every action
 - Audit requirements
 
-### 2. ArqonOrg (Fleet Layer)
+### 2. CodeMonkeysOrg (Fleet Layer)
 - Manages 50+ products across multiple companies
 - Swarm DB (patterns shared across all repos)
 - Cross-repo operations
 - Dashboard for fleet health
 
-### 3. ArqonShip (Product Layer)
+### 3. Code Monkeys (Product Layer)
 | Pillar | Integrates With | Job |
 |--------|-----------------|-----|
 | **Oracle** | Local SQLite + LanceDB | Code understanding |
@@ -70,18 +70,18 @@ You write **Constitution + Spec**. ArqonShip does everything else.
 ### 4. Jenkins (CI Layer)
 - Self-hosted on your hardware
 - Unlimited builds, no rate limits
-- ArqonShip triggers via Jenkins API
+- Code Monkeys triggers via Jenkins API
 - Pipelines defined in Jenkinsfile (per repo)
 
 ### 5. Ansible (Config/Deploy Layer)
 - Playbooks for every deployment scenario
-- ArqonShip runs `ansible-playbook`
+- Code Monkeys runs `ansible-playbook`
 - Manages servers, packages, configs
 - Idempotent = safe to run repeatedly
 
 ### 6. Terraform (Infrastructure Layer)
 - Only when you need cloud resources
-- ArqonShip runs `terraform apply`
+- Code Monkeys runs `terraform apply`
 - State managed per-product
 
 ### 7. Browser Automation (Last-Mile Layer)
@@ -97,7 +97,7 @@ You write **Constitution + Spec**. ArqonShip does everything else.
 Event (webhook/cron/manual)
         │
         ▼
-   ArqonShip Watch
+   Code Monkeys Watch
         │
         ├──→ Heal needed? ─→ Jenkins (build) ─→ Ollama (fix) ─→ Git (commit)
         │
@@ -112,7 +112,7 @@ Event (webhook/cron/manual)
 
 ## Swarm Intelligence
 
-Each ArqonShip instance reports to the Swarm DB:
+Each Code Monkeys instance reports to the Swarm DB:
 
 | Data | Use |
 |------|-----|
@@ -125,9 +125,9 @@ Each ArqonShip instance reports to the Swarm DB:
 
 ---
 
-## What You Touch vs What ArqonShip Touches
+## What You Touch vs What Code Monkeys Touches
 
-| You | ArqonShip |
+| You | Code Monkeys |
 |-----|-----------|
 | Constitution | Everything else |
 | Spec | Jenkinsfiles |
@@ -147,7 +147,7 @@ Each ArqonShip instance reports to the Swarm DB:
 - Ship (semver + changelog)
 
 ### Phase 2: Watch & Daemon
-- `arqonship watch` command
+- `codemonkeys watch` command
 - Webhook receiver OR cron trigger
 - Auto-trigger heal/ship
 
@@ -161,7 +161,7 @@ Each ArqonShip instance reports to the Swarm DB:
 - Playbook library (crates.io, PyPI, Docker, etc.)
 - Secrets management
 
-### Phase 5: ArqonOrg
+### Phase 5: CodeMonkeysOrg
 - Fleet registry
 - Multi-account auth
 - Cross-repo operations
@@ -182,7 +182,7 @@ Each ArqonShip instance reports to the Swarm DB:
 | Deployment complexity | Ansible (declarative, repeatable) |
 | Infrastructure | Terraform (code-defined) |
 | UI-only tasks | Browser automation |
-| 50+ products | ArqonOrg fleet management |
+| 50+ products | CodeMonkeysOrg fleet management |
 | Knowledge silos | Swarm DB (cross-product learning) |
 | Maintenance burden | Constitution-governed autopilot |
 
@@ -195,7 +195,7 @@ You: *define Constitution + Spec*
 You: *commit*
 You: *sleep*
 
-ArqonShip:
+Code Monkeys:
   - Builds in Jenkins
   - Tests pass ✅
   - Docs regenerated

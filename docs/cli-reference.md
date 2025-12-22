@@ -1,41 +1,41 @@
-# ArqonShip CLI Reference
+# Code Monkeys CLI Reference
 
 ## Installation
 
 ```bash
 # Build from source
-cd ArqonHPO
+cd codemonkeys
 cargo build -p ship --release
 
 # Add to PATH (optional)
-cp target/release/ship ~/.local/bin/arqon
+cp target/release/ship ~/.local/bin/codemonkeys
 # OR
-alias arqon='./target/release/ship'
+alias codemonkeys='./target/release/ship'
 ```
 
 ## Global Options
 
 ```
-arqon [OPTIONS] <COMMAND>
+codemonkeys [OPTIONS] <COMMAND>
 
 Options:
-  --config <PATH>    Path to config file [default: .arqonship/config.toml]
+  --config <PATH>    Path to config file [default: .codemonkeys/config.toml]
   -h, --help         Print help
   -V, --version      Print version
 ```
 
 ## Commands
 
-### `arqonship init`
+### `codemonkeys init`
 
-Initialize ArqonShip in the current repository.
+Initialize Code Monkeys in the current repository.
 
 ```bash
-arqonship init
+codemonkeys init
 ```
 
 **Behavior:**
-- Creates `.arqonship/` directory
+- Creates `.codemonkeys/` directory
 - Generates default `config.toml`
 - If config exists, does nothing
 
@@ -45,12 +45,12 @@ arqonship init
 
 ---
 
-### `arqonship scan`
+### `codemonkeys scan`
 
 Build the Codebase Oracle (parse files, build graph, generate embeddings).
 
 ```bash
-arqonship scan
+codemonkeys scan
 ```
 
 **Behavior:**
@@ -75,13 +75,13 @@ Scan complete.
 
 ---
 
-### `arqonship chat`
+### `codemonkeys chat`
 
 Query the Codebase Oracle using natural language.
 
 ```bash
-arqonship chat --query "How does authentication work?"
-arqonship chat -q "optimizer implementation"
+codemonkeys chat --query "How does authentication work?"
+codemonkeys chat -q "optimizer implementation"
 ```
 
 **Options:**
@@ -102,13 +102,13 @@ arqonship chat -q "optimizer implementation"
 
 ---
 
-### `arqonship heal`
+### `codemonkeys heal`
 
 Autonomous self-healing for test failures.
 
 ```bash
-arqonship heal
-arqonship heal --log-file test-output.json --max-attempts 3
+codemonkeys heal
+codemonkeys heal --log-file test-output.json --max-attempts 3
 ```
 
 **Options:**
@@ -134,14 +134,14 @@ arqonship heal --log-file test-output.json --max-attempts 3
 
 ---
 
-### `arqonship ship`
+### `codemonkeys ship`
 
 Create a governed release (SemVer + Changelog + PR).
 
 ```bash
-arqonship ship
-arqonship ship --dry-run
-arqonship ship --skip-checks
+codemonkeys ship
+codemonkeys ship --dry-run
+codemonkeys ship --skip-checks
 ```
 
 **Options:**
@@ -197,20 +197,20 @@ Changelog:
 
 ```bash
 # Initialize project
-arqonship init
+codemonkeys init
 
 # Build index
-arqonship scan
+codemonkeys scan
 
 # Query code
-arqonship chat -q "error handling"
+codemonkeys chat -q "error handling"
 
 # After test failure
 cargo test --message-format=json > test.json
-arqonship heal --log-file test.json
+codemonkeys heal --log-file test.json
 
 # Create release
 export GITHUB_TOKEN=ghp_xxx
-arqonship ship --dry-run
-arqonship ship
+codemonkeys ship --dry-run
+codemonkeys ship
 ```

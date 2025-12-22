@@ -1,18 +1,18 @@
 <!--
 Sync Impact Report:
 
-- ArqonHPO Constitution v1.0.0 (2025-12-13)
+- CodeMonkeys Constitution v1.0.0 (2025-12-13)
 -->
 
-# ArqonHPO Constitution
+# CodeMonkeys Constitution
 
 **Version**: 1.0.0  
 **Ratification Date**: 2025-12-13  
 **Last Amended**: 2025-12-13  
 
-This document defines the **non-negotiable principles** that govern how ArqonHPO is designed, evolved, and maintained.
+This document defines the **non-negotiable principles** that govern how CodeMonkeys is designed, evolved, and maintained.
 
-It exists to protect ArqonHPO from accidental bloat, regression, silent breakage, and “clever” shortcuts that erode trust.
+It exists to protect CodeMonkeys from accidental bloat, regression, silent breakage, and “clever” shortcuts that erode trust.
 
 If a decision conflicts with this constitution, **the decision is wrong**.
 
@@ -226,7 +226,7 @@ If a situation, decision, or design choice is not explicitly covered by this Con
 
 ## 1. The Vision
 
-**ArqonHPO is a probe-gated optimization engine for time-to-target.**
+**CodeMonkeys is a probe-gated optimization engine for time-to-target.**
 
 It is built to be clearly competitive for two product-aligned use cases:
 
@@ -235,11 +235,11 @@ It is built to be clearly competitive for two product-aligned use cases:
 
 ## 2. The Scope
 
-To achieve this vision, we must be ruthless about what ArqonHPO **is** and what it **is not**.
+To achieve this vision, we must be ruthless about what CodeMonkeys **is** and what it **is not**.
 
 ### 2.1 In Scope (The Core Product)
 
-ArqonHPO is **probe-gated optimization**. It is responsible for:
+CodeMonkeys is **probe-gated optimization**. It is responsible for:
 
 * **The Probe Phase:** Deterministic sampling to gather an initial signal and candidates.
 * **The Classification Phase:** A fixed-size test that labels the landscape (e.g., structured vs chaotic) and produces a score.
@@ -249,7 +249,7 @@ ArqonHPO is **probe-gated optimization**. It is responsible for:
 
 ### 2.2 Out of Scope (The Boundaries)
 
-ArqonHPO is **not**:
+CodeMonkeys is **not**:
 
 * **A general-purpose ML training framework.** It tunes; it does not train end-to-end pipelines.
 * **A distributed execution platform.** It may integrate with external evaluators, but it does not provide a cluster runtime.
@@ -273,7 +273,7 @@ We define evolution in three distinct epochs. Engineering decisions must align w
 
 # II. Core Principles
 
-This section defines the engineering laws that govern ArqonHPO. These are not guidelines; they are constraints. Code that violates these principles will be rejected during Review.
+This section defines the engineering laws that govern CodeMonkeys. These are not guidelines; they are constraints. Code that violates these principles will be rejected during Review.
 
 ### 1. Architectural Invariance (The Gate Pattern)
 
@@ -469,7 +469,7 @@ The system may manage governed experiment namespaces (“Realities”) as first-
 
 ### 1. The "Boring Code" Manifesto
 
-We value clarity over cleverness. ArqonHPO must be readable by a junior engineer at 3 AM.
+We value clarity over cleverness. CodeMonkeys must be readable by a junior engineer at 3 AM.
 
 * **Readability First:** If a "clever" one-liner creates cognitive load, expand it.
 * **Explicit over Implicit:** Magic behavior, monkey-patching, and hidden control flow are forbidden.
@@ -558,7 +558,7 @@ Optimization systems die when state becomes ambiguous.
 
 ### 1. TDD as the Working Standard
 
-Test-Driven Development (TDD) is the **default and expected workflow** for all ArqonHPO components.
+Test-Driven Development (TDD) is the **default and expected workflow** for all CodeMonkeys components.
 
 * **The Workflow:**
   1. **Specify:** Define behavior in `/specs/` (SDD-first).
@@ -595,7 +595,7 @@ A PR **may not be merged** if any of the following are true:
 
 # V. Lifecycle & Automation
 
-ArqonHPO does not “ship code”; it manufactures **artifacts** through a controlled factory.
+CodeMonkeys does not “ship code”; it manufactures **artifacts** through a controlled factory.
 
 ### 1. The Factory Mandate
 
@@ -617,7 +617,7 @@ Manual releases are forbidden for production claims. CI is the source of truth.
 
 # VI. Operational Excellence
 
-ArqonHPO is correctness-sensitive infrastructure for optimization. The way it behaves under real objectives is as important as the way it behaves in tests.
+CodeMonkeys is correctness-sensitive infrastructure for optimization. The way it behaves under real objectives is as important as the way it behaves in tests.
 
 ### 1. Performance & Capacity Invariants
 
@@ -633,11 +633,11 @@ ArqonHPO is correctness-sensitive infrastructure for optimization. The way it be
 
 # VII. Governance & Amendment
 
-Governance defines how ArqonHPO protects its mission and how this Constitution itself may change.
+Governance defines how CodeMonkeys protects its mission and how this Constitution itself may change.
 
 ### 1. Scope Protection
 
-ArqonHPO is probe-gated optimization for the two target use cases. Scope creep is a bug.
+CodeMonkeys is probe-gated optimization for the two target use cases. Scope creep is a bug.
 
 ### 2. Complexity Budget
 
@@ -684,7 +684,7 @@ What cannot be observed cannot be governed.
 
 # X. Data Governance & Retention
 
-ArqonHPO may handle sensitive objective data. Data is an asset and a liability.
+CodeMonkeys may handle sensitive objective data. Data is an asset and a liability.
 
 ### 1. Data Classification
 
@@ -717,7 +717,7 @@ To prevent interpretation drift (especially for Spec Kit agents), we define core
 
 | Term | Definition |
 | :--- | :--- |
-| **ArqonHPO** | The probe-gated optimization engine described by this Constitution. |
+| **CodeMonkeys** | The probe-gated optimization engine described by this Constitution. |
 | **Probe** | Deterministic initial sampling phase to gather candidates and signal. |
 | **Classify** | Fixed-size test producing a label and score to drive mode selection. |
 | **Mode** | The chosen refinement strategy family (structured vs chaotic). |

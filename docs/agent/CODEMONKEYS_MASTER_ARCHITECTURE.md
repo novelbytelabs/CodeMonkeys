@@ -158,9 +158,9 @@ codemonkeys dev test                  # Run tests + chaos
 
 **Goal:** Make it live.
 
-**Heritage:** The full ArqonShip vision.
+**Heritage:** The full Code Monkeys vision.
 
-## The Ship Pillars (from ArqonShip)
+## The Ship Pillars (from Code Monkeys)
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -246,7 +246,7 @@ codemonkeys --tui
 
 # Ideas to Preserve
 
-## From ArqonShip
+## From Code Monkeys
 - Living Linter (rule evolution)
 - Adaptive Immunity (auto-fix propagation)
 - Reality Forks (canary branching)

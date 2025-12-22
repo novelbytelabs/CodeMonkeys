@@ -19,24 +19,24 @@ As a solo builder shipping dozens of products:
 
 | Layer | Product | Job |
 |-------|---------|-----|
-| **Bootstrap** | **ArqonInit** | 0 → working repo with CI/release wiring |
-| **Front Half** | **ArqonDev** | Spec → Plan → Tasks → Tests (SDD+TDD) |
-| **Back Half** | **ArqonShip** | Heal → Docs → Ship → Publish → Announce |
+| **Bootstrap** | **CodeMonkeysInit** | 0 → working repo with CI/release wiring |
+| **Front Half** | **CodeMonkeysDev** | Spec → Plan → Tasks → Tests (SDD+TDD) |
+| **Back Half** | **Code Monkeys** | Heal → Docs → Ship → Publish → Announce |
 
-### ArqonInit — "Factory Bootstrap"
+### CodeMonkeysInit — "Factory Bootstrap"
 - Repo skeleton + language templates (Rust/Python/C)
 - CI workflows + caching
 - Release pipeline wiring
 - Default Constitution + Spec templates with machine policy block
-- `.arqonship/config.toml` tuned to your environment
+- `.codemonkeys/config.toml` tuned to your environment
 
-### ArqonDev — "Front-Half Loop" (spec-kit fork/wrapper)
+### CodeMonkeysDev — "Front-Half Loop" (spec-kit fork/wrapper)
 - Spec authoring
 - Task decomposition
 - TDD scaffolding
 - Traceability mapping (req → code/tests/docs)
 
-### ArqonShip — "Back-Half Loop"
+### Code Monkeys — "Back-Half Loop"
 - **Oracle**: Code graph + semantic indexing
 - **Heal**: Self-healing CI with LLM-powered fixes
 - **Docs**: Living documentation that stays in sync
@@ -128,7 +128,7 @@ This is the missing piece SDD doesn't cover.
 - Doc drift check (README/CLI regenerated from Clap)
 
 ### Milestone 2: Living Docs + Policy Gates
-- `arqon docs` command (update + enforce in CI)
+- `codemonkeys docs` command (update + enforce in CI)
 - Constitution checks expand
 
 ### Milestone 3: Full Autopilot Loop
@@ -140,7 +140,7 @@ This is the missing piece SDD doesn't cover.
 
 ## Key Design Principle
 
-ArqonShip is **not a chatbot**. It's an **execution engine with governance**:
+Code Monkeys is **not a chatbot**. It's an **execution engine with governance**:
 
 ```
 observe → decide → act → verify → log

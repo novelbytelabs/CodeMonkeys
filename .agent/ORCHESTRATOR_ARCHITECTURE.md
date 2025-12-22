@@ -1,4 +1,4 @@
-# ArqonShip Orchestrator Architecture
+# Code Monkeys Orchestrator Architecture
 
 > **Synthesized from:** Gemini, Grok, GPT-5.2 (2025-12-20)
 > **Pattern:** Hybrid (Central Coordinator + Distributed Workers)

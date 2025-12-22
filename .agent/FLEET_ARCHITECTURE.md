@@ -1,4 +1,4 @@
-# ArqonOrg + ArqonShip: Fleet Architecture
+# CodeMonkeysOrg + Code Monkeys: Fleet Architecture
 
 ## Confirmed Decisions
 
@@ -15,14 +15,14 @@
 
 ```
 ┌───────────────────────────────────────────────┐
-│              ARQON ORG                        │
+│              CODEMONKEYS ORG                        │
 │  Fleet registry + Swarm DB + Cross-repo ops  │
 └───────────────────┬───────────────────────────┘
                     │
     ┌───────────────┼───────────────┐
     ▼               ▼               ▼
 ┌────────┐     ┌────────┐     ┌────────┐
-│ArqonShip     │ArqonShip     │ArqonShip
+│Code Monkeys     │Code Monkeys     │Code Monkeys
 │ (repo1)│     │ (repo2)│     │ (repoN)│
 └────────┘     └────────┘     └────────┘
               ↓ Telemetry ↓
@@ -44,7 +44,7 @@
 
 ---
 
-## ArqonShip Pillars
+## Code Monkeys Pillars
 
 | Pillar | Job |
 |--------|-----|
@@ -60,15 +60,15 @@
 
 | Store | Data | Path |
 |-------|------|------|
-| SQLite | Error patterns, fix templates, fleet registry | `~/.arqonship/swarm.db` |
-| LanceDB | Semantic embeddings | `~/.arqonship/swarm_vectors/` |
+| SQLite | Error patterns, fix templates, fleet registry | `~/.codemonkeys/swarm.db` |
+| LanceDB | Semantic embeddings | `~/.codemonkeys/swarm_vectors/` |
 
 ---
 
 ## Next Implementation Steps
 
-1. **`arqonship watch`** — event listener mode
-2. **GitHub Action** — `arqonship heal` on CI failure
-3. **`arqonship ship --auto`** — release when green
+1. **`codemonkeys watch`** — event listener mode
+2. **GitHub Action** — `codemonkeys heal` on CI failure
+3. **`codemonkeys ship --auto`** — release when green
 4. **Swarm DB** — shared cross-repo memory
-5. **ArqonOrg CLI** — fleet commands
+5. **CodeMonkeysOrg CLI** — fleet commands

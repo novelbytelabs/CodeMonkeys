@@ -1,4 +1,4 @@
-# ArqonShip: Adaptive Immunity Architecture
+# Code Monkeys: Adaptive Immunity Architecture
 
 > **Synthesized from:** Gemini AI Studio + Microsoft Copilot (2025-12-20)
 > **Replaces:** "Antibody Propagation" (deemed too risky)

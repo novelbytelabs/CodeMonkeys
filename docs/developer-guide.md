@@ -1,4 +1,4 @@
-# ArqonShip Developer Guide
+# Code Monkeys Developer Guide
 
 ## Getting Started
 
@@ -13,15 +13,15 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/novelbytelabs/ArqonHPO.git
-cd ArqonHPO
+git clone https://github.com/novelbytelabs/CodeMonkeys.git
+cd codemonkeys
 
 # Build the ship crate
 cargo build -p ship --release
 
 # The binary is at target/release/ship
 # Optionally, alias it:
-alias arqon='./target/release/ship'
+alias codemonkeys='./target/release/ship'
 ```
 
 ### Running Tests
@@ -32,8 +32,8 @@ cargo test -p ship
 
 # Integration tests (requires initialized project)
 cd /path/to/test-project
-arqonship init
-arqonship scan
+codemonkeys init
+codemonkeys scan
 cargo test -p ship --test integration
 ```
 
@@ -81,7 +81,7 @@ crates/ship/
     └── vector_test.rs   # Vector store tests
 ```
 
-## Extending ArqonShip
+## Extending Code Monkeys
 
 ### Adding a New Language Parser
 
@@ -211,13 +211,13 @@ fn test_graph_extraction() {
 
 Add `tracing` for structured logging:
 ```bash
-RUST_LOG=debug arqonship scan
+RUST_LOG=debug codemonkeys scan
 ```
 
 ### SQLite Inspection
 
 ```bash
-sqlite3 .arqonship/graph.db
+sqlite3 .codemonkeys/graph.db
 sqlite> .schema
 sqlite> SELECT * FROM nodes LIMIT 10;
 ```
@@ -226,7 +226,7 @@ sqlite> SELECT * FROM nodes LIMIT 10;
 
 ```python
 import lancedb
-db = lancedb.connect(".arqonship/vectors.lance")
+db = lancedb.connect(".codemonkeys/vectors.lance")
 table = db.open_table("code_vectors")
 print(table.head())
 ```

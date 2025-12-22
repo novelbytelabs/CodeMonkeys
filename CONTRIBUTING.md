@@ -1,13 +1,13 @@
-# Contributing to ArqonShip
+# Contributing to Code Monkeys
 
-Thank you for your interest in contributing to ArqonShip!
+Thank you for your interest in contributing to Code Monkeys!
 
 ## Development Setup
 
 ```bash
 # Clone
-git clone https://github.com/novelbytelabs/ArqonShip.git
-cd ArqonShip
+git clone https://github.com/novelbytelabs/Code Monkeys.git
+cd Code Monkeys
 
 # Build
 cargo build
