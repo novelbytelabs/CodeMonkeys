@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "science_dossier.schema.json",
+  "title": "Science Dossier Schema",
+  "description": "Schema for Science Monkeys research dossiers that can be converted to Code Monkeys design dossiers",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dossier_type",
+    "dossier_id",
+    "topic",
+    "owner",
+    "status",
+    "created_at",
+    "hypothesis",
+    "acceptance_hooks",
+    "evidence_plan",
+    "constitution_refs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "dossier_type": {
+      "type": "string",
+      "const": "science",
+      "description": "Must be 'science' for science dossiers"
+    },
+    "dossier_id": {
+      "type": "string",
+      "description": "Unique identifier",
+      "pattern": "^SCI-\\d{8}-[a-z0-9-]+$"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Research topic name"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Owner team (e.g., science-monkeys)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "validated", "converted", "archived"],
+      "description": "Current status"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Creation date"
+    },
+    "hypothesis": {
+      "type": "object",
+      "required": ["statement"],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "description": "The main hypothesis claim"
+        },
+        "null_hypothesis": {
+          "type": "string",
+          "description": "What would disprove the hypothesis"
+        },
+        "significance_level": {
+          "type": "number",
+          "description": "Statistical significance threshold"
+        }
+      }
+    },
+    "experiment_links": {
+      "type": "array",
+      "description": "Links to experiment code/data",
+      "items": {
+        "type": "object",
+        "required": ["name", "path"],
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "acceptance_hooks": {
+      "type": "object",
+      "description": "How Code Monkeys will prove this works",
+      "properties": {
+        "code_proofs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "test_requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "evidence_artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Known risks and mitigations",
+      "items": {
+        "type": "object",
+        "required": ["risk", "mitigation"],
+        "properties": {
+          "risk": { "type": "string" },
+          "mitigation": { "type": "string" }
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "description": "Hard constraints on implementation",
+      "items": { "type": "string" }
+    },
+    "evidence_plan": {
+      "type": "object",
+      "description": "What artifacts will exist when done",
+      "required": ["final_artifacts"],
+      "properties": {
+        "final_artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "validation_method": {
+          "type": "string"
+        }
+      }
+    },
+    "constitution_refs": {
+      "type": "array",
+      "description": "Constitutional documents this inherits from",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  }
+}
