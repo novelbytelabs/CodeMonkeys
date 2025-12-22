@@ -86,6 +86,31 @@ def execute_regenerate_report(product_id: str, dry_run: bool = False) -> tuple[i
     return (result.returncode, output)
 
 
+def execute_science_to_design(
+    science_path: str,
+    product_id: str,
+    dry_run: bool = False
+) -> tuple[int, str]:
+    """Execute science-to-design conversion."""
+    cmd = [
+        sys.executable, "-m", "codemonkeys.cli",
+        "dossier", "science-to-design", science_path,
+        "--product-id", product_id
+    ]
+
+    if dry_run:
+        return (0, f"[DRY-RUN] Would execute: {' '.join(cmd)}")
+
+    # Check if science dossier exists
+    from pathlib import Path as P
+    if not P(science_path).exists():
+        return (1, f"Science dossier not found: {science_path}")
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    output = result.stdout + result.stderr
+    return (result.returncode, output)
+
+
 def execute_work_order(wo: dict, dry_run: bool = False) -> dict:
     """Execute a single work order and return result."""
     intent = wo.get("intent")
@@ -108,6 +133,12 @@ def execute_work_order(wo: dict, dry_run: bool = False) -> dict:
     elif intent == "regenerate_report":
         exit_code, output = execute_regenerate_report(
             inputs.get("product_id", product_id),
+            dry_run
+        )
+    elif intent == "science_to_design":
+        exit_code, output = execute_science_to_design(
+            inputs.get("science_path", ""),
+            inputs.get("product_id", ""),
             dry_run
         )
     else:

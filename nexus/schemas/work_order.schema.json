@@ -29,7 +29,7 @@
     "intent": {
       "type": "string",
       "description": "Type of action to perform",
-      "enum": ["validate", "test", "regenerate_report"]
+      "enum": ["validate", "test", "regenerate_report", "science_to_design"]
     },
     "inputs": {
       "type": "object",
@@ -57,7 +57,7 @@
       "description": "Conditions that should halt execution",
       "items": {
         "type": "string",
-        "enum": ["on_test_fail", "on_silverback_fail", "on_missing_evidence"]
+        "enum": ["on_test_fail", "on_silverback_fail", "on_missing_evidence", "on_validation_fail"]
       }
     },
     "priority": {

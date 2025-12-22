@@ -149,7 +149,7 @@ def plan(
     
     # Sort by priority (descending), then by product_id (stable sort)
     scored_products.sort(key=lambda x: (-x["priority"], x["product_id"]))
-    
+
     # Generate work orders for top N
     work_orders = []
     for rank, sp in enumerate(scored_products[:budget], start=1):
@@ -161,8 +161,109 @@ def plan(
             deterministic=deterministic
         )
         work_orders.append(wo)
-    
+
     return work_orders
+
+
+def find_pending_science_dossiers(science_dir: Path, dossiers_dir: Path) -> list[dict]:
+    """Find science dossiers that need conversion to design dossiers."""
+    pending = []
+
+    if not science_dir.exists():
+        return pending
+
+    for sci_file in science_dir.glob("SCI-*.md"):
+        try:
+            import frontmatter
+            post = frontmatter.load(sci_file)
+            meta = post.metadata
+
+            # Only process validated dossiers
+            if meta.get("status") != "validated":
+                continue
+
+            dossier_id = meta.get("dossier_id", "")
+            topic = meta.get("topic", sci_file.stem)
+
+            # Check if design dossier already exists for this science input
+            # (By convention: we look for DOS-*-<topic-slug>.md)
+            topic_slug = topic.lower().replace(" ", "-")
+            existing = list(dossiers_dir.glob(f"DOS-*-{topic_slug}.md"))
+            if existing:
+                continue
+
+            pending.append({
+                "science_path": str(sci_file),
+                "dossier_id": dossier_id,
+                "topic": topic,
+                "priority": 75  # Science intake is high priority
+            })
+        except Exception:
+            continue
+
+    return pending
+
+
+def generate_science_work_order(
+    science_dossier: dict,
+    rank: int,
+    deterministic: bool = False
+) -> dict[str, Any]:
+    """Generate a work order to convert science dossier to design dossier."""
+    topic_slug = science_dossier["topic"].lower().replace(" ", "-")
+
+    if deterministic:
+        job_id = f"wo_science_{topic_slug}_science_to_design_{rank:03d}"
+    else:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        job_id = f"wo_science_{topic_slug}_science_to_design_{timestamp}_{rank:03d}"
+
+    return {
+        "job_id": job_id,
+        "product_id": f"science-{topic_slug}",
+        "intent": "science_to_design",
+        "inputs": {
+            "science_path": science_dossier["science_path"],
+            "product_id": topic_slug
+        },
+        "budget": {"max_actions": 1, "max_seconds": 60},
+        "stop_conditions": ["on_validation_fail"],
+        "priority": science_dossier["priority"],
+        "created_at": datetime.now().isoformat() + "Z",
+        "constitution_refs": ["constitution.md"],
+        "evidence_expectations": [f"docs/dossiers/DOS-*-{topic_slug}.md"],
+        "status": "pending"
+    }
+
+
+def plan_with_science(
+    products_path: Path,
+    runs_dir: Path,
+    science_dir: Path,
+    dossiers_dir: Path,
+    budget: int,
+    deterministic: bool = False
+) -> list[dict]:
+    """
+    Generate bounded, prioritized work orders including science intake.
+
+    Returns up to `budget` work orders, sorted by priority (descending).
+    """
+    # Get product work orders
+    product_wos = plan(products_path, runs_dir, budget, deterministic)
+
+    # Get science intake work orders
+    pending_science = find_pending_science_dossiers(science_dir, dossiers_dir)
+    science_wos = []
+    for rank, sci in enumerate(pending_science, start=len(product_wos) + 1):
+        wo = generate_science_work_order(sci, rank, deterministic)
+        science_wos.append(wo)
+
+    # Combine and sort by priority
+    all_wos = product_wos + science_wos
+    all_wos.sort(key=lambda x: -x["priority"])
+
+    return all_wos[:budget]
 
 
 def main():
