@@ -70,12 +70,68 @@ class ValidationResult:
 
 
 def validate_spec(spec_path: Path, result: ValidationResult):
-    """Validate that a spec file has non-empty mandatory sections."""
+    """Validate that a spec file has non-empty mandatory sections, a valid Dossier, and correct Governance."""
     if not spec_path.exists():
         result.error(f"Spec not found: {spec_path}")
         return
 
     content = spec_path.read_text()
+    
+    # 1. Dossier & Constitution Header Gate
+    dossier_match = re.search(r"^Dossier:\s*(DOS-[\w-]+)", content, re.MULTILINE)
+    const_match = re.search(r"^Constitution:\s*([\w\.]+)", content, re.MULTILINE)
+    legacy_match = re.search(r"^Legacy-Spec:\s*true", content, re.MULTILINE | re.IGNORECASE)
+    
+    if dossier_match:
+        dossier_id = dossier_match.group(1)
+        # Try to find the dossier file (fuzzy match)
+        dossier_files = list(Path("docs/dossiers").glob(f"{dossier_id}*.md"))
+        
+        if dossier_files:
+            dossier_path = dossier_files[0]
+            result.ok(f"Dossier reference found: {dossier_id} -> {dossier_path}")
+            
+            # Validate Dossier Content & Governance
+            try:
+                import frontmatter
+                post = frontmatter.load(dossier_path)
+                meta = post.metadata
+                
+                # Check for Constitution Refs
+                refs = meta.get("constitution_refs", [])
+                if not refs:
+                    result.error(f"Dossier {dossier_id} missing 'constitution_refs' (must include constitution.md)")
+                    _escalate_to_nexus_silverback(result, dossier_path, "Missing constitution_refs")
+                elif "constitution.md" not in refs:
+                     result.error(f"Dossier {dossier_id} must reference 'constitution.md'")
+                     _escalate_to_nexus_silverback(result, dossier_path, "Missing constitution.md reference")
+                else:
+                    # Check if referenced docs exist
+                    missing_refs = [r for r in refs if not Path(r).exists()]
+                    if missing_refs:
+                         result.error(f"Dossier {dossier_id} references missing docs: {missing_refs}")
+                    else:
+                         result.ok(f"Dossier {dossier_id} governance valid")
+
+                if not meta.get("acceptance_proofs"):
+                    result.error(f"Dossier {dossier_id} missing acceptance_proofs")
+            except Exception as e:
+                 result.error(f"Failed to load dossier {dossier_id}: {e}")
+        else:
+             result.error(f"Referenced Dossier not found: {dossier_id}")
+        
+        # Check for Constitution Header in Spec
+        if not const_match:
+             result.error("Spec missing 'Constitution: constitution.md' header")
+
+    elif legacy_match:
+        result.warning(f"Legacy Spec bypass: {spec_path.name}")
+    else:
+        # Bootstrap Exceptions
+        if "000-dash-mvp" in str(spec_path) or "001-factory-cli" in str(spec_path):
+             result.warning(f"Bootstrap Spec allowed without Dossier: {spec_path.name}")
+        else:
+             result.error(f"Spec missing 'Dossier: DOS-...' header: {spec_path.name}")
 
     for section in MANDATORY_SECTIONS:
         # Match "## Section" OR "## 1. Section"
@@ -108,6 +164,32 @@ def validate_spec(spec_path: Path, result: ValidationResult):
             result.warning(f"Section '{section}' appears to be placeholder-only")
         else:
             result.ok(f"Section '{section}' has content")
+
+def _escalate_to_nexus_silverback(result, context, reason):
+    """Create a Nexus request for clarification (internal helper)."""
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    req_file = Path(f"nexus/inbox/req_{timestamp}_governance_escalation.json")
+    
+    payload = {
+        "schema_version": "0.1",
+        "request_id": f"req_{timestamp}",
+        "type": "clarification_required",
+        "source": "silverback_validator",
+        "created_at": datetime.now().isoformat(),
+        "status": "pending",
+        "priority": "high",
+        "payload": {
+            "description": f"Governance check failed: {reason}",
+            "context": str(context)
+        }
+    }
+    
+    try:
+        req_file.write_text(json.dumps(payload, indent=2))
+        result.warning(f"Nexus escalation created: {req_file}")
+    except Exception as e:
+        result.error(f"Failed to create Nexus escalation: {e}")
 
 
 def validate_run_artifact(artifact_path: Path, result: ValidationResult):

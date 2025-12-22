@@ -1,23 +1,21 @@
 ---
 schema_version: "0.1"
-dossier_id: "DOS-[YYYYMMDD]-[product-slug]"
-product_id: "[product-slug]"
+dossier_id: "DOS-20251222-test-product"
+product_id: "test-product"
 owner: "nexus"
 status: "draft"
-created_at: "[YYYY-MM-DD]"
+created_at: "2025-12-22"
 hypothesis:
-  problem: "[One sentence problem statement]"
-  claim: "[One sentence hypothesis]"
-  falsification: "[What evidence would prove this wrong?]"
+  problem: "We need to test governance."
+  claim: "This will pass verification."
+  falsification: "If it fails."
 mvp_boundary:
   in_scope:
-    - "[Critical feature 1]"
-    - "[Critical feature 2]"
+    - "Feature 1"
   non_goals:
     - "[Out of scope item]"
 acceptance_proofs:
-  - "[Proof 1: e.g. CLI command returns 0]"
-  - "[Proof 2: e.g. Artifact X exists]"
+  - "Proof 1: Valid proof"
 evidence:
   links: []
 constitution_refs:
