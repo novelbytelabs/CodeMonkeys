@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "product_id": "codemonkeys-cli",
+  "cadence": "daily",
+  "jobs": [
+    {
+      "intent": "validate",
+      "budget": {"max_actions": 1, "max_seconds": 120},
+      "stop_conditions": ["on_silverback_fail"],
+      "priority": 90
+    },
+    {
+      "intent": "test",
+      "budget": {"max_actions": 1, "max_seconds": 300},
+      "stop_conditions": ["on_test_fail"],
+      "priority": 80
+    },
+    {
+      "intent": "gc_runs",
+      "budget": {"max_actions": 1, "max_seconds": 60},
+      "stop_conditions": [],
+      "priority": 20
+    },
+    {
+      "intent": "drift_check",
+      "budget": {"max_actions": 1, "max_seconds": 60},
+      "stop_conditions": [],
+      "priority": 30
+    }
+  ],
+  "enabled": true
+}

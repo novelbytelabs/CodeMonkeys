@@ -20,22 +20,30 @@ def oracle():
 @click.option("--stdout", is_flag=True, help="Output to stdout instead of files")
 @click.option("--output-dir", type=click.Path(), default="nexus/work_orders", help="Output directory")
 @click.option("--deterministic", is_flag=True, help="Use deterministic job IDs for testing")
-def plan(budget: int, stdout: bool, output_dir: str, deterministic: bool):
+@click.option("--from-schedules", is_flag=True, help="Plan from schedule files")
+@click.option("--product", type=str, default=None, help="Filter to single product")
+def plan(budget: int, stdout: bool, output_dir: str, deterministic: bool, from_schedules: bool, product: str):
     """Generate bounded, prioritized work orders."""
     console.print("[bold blue]Code Monkeys Factory :: Oracle Plan[/bold blue]")
-    
+
     cmd = [sys.executable, "scripts/oracle_planner.py", "--budget", str(budget)]
-    
+
     if stdout:
         cmd.append("--stdout")
     else:
         cmd.extend(["--output-dir", output_dir])
-    
+
     if deterministic:
         cmd.append("--deterministic")
-    
+
+    if from_schedules:
+        cmd.append("--from-schedules")
+
+    if product:
+        cmd.extend(["--product", product])
+
     result = subprocess.run(cmd, capture_output=False)
-    
+
     raise SystemExit(result.returncode)
 
 

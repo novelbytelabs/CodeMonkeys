@@ -29,7 +29,7 @@
     "intent": {
       "type": "string",
       "description": "Type of action to perform",
-      "enum": ["validate", "test", "regenerate_report", "science_to_design"]
+      "enum": ["validate", "test", "regenerate_report", "science_to_design", "gc_runs", "drift_check"]
     },
     "inputs": {
       "type": "object",

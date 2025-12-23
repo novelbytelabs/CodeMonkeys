@@ -266,6 +266,82 @@ def plan_with_science(
     return all_wos[:budget]
 
 
+def load_schedules(schedules_dir: Path, product_filter: str | None = None) -> list[dict]:
+    """Load enabled schedules from dash/schedules/."""
+    schedules = []
+
+    if not schedules_dir.exists():
+        return schedules
+
+    for schedule_file in schedules_dir.glob("*.json"):
+        with open(schedule_file) as f:
+            schedule = json.load(f)
+
+        if not schedule.get("enabled", False):
+            continue
+
+        if product_filter and schedule.get("product_id") != product_filter:
+            continue
+
+        schedules.append(schedule)
+
+    return schedules
+
+
+def plan_from_schedules(
+    schedules_dir: Path,
+    budget: int,
+    product_filter: str | None = None,
+    deterministic: bool = False
+) -> list[dict]:
+    """Generate work orders from schedule definitions."""
+    schedules = load_schedules(schedules_dir, product_filter)
+    work_orders = []
+    rank = 0
+
+    for schedule in schedules:
+        product_id = schedule.get("product_id", "unknown")
+        jobs = schedule.get("jobs", [])
+
+        for job in jobs:
+            if rank >= budget:
+                break
+
+            rank += 1
+            intent = job.get("intent", "validate")
+            priority = job.get("priority", 50)
+            job_budget = job.get("budget", {"max_actions": 1})
+            stop_conditions = job.get("stop_conditions", [])
+
+            if deterministic:
+                job_id = f"wo_{product_id}_{intent}_{rank:03d}"
+            else:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                job_id = f"wo_{product_id}_{intent}_{timestamp}_{rank:03d}"
+
+            wo = {
+                "job_id": job_id,
+                "product_id": product_id,
+                "intent": intent,
+                "inputs": {"product_id": product_id},
+                "budget": job_budget,
+                "stop_conditions": stop_conditions,
+                "priority": priority,
+                "created_at": datetime.now().isoformat() + "Z",
+                "constitution_refs": ["constitution.md"],
+                "evidence_expectations": [],
+                "status": "pending"
+            }
+            work_orders.append(wo)
+
+        if rank >= budget:
+            break
+
+    # Sort by priority descending
+    work_orders.sort(key=lambda x: -x["priority"])
+    return work_orders[:budget]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Oracle Planner")
     parser.add_argument("--budget", type=int, default=3, help="Max work orders to generate")
@@ -273,21 +349,32 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=Path("nexus/work_orders"), help="Output directory")
     parser.add_argument("--products", type=Path, default=Path("dash/products.json"), help="Products file")
     parser.add_argument("--runs-dir", type=Path, default=Path("dash/runs"), help="Runs directory")
+    parser.add_argument("--schedules-dir", type=Path, default=Path("dash/schedules"), help="Schedules directory")
     parser.add_argument("--deterministic", action="store_true", help="Use deterministic job IDs")
-    
+    parser.add_argument("--from-schedules", action="store_true", help="Plan from schedule files")
+    parser.add_argument("--product", type=str, default=None, help="Filter to single product")
+
     args = parser.parse_args()
-    
-    work_orders = plan(
-        products_path=args.products,
-        runs_dir=args.runs_dir,
-        budget=args.budget,
-        deterministic=args.deterministic
-    )
-    
+
+    if args.from_schedules:
+        work_orders = plan_from_schedules(
+            schedules_dir=args.schedules_dir,
+            budget=args.budget,
+            product_filter=args.product,
+            deterministic=args.deterministic
+        )
+    else:
+        work_orders = plan(
+            products_path=args.products,
+            runs_dir=args.runs_dir,
+            budget=args.budget,
+            deterministic=args.deterministic
+        )
+
     if not work_orders:
-        print("No work orders generated (no products found).", file=sys.stderr)
+        print("No work orders generated.", file=sys.stderr)
         return 0
-    
+
     if args.stdout:
         print(json.dumps(work_orders, indent=2))
     else:
@@ -298,10 +385,11 @@ def main():
             with open(filepath, "w") as f:
                 json.dump(wo, f, indent=2)
             print(f"Created: {filepath}")
-    
+
     print(f"\n✅ Generated {len(work_orders)} work order(s)", file=sys.stderr)
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
+

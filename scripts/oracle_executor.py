@@ -111,21 +111,100 @@ def execute_science_to_design(
     return (result.returncode, output)
 
 
+def execute_gc_runs(
+    product_id: str,
+    keep_count: int = 10,
+    dry_run: bool = False
+) -> tuple[int, str]:
+    """Execute GC runs - delete old run directories, keep last N."""
+    runs_dir = Path(f"dash/runs/{product_id}")
+
+    if dry_run:
+        return (0, f"[DRY-RUN] Would GC runs for {product_id}, keeping last {keep_count}")
+
+    if not runs_dir.exists():
+        return (0, f"No runs directory for {product_id}")
+
+    # Find run directories (run_YYYYMMDD_HHMMSS pattern)
+    run_dirs = sorted([d for d in runs_dir.iterdir() if d.is_dir() and d.name.startswith("run_")])
+
+    if len(run_dirs) <= keep_count:
+        return (0, f"Only {len(run_dirs)} runs, nothing to GC (keep={keep_count})")
+
+    # Delete oldest runs beyond keep_count
+    to_delete = run_dirs[:-keep_count]
+    deleted = []
+
+    import shutil
+    for run_dir in to_delete:
+        try:
+            shutil.rmtree(run_dir)
+            deleted.append(run_dir.name)
+        except Exception as e:
+            return (1, f"Failed to delete {run_dir}: {e}")
+
+    return (0, f"Deleted {len(deleted)} old runs: {', '.join(deleted)}")
+
+
+def execute_drift_check(
+    product_id: str,
+    dry_run: bool = False
+) -> tuple[int, str]:
+    """Execute drift check - produce a report of environment state."""
+    import platform
+    from datetime import datetime as dt
+
+    timestamp = dt.now().strftime("%Y%m%d_%H%M%S")
+    drift_dir = Path(f"dash/drift/{product_id}/{timestamp}")
+
+    if dry_run:
+        return (0, f"[DRY-RUN] Would produce drift report at {drift_dir}/report.json")
+
+    drift_dir.mkdir(parents=True, exist_ok=True)
+
+    # Collect environment info
+    report = {
+        "timestamp": dt.now().isoformat() + "Z",
+        "product_id": product_id,
+        "python_version": platform.python_version(),
+        "platform": platform.platform(),
+        "env_snapshot": {}
+    }
+
+    # Get pip freeze if possible
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "freeze"],
+            capture_output=True, text=True
+        )
+        report["pip_freeze"] = result.stdout.strip().split("\n")
+    except Exception:
+        report["pip_freeze"] = []
+
+    # Write report
+    report_file = drift_dir / "report.json"
+    import json
+    with open(report_file, "w") as f:
+        json.dump(report, f, indent=2)
+
+    return (0, f"Drift report written to {report_file}")
+
+
 def execute_work_order(wo: dict, dry_run: bool = False) -> dict:
     """Execute a single work order and return result."""
     intent = wo.get("intent")
     product_id = wo.get("product_id")
     inputs = wo.get("inputs", {})
-    
+
     print(f"\n{'='*50}")
     print(f"Executing: {wo.get('job_id')}")
     print(f"  Product: {product_id}")
     print(f"  Intent:  {intent}")
     print(f"  Priority: {wo.get('priority')}")
     print(f"{'='*50}")
-    
+
     start_time = datetime.now()
-    
+
     if intent == "validate":
         exit_code, output = execute_validate(dry_run)
     elif intent == "test":
@@ -141,8 +220,20 @@ def execute_work_order(wo: dict, dry_run: bool = False) -> dict:
             inputs.get("product_id", ""),
             dry_run
         )
+    elif intent == "gc_runs":
+        exit_code, output = execute_gc_runs(
+            inputs.get("product_id", product_id),
+            inputs.get("keep_count", 10),
+            dry_run
+        )
+    elif intent == "drift_check":
+        exit_code, output = execute_drift_check(
+            inputs.get("product_id", product_id),
+            dry_run
+        )
     else:
         exit_code = 1
+        output = f"Unknown intent: {intent}"
         output = f"Unknown intent: {intent}"
     
     end_time = datetime.now()

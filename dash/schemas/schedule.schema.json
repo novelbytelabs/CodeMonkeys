@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "schedule.schema.json",
+  "title": "Schedule Schema",
+  "description": "Schema for product schedule definitions",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "product_id",
+    "cadence",
+    "jobs",
+    "enabled"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product this schedule applies to"
+    },
+    "cadence": {
+      "type": "string",
+      "description": "How often jobs run",
+      "enum": ["hourly", "daily", "weekly", "manual", "on_push"]
+    },
+    "jobs": {
+      "type": "array",
+      "description": "Jobs to run on this schedule",
+      "items": {
+        "type": "object",
+        "required": ["intent", "budget", "priority"],
+        "properties": {
+          "intent": {
+            "type": "string",
+            "enum": ["validate", "test", "regenerate_report", "science_to_design", "gc_runs", "drift_check"]
+          },
+          "budget": {
+            "type": "object",
+            "required": ["max_actions"],
+            "properties": {
+              "max_actions": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "max_seconds": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "stop_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["on_test_fail", "on_silverback_fail", "on_missing_evidence", "on_validation_fail", "on_drift_detected"]
+            }
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether this schedule is active"
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time this schedule was executed"
+    },
+    "next_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Next scheduled execution time"
+    }
+  }
+}
