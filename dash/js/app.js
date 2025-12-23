@@ -17,10 +17,78 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const products = await app.fetchProducts();
                 await app.renderProducts(products);
                 await app.renderNexusQueue();
+                await app.renderScienceLane();
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
             } catch (err) {
                 app.showError(err.message);
+            }
+        },
+
+        fetchScienceIndex: async () => {
+            try {
+                const response = await fetch('science_index.json');
+                if (!response.ok) return null;
+                return await response.json();
+            } catch (e) {
+                return null;
+            }
+        },
+
+        renderScienceLane: async () => {
+            const summaryEl = document.getElementById('science-summary');
+            const listEl = document.getElementById('science-list');
+
+            const index = await app.fetchScienceIndex();
+
+            if (!index || !index.items || index.items.length === 0) {
+                summaryEl.innerHTML = '<div class="empty-state">No science dossiers found</div>';
+                listEl.innerHTML = '';
+                return;
+            }
+
+            // Count by status
+            const counts = {draft: 0, validated: 0, converted: 0};
+            for (const item of index.items) {
+                if (item.design_dossier_path) {
+                    counts.converted++;
+                } else if (item.status === 'validated') {
+                    counts.validated++;
+                } else {
+                    counts.draft++;
+                }
+            }
+
+            summaryEl.innerHTML = `
+                <span class="stat">📝 Draft: ${counts.draft}</span>
+                <span class="stat">✅ Validated: ${counts.validated}</span>
+                <span class="stat">🔄 Converted: ${counts.converted}</span>
+            `;
+
+            // Render items
+            listEl.innerHTML = '';
+            for (const item of index.items) {
+                const card = document.createElement('div');
+                card.className = 'card science-card';
+
+                const statusIcon = item.design_dossier_path ? '🔄' : (item.status === 'validated' ? '✅' : '📝');
+                const statusLabel = item.design_dossier_path ? 'Converted' : item.status;
+                const converted = item.design_dossier_path
+                    ? `<div class="row"><span class="label">Design:</span> <code>${item.design_dossier_path}</code></div>`
+                    : '';
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="product-name">${item.topic || item.dossier_id}</span>
+                        <span class="status-indicator ${statusLabel.toLowerCase()}">${statusIcon} ${statusLabel}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row"><span class="label">ID:</span> <code>${item.dossier_id}</code></div>
+                        <div class="row"><span class="label">Path:</span> <code>${item.science_path}</code></div>
+                        ${converted}
+                    </div>
+                `;
+                listEl.appendChild(card);
             }
         },
 

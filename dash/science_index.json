@@ -1,0 +1,14 @@
+{
+  "generated_at": "2025-12-22T19:35:19.067446Z",
+  "items": [
+    {
+      "dossier_id": "SCI-20251222-arqonhpo-runtime-optimization",
+      "topic": "Runtime Optimization Control Loop",
+      "status": "validated",
+      "created_at": "2025-12-22",
+      "owner": "science-monkeys",
+      "science_path": "docs/science/SCI-20251222-arqonhpo-runtime-optimization.md",
+      "design_dossier_path": "docs/dossiers/DOS-20251222-runtime-optimizer.md"
+    }
+  ]
+}
