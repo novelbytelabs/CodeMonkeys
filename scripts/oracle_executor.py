@@ -71,7 +71,7 @@ def execute_test(dry_run: bool = False) -> tuple[int, str]:
 
 def execute_regenerate_report(product_id: str, dry_run: bool = False) -> tuple[int, str]:
     """Execute report regeneration."""
-    cmd = [sys.executable, "scripts/generate_run_report.py", "--product", product_id]
+    cmd = [sys.executable, "scripts/generate_run_report.py", product_id]
     
     if dry_run:
         return (0, f"[DRY-RUN] Would execute: {' '.join(cmd)}")

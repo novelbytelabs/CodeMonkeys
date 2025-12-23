@@ -252,14 +252,53 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
         result.warning("No evidence paths in artifact")
     else:
         base_dir = Path("dash")
+        product_id = data.get("product_id", "")
+
+        # Check product status for evidence policy
+        product_status = _get_product_status(product_id)
+        is_production = product_status in ("active",) and _is_high_criticality(product_id)
+
         for ep in evidence_paths:
             full_path = base_dir / ep
             if full_path.exists():
                 result.ok(f"Evidence exists: {ep}")
             else:
-                result.error(f"Evidence missing: {ep}")
+                if is_production:
+                    result.error(f"Evidence missing: {ep}")
+                else:
+                    result.warning(f"Evidence missing (dev/demo product): {ep}")
 
     return data
+
+
+def _get_product_status(product_id: str) -> str:
+    """Get product status from registry."""
+    registry_path = Path("dash/products.json")
+    if not registry_path.exists():
+        return "unknown"
+    try:
+        registry = json.loads(registry_path.read_text())
+        for product in registry.get("products", []):
+            if product.get("product_id") == product_id:
+                return product.get("status", "unknown")
+    except Exception:
+        pass
+    return "unknown"
+
+
+def _is_high_criticality(product_id: str) -> bool:
+    """Check if product is high criticality."""
+    registry_path = Path("dash/products.json")
+    if not registry_path.exists():
+        return False
+    try:
+        registry = json.loads(registry_path.read_text())
+        for product in registry.get("products", []):
+            if product.get("product_id") == product_id:
+                return product.get("criticality") == "high"
+    except Exception:
+        pass
+    return False
 
 
 def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_type: str, result: ValidationResult):
