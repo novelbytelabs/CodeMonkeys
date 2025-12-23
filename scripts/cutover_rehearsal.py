@@ -21,6 +21,10 @@ def export_subset(source_dir: Path, target_dir: Path) -> bool:
         "dash/science_index.json",
         "dash/schemas/",
         "dash/schedules/",
+        "dash/runs/",
+        "dash/index.html",
+        "dash/css/",
+        "dash/js/",
 
         # Specs (just one for minimal test)
         "specs/001-factory-cli/",
@@ -29,9 +33,12 @@ def export_subset(source_dir: Path, target_dir: Path) -> bool:
         "docs/science/",
         "docs/dossiers/",
         "docs/schemas/",
+        "docs/pm/",
 
         # Nexus
         "nexus/schemas/",
+        "nexus/inbox/",
+        "nexus/outbox/",
 
         # Tests
         "tests/",
