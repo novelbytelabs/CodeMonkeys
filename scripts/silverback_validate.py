@@ -24,6 +24,7 @@ from pathlib import Path
 
 try:
     from jsonschema import validate, ValidationError
+
     HAS_JSONSCHEMA = True
 except ImportError:
     HAS_JSONSCHEMA = False
@@ -56,8 +57,8 @@ def _is_placeholder_only(section_content: str) -> bool:
         cleaned = re.sub(p, " ", cleaned, flags=re.IGNORECASE)
 
     # Strip markdown noise but keep words
-    cleaned = re.sub(r"(?m)^\s*[-*+]\s*", "", cleaned)   # bullet markers
-    cleaned = re.sub(r"[`*_#]", "", cleaned)             # formatting chars
+    cleaned = re.sub(r"(?m)^\s*[-*+]\s*", "", cleaned)  # bullet markers
+    cleaned = re.sub(r"[`*_#]", "", cleaned)  # formatting chars
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
 
     if not cleaned:
@@ -118,68 +119,81 @@ def validate_spec(spec_path: Path, result: ValidationResult):
         return
 
     content = spec_path.read_text()
-    
+
     # 1. Dossier & Constitution Header Gate
     dossier_match = re.search(r"^Dossier:\s*(DOS-[\w-]+)", content, re.MULTILINE)
     const_match = re.search(r"^Constitution:\s*([\w\.]+)", content, re.MULTILINE)
-    legacy_match = re.search(r"^Legacy-Spec:\s*true", content, re.MULTILINE | re.IGNORECASE)
-    
+    legacy_match = re.search(
+        r"^Legacy-Spec:\s*true", content, re.MULTILINE | re.IGNORECASE
+    )
+
     if dossier_match:
         dossier_id = dossier_match.group(1)
         # Try to find the dossier file (fuzzy match)
         dossier_files = list(Path("docs/dossiers").glob(f"{dossier_id}*.md"))
-        
+
         if dossier_files:
             dossier_path = dossier_files[0]
             result.ok(f"Dossier reference found: {dossier_id} -> {dossier_path}")
-            
+
             # Validate Dossier Content & Governance
             try:
                 import frontmatter
+
                 post = frontmatter.load(dossier_path)
                 meta = post.metadata
-                
+
                 # Check for Constitution Refs
                 refs = meta.get("constitution_refs", [])
                 if not refs:
-                    result.error(f"Dossier {dossier_id} missing 'constitution_refs' (must include constitution.md)")
-                    _escalate_to_nexus_silverback(result, dossier_path, "Missing constitution_refs")
+                    result.error(
+                        f"Dossier {dossier_id} missing 'constitution_refs' (must include constitution.md)"
+                    )
+                    _escalate_to_nexus_silverback(
+                        result, dossier_path, "Missing constitution_refs"
+                    )
                 elif "constitution.md" not in refs:
-                     result.error(f"Dossier {dossier_id} must reference 'constitution.md'")
-                     _escalate_to_nexus_silverback(result, dossier_path, "Missing constitution.md reference")
+                    result.error(
+                        f"Dossier {dossier_id} must reference 'constitution.md'"
+                    )
+                    _escalate_to_nexus_silverback(
+                        result, dossier_path, "Missing constitution.md reference"
+                    )
                 else:
                     # Check if referenced docs exist
                     missing_refs = [r for r in refs if not Path(r).exists()]
                     if missing_refs:
-                         result.error(f"Dossier {dossier_id} references missing docs: {missing_refs}")
+                        result.error(
+                            f"Dossier {dossier_id} references missing docs: {missing_refs}"
+                        )
                     else:
-                         result.ok(f"Dossier {dossier_id} governance valid")
+                        result.ok(f"Dossier {dossier_id} governance valid")
 
                 if not meta.get("acceptance_proofs"):
                     result.error(f"Dossier {dossier_id} missing acceptance_proofs")
             except Exception as e:
-                 result.error(f"Failed to load dossier {dossier_id}: {e}")
+                result.error(f"Failed to load dossier {dossier_id}: {e}")
         else:
-             result.error(f"Referenced Dossier not found: {dossier_id}")
-        
+            result.error(f"Referenced Dossier not found: {dossier_id}")
+
         # Check for Constitution Header in Spec
         if not const_match:
-             result.error("Spec missing 'Constitution: constitution.md' header")
+            result.error("Spec missing 'Constitution: constitution.md' header")
 
     elif legacy_match:
         result.warning(f"Legacy Spec bypass: {spec_path.name}")
     else:
         # Bootstrap Exceptions
         if "000-dash-mvp" in str(spec_path) or "001-factory-cli" in str(spec_path):
-             result.warning(f"Bootstrap Spec allowed without Dossier: {spec_path.name}")
+            result.warning(f"Bootstrap Spec allowed without Dossier: {spec_path.name}")
         else:
-             result.error(f"Spec missing 'Dossier: DOS-...' header: {spec_path.name}")
+            result.error(f"Spec missing 'Dossier: DOS-...' header: {spec_path.name}")
 
     for section in MANDATORY_SECTIONS:
         # Match "## Section" OR "## 1. Section"
         pattern = rf"##+\s+(\d+\.\s+)?{re.escape(section)}"
         match = re.search(pattern, content, re.IGNORECASE)
-        
+
         if not match:
             result.error(f"Missing section: '{section}'")
             continue
@@ -187,7 +201,9 @@ def validate_spec(spec_path: Path, result: ValidationResult):
         section_start = match.end()
         # Only look for same-level (##) headers as section boundaries, not ### subsections
         next_section = re.search(r"\n## ", content[section_start:])
-        section_end = section_start + next_section.start() if next_section else len(content)
+        section_end = (
+            section_start + next_section.start() if next_section else len(content)
+        )
         section_content = content[section_start:section_end].strip()
 
         if _is_placeholder_only(section_content):
@@ -195,12 +211,14 @@ def validate_spec(spec_path: Path, result: ValidationResult):
         else:
             result.ok(f"Section '{section}' has content")
 
+
 def _escalate_to_nexus_silverback(result, context, reason):
     """Create a Nexus request for clarification (internal helper)."""
     from datetime import datetime
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     req_file = Path(f"nexus/inbox/req_{timestamp}_governance_escalation.json")
-    
+
     payload = {
         "schema_version": "0.1",
         "request_id": f"req_{timestamp}",
@@ -211,10 +229,10 @@ def _escalate_to_nexus_silverback(result, context, reason):
         "priority": "high",
         "payload": {
             "description": f"Governance check failed: {reason}",
-            "context": str(context)
-        }
+            "context": str(context),
+        },
     }
-    
+
     try:
         req_file.write_text(json.dumps(payload, indent=2))
         result.warning(f"Nexus escalation created: {req_file}")
@@ -245,7 +263,9 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
         except ValidationError as e:
             result.error(f"Schema validation failed: {e.message}")
     else:
-        result.warning("Schema validation skipped (jsonschema not available or schema missing)")
+        result.warning(
+            "Schema validation skipped (jsonschema not available or schema missing)"
+        )
 
     evidence_paths = data.get("evidence", {}).get("paths", [])
     if not evidence_paths:
@@ -253,15 +273,22 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
     else:
         base_dir = Path("dash")
         product_id = data.get("product_id", "")
+        product_status = _get_product_status(product_id)
 
-        # Evidence policy: WARN for missing evidence in clean clone scenarios
-        # This allows bootstrap/migration without committed run logs
+        # Evidence policy: tiered severity based on product status
+        # - active products: missing evidence = ERROR (fails CI)
+        # - development/planned products: missing evidence = WARN only
+        is_production = product_status == "active"
+
         for ep in evidence_paths:
             full_path = base_dir / ep
             if full_path.exists():
                 result.ok(f"Evidence exists: {ep}")
             else:
-                result.warning(f"Evidence missing: {ep}")
+                if is_production:
+                    result.error(f"Evidence missing (production product): {ep}")
+                else:
+                    result.warning(f"Evidence missing (dev product): {ep}")
 
     return data
 
@@ -296,7 +323,9 @@ def _is_high_criticality(product_id: str) -> bool:
     return False
 
 
-def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_type: str, result: ValidationResult):
+def validate_nexus_artifact(
+    artifact_path: Path, schema_path: Path, artifact_type: str, result: ValidationResult
+):
     """Validate a Nexus artifact (inbox or outbox) against its schema."""
     if not artifact_path.exists():
         result.error(f"Nexus {artifact_type} not found: {artifact_path}")
@@ -312,7 +341,9 @@ def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_typ
 
     # Validate schema version
     if data.get("schema_version") != "0.1":
-        result.warning(f"Unexpected schema version in {artifact_path}: {data.get('schema_version')}")
+        result.warning(
+            f"Unexpected schema version in {artifact_path}: {data.get('schema_version')}"
+        )
 
     # Schema validation
     if HAS_JSONSCHEMA and schema_path.exists():
@@ -321,7 +352,9 @@ def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_typ
             validate(instance=data, schema=schema)
             result.ok(f"Schema validation passed: {artifact_path.name}")
         except ValidationError as e:
-            result.error(f"Schema validation failed for {artifact_path.name}: {e.message}")
+            result.error(
+                f"Schema validation failed for {artifact_path.name}: {e.message}"
+            )
     else:
         result.warning(f"Schema validation skipped for {artifact_path.name}")
 
@@ -332,7 +365,9 @@ def validate_nexus_artifact(artifact_path: Path, schema_path: Path, artifact_typ
             result.ok(f"Governance compliant: {artifact_path.name}")
         else:
             violations = gc.get("violations", [])
-            result.warning(f"Governance violations in {artifact_path.name}: {violations}")
+            result.warning(
+                f"Governance violations in {artifact_path.name}: {violations}"
+            )
 
     return data
 
@@ -345,7 +380,7 @@ def validate_nexus_inbox(result: ValidationResult):
 
     schema_path = NEXUS_SCHEMA_DIR / "request.schema.json"
     files = list(NEXUS_INBOX_DIR.glob("*.json"))
-    
+
     if not files:
         result.warning("No inbox files found")
         return
@@ -362,7 +397,7 @@ def validate_nexus_outbox(result: ValidationResult):
 
     schema_path = NEXUS_SCHEMA_DIR / "decision.schema.json"
     files = list(NEXUS_OUTBOX_DIR.glob("*.json"))
-    
+
     if not files:
         result.warning("No outbox files found")
         return
@@ -408,8 +443,12 @@ def main():
     parser = argparse.ArgumentParser(description="Silverback Validator")
     parser.add_argument("--spec", help="Validate a specific spec file")
     parser.add_argument("--run-artifact", help="Validate a specific run artifact")
-    parser.add_argument("--nexus", action="store_true", help="Validate Nexus inbox/outbox only")
-    parser.add_argument("--all", action="store_true", help="Validate all specs and artifacts")
+    parser.add_argument(
+        "--nexus", action="store_true", help="Validate Nexus inbox/outbox only"
+    )
+    parser.add_argument(
+        "--all", action="store_true", help="Validate all specs and artifacts"
+    )
     args = parser.parse_args()
 
     result = ValidationResult()
