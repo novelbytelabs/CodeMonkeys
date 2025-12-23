@@ -1,6 +1,6 @@
 # Code Monkeys 🚀
 
-[![CI](https://github.com/novelbytelabs/Code Monkeys/actions/workflows/ci.yml/badge.svg)](https://github.com/novelbytelabs/Code Monkeys/actions/workflows/ci.yml)
+[![CI](https://github.com/novelbytelabs/CodeMonkeys/actions/workflows/ci.yml/badge.svg)](https://github.com/novelbytelabs/CodeMonkeys/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.82%2B-orange.svg)](https://www.rust-lang.org/)
 
