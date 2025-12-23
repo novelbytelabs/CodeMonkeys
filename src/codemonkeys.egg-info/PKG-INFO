@@ -11,9 +11,9 @@ Requires-Dist: rich>=10.0.0
 Requires-Dist: pytest>=7.0.0
 Dynamic: license-file
 
-# ArqonShip 🚀
+# Code Monkeys 🚀
 
-[![CI](https://github.com/novelbytelabs/ArqonShip/actions/workflows/ci.yml/badge.svg)](https://github.com/novelbytelabs/ArqonShip/actions/workflows/ci.yml)
+[![CI](https://github.com/novelbytelabs/CodeMonkeys/actions/workflows/ci.yml/badge.svg)](https://github.com/novelbytelabs/CodeMonkeys/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.82%2B-orange.svg)](https://www.rust-lang.org/)
 
@@ -29,11 +29,11 @@ You're building multiple products. Every repo needs:
 - Releases that follow the rules
 - Hours of maintenance you don't have
 
-**ArqonShip does all of it. Automatically.**
+**Code Monkeys does all of it. Automatically.**
 
 ---
 
-## What ArqonShip Does
+## What Code Monkeys Does
 
 | Pillar | What It Does | Your Benefit |
 |--------|--------------|--------------|
@@ -45,7 +45,7 @@ You're building multiple products. Every repo needs:
 
 ---
 
-## Why ArqonShip?
+## Why Code Monkeys?
 
 ### 🏠 100% Local
 Your code never leaves your machine. Runs on your hardware with Ollama.
@@ -65,10 +65,10 @@ One product or fifty. Same workflow. Swarm intelligence across repos.
 
 ```
 You: *sleeping*
-ArqonShip: Detected CI failure (E0308: type mismatch)
-ArqonShip: Generated fix via Qwen-7B
-ArqonShip: Applied fix, verified, committed
-ArqonShip: All tests passing ✅
+Code Monkeys: Detected CI failure (E0308: type mismatch)
+Code Monkeys: Generated fix via Qwen-7B
+Code Monkeys: Applied fix, verified, committed
+Code Monkeys: All tests passing ✅
 You: *wake up* → Green CI, fixed code, audit log
 ```
 
@@ -80,8 +80,8 @@ echo 'fn add(a: i32, b: i32) -> i32 { a - b // bug' > tests/broken.rs
 # Generate failure log
 cargo test --message-format=json > fail.json
 
-# Watch ArqonShip fix it
-arqonship heal --log-file fail.json
+# Watch Code Monkeys fix it
+codemonkeys heal --log-file fail.json
 ```
 
 ---
@@ -93,19 +93,19 @@ arqonship heal --log-file fail.json
 cargo install --path .
 
 # Initialize
-arqonship init
+codemonkeys init
 
 # Scan your codebase
-arqonship scan
+codemonkeys scan
 
 # Query your code
-arqonship chat -q "What functions handle errors?"
+codemonkeys chat -q "What functions handle errors?"
 
 # Self-heal failures
-arqonship heal --log-file test.json
+codemonkeys heal --log-file test.json
 
 # Ship a release
-arqonship ship --dry-run
+codemonkeys ship --dry-run
 ```
 
 ---
@@ -114,25 +114,25 @@ arqonship ship --dry-run
 
 | Command | Description |
 |---------|-------------|
-| `arqonship init` | Initialize ArqonShip in current repo |
-| `arqonship scan` | Build Codebase Oracle (parse → graph → embed) |
-| `arqonship chat` | Query codebase with natural language |
-| `arqonship heal` | Autonomous self-healing for CI failures |
-| `arqonship ship` | Governed release pipeline |
-| `arqonship watch` | *(Coming)* Always-on daemon mode |
+| `codemonkeys init` | Initialize Code Monkeys in current repo |
+| `codemonkeys scan` | Build Codebase Oracle (parse → graph → embed) |
+| `codemonkeys chat` | Query codebase with natural language |
+| `codemonkeys heal` | Autonomous self-healing for CI failures |
+| `codemonkeys ship` | Governed release pipeline |
+| `codemonkeys watch` | *(Coming)* Always-on daemon mode |
 
 ---
 
 ## The Vision: Solo Product Factory
 
-ArqonShip is part of a larger system:
+Code Monkeys is part of a larger system:
 
 | Layer | Product | Job |
 |-------|---------|-----|
-| Bootstrap | **ArqonInit** | 0 → working repo |
-| Front Half | **ArqonDev** | Spec → Plan → Tasks |
-| Back Half | **ArqonShip** | Heal → Docs → Ship |
-| Fleet | **ArqonOrg** | 50+ products at once |
+| Bootstrap | **CodeMonkeysInit** | 0 → working repo |
+| Front Half | **CodeMonkeysDev** | Spec → Plan → Tasks |
+| Back Half | **Code Monkeys** | Heal → Docs → Ship |
+| Fleet | **CodeMonkeysOrg** | 50+ products at once |
 
 **You write Constitution + Spec. The system does the rest.**
 
@@ -140,10 +140,10 @@ ArqonShip is part of a larger system:
 
 ## Documentation
 
-- [Architecture](https://novelbytelabs.github.io/ArqonShip/architecture)
-- [CLI Reference](https://novelbytelabs.github.io/ArqonShip/cli-reference)
-- [Configuration](https://novelbytelabs.github.io/ArqonShip/configuration)
-- [Developer Guide](https://novelbytelabs.github.io/ArqonShip/developer-guide)
+- [Architecture](https://novelbytelabs.github.io/Code Monkeys/architecture)
+- [CLI Reference](https://novelbytelabs.github.io/Code Monkeys/cli-reference)
+- [Configuration](https://novelbytelabs.github.io/Code Monkeys/configuration)
+- [Developer Guide](https://novelbytelabs.github.io/Code Monkeys/developer-guide)
 
 ---
 

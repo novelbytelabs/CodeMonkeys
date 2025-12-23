@@ -8,6 +8,7 @@ from codemonkeys.commands.fleet import fleet
 from codemonkeys.commands.dossier import dossier
 from codemonkeys.commands.ship import ship
 from codemonkeys.commands.oracle import oracle
+from codemonkeys.commands.doctor import doctor
 
 console = Console()
 
@@ -24,6 +25,7 @@ cli.add_command(fleet)
 cli.add_command(dossier)
 cli.add_command(ship)
 cli.add_command(oracle)
+cli.add_command(doctor)
 
 if __name__ == "__main__":
     cli()
