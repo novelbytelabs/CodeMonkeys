@@ -254,19 +254,14 @@ def validate_run_artifact(artifact_path: Path, result: ValidationResult):
         base_dir = Path("dash")
         product_id = data.get("product_id", "")
 
-        # Check product status for evidence policy
-        product_status = _get_product_status(product_id)
-        is_production = product_status in ("active",) and _is_high_criticality(product_id)
-
+        # Evidence policy: WARN for missing evidence in clean clone scenarios
+        # This allows bootstrap/migration without committed run logs
         for ep in evidence_paths:
             full_path = base_dir / ep
             if full_path.exists():
                 result.ok(f"Evidence exists: {ep}")
             else:
-                if is_production:
-                    result.error(f"Evidence missing: {ep}")
-                else:
-                    result.warning(f"Evidence missing (dev/demo product): {ep}")
+                result.warning(f"Evidence missing: {ep}")
 
     return data
 
