@@ -55,6 +55,26 @@
           "run_evidence_path": {
             "type": "string",
             "description": "Path to the product's run evidence directory"
+          },
+          "criticality": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Product criticality level for prioritization"
+          },
+          "sla_tier": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "SLA tier (1=highest priority, 5=lowest)"
+          },
+          "schedule_path": {
+            "type": "string",
+            "description": "Path to product schedule file"
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether product is active in fleet ops"
           }
         }
       }

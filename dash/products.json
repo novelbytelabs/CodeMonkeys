@@ -2,44 +2,62 @@
   "schema_version": "0.1",
   "products": [
     {
-      "product_id": "codemonkeys-dash",
-      "display_name": "Code Monkeys Dash",
-      "owner": "Nexus",
-      "status": "active",
-      "spec_path": "specs/000-dash-mvp/spec.md",
-      "run_evidence_path": "dash/runs/codemonkeys-dash/"
-    },
-    {
       "product_id": "codemonkeys-cli",
       "display_name": "Code Monkeys CLI",
       "owner": "CodeMonkeys",
       "status": "active",
+      "criticality": "high",
+      "sla_tier": 1,
       "spec_path": "specs/001-factory-cli/spec.md",
-      "run_evidence_path": "dash/runs/codemonkeys-cli/"
+      "run_evidence_path": "dash/runs/codemonkeys-cli/",
+      "schedule_path": "dash/schedules/codemonkeys-cli.json",
+      "enabled": true
+    },
+    {
+      "product_id": "codemonkeys-dash",
+      "display_name": "Code Monkeys Dash",
+      "owner": "Nexus",
+      "status": "active",
+      "criticality": "high",
+      "sla_tier": 1,
+      "spec_path": "specs/000-dash-mvp/spec.md",
+      "run_evidence_path": "dash/runs/codemonkeys-dash/",
+      "schedule_path": "dash/schedules/codemonkeys-dash.json",
+      "enabled": true
     },
     {
       "product_id": "spec-kit",
       "display_name": "Spec Kit",
       "owner": "CodeMonkeys",
-      "status": "pending",
+      "status": "active",
+      "criticality": "medium",
+      "sla_tier": 2,
       "spec_path": "specs/002-spec-kit/spec.md",
-      "run_evidence_path": "dash/runs/spec-kit/"
+      "run_evidence_path": "dash/runs/spec-kit/",
+      "schedule_path": "dash/schedules/spec-kit.json",
+      "enabled": true
     },
     {
       "product_id": "banana-economy",
       "display_name": "Banana Economy",
       "owner": "Nexus",
       "status": "development",
+      "criticality": "low",
+      "sla_tier": 3,
       "spec_path": "specs/003-banana-economy/spec.md",
-      "run_evidence_path": "dash/runs/banana-economy/"
+      "run_evidence_path": "dash/runs/banana-economy/",
+      "enabled": true
     },
     {
       "product_id": "silverback-agent",
       "display_name": "Silverback Agent",
       "owner": "Nexus",
       "status": "planned",
+      "criticality": "medium",
+      "sla_tier": 2,
       "spec_path": "specs/004-silverback-agent/spec.md",
-      "run_evidence_path": "dash/runs/silverback-agent/"
+      "run_evidence_path": "dash/runs/silverback-agent/",
+      "enabled": false
     }
   ]
 }

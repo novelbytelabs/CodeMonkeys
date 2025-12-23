@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1",
+  "product_id": "spec-kit",
+  "cadence": "weekly",
+  "jobs": [
+    {
+      "intent": "validate",
+      "budget": {"max_actions": 1, "max_seconds": 120},
+      "stop_conditions": ["on_silverback_fail"],
+      "priority": 70
+    },
+    {
+      "intent": "test",
+      "budget": {"max_actions": 1, "max_seconds": 300},
+      "stop_conditions": ["on_test_fail"],
+      "priority": 60
+    }
+  ],
+  "enabled": true
+}
